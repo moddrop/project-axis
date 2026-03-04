@@ -8,8 +8,36 @@
         animation: autoZoom 3s alternate forwards;
     }
 
+    .gallery-8-wrapper {
+        background-image: url("nano-esp32.webp");
+        background-size: 1000%;
+        background-position: center;
+        background-size: cover;
+        height: auto;
+        animation: autozoomSmall 3s alternate forwards;
+    }
+
+    .project {
+        font-size: 20px;
+        display: flex;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        justify-content: center;
+        text-align: center;
+        flex-direction: column;
+    }
+
+}
+
+@media only screen and (min-width: 768px) {
+    
     .navbar {
-        
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    a {
+        font-size: 1rem;
     }
 }
 
@@ -27,7 +55,27 @@
     }
 }
 
+@keyframes autozoomSmall {
+    0% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(1.5);
+        background-position-y: -130px;
+    }
+}
+
 @media only screen and (min-width: 700px) {
+    .project {
+        font-size: 20px;
+        display: flex;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        justify-content: center;
+        text-align: center;
+        flex-direction: row;
+    }
 
     .people {
         display: flex;
@@ -58,21 +106,30 @@
         box-shadow: 4px 4px 17px rgba(0, 0, 0, 0.6);
     }
 
+    .navbar {
+        word-spacing: 10px;
+    }
+
+
+}
+.image{
+    width: 100%;          
+    max-width: 500px;     
+    height: auto; 
+    border-radius: 10px;
 }
 
 .navbar {
-    width: 100%;
-    height: 37px;
-    background: rgb(245, 243, 243);
+    background-color: rgb(245, 243, 243);
     color: rgb(39, 39, 39);
     list-style-type: none;
     display: flex;
-    gap: 5px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 20px;
     font-family: "Rubik", sans-serif;
-    padding: 20px;
-    padding-right: 50px;
-    text-align: center;
-    word-spacing: 20px;
+    padding: 15px;
 }
 
 
@@ -110,6 +167,8 @@ body {
     font-family: "Rubik", sans-serif;
 }
 
+
+
 .line {
     height: 2px;
     width: 100%;
@@ -119,7 +178,12 @@ body {
 
 .gallery-1,
 .gallery-2,
-.gallery-3 {
+.gallery-3,
+.gallery-4,
+.gallery-5,
+.gallery-6,
+.gallery-7,
+.gallery-8 {
     width: 40%;
     height: 300px;
     background: rgba(255, 255, 255, 0.322);
@@ -127,6 +191,7 @@ body {
     transform: scale(1);
     color: white;
 }
+
 .gallery-5 {
     background-image: url("m5stack.webp");
     background-size: cover;
@@ -136,7 +201,7 @@ body {
 }
 
 .gallery-6 {
-    background-image: url("uno.webp");
+    background-image: url("s2mini.webp");
     background-size: cover;
     background-position-x: -17px;
     background-repeat: no-repeat;
@@ -144,12 +209,13 @@ body {
 }
 
 .gallery-7 {
-    background-image: url("pico.webp");
+    background-image: url("allnewstep.webp");
     background-size: cover;
     background-position-x: -17px;
     background-repeat: no-repeat;
     max-width: 100%;
 }
+
 .gallery-1 {
     background-image: url("nano.webp");
     background-size: cover;
@@ -205,6 +271,38 @@ body {
     width: 100%;
 }
 
+.gallery-8 {
+    width: 100%;
+    height: 250px;
+    box-shadow: 4px 4px 17px rgba(0, 0, 0, 0.6);
+    max-width: 100%;
+}
+
+.gallery-8 {
+    background-color: #B9B16A;
+    background-image: url("nano-esp32.webp");
+    background-size: 784px;
+    background-position-x: center;
+    background-repeat: no-repeat;
+    max-width: 100%;
+    height: 350px;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+
+.gallery-8-wrapper {
+    background-image: url("nano-esp32.webp");
+    background-size: 784px;
+    background-position-x: center;
+    background-repeat: no-repeat;
+    max-width: 100%;
+    height: 350px;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+
 .gallery-box {
     display: flex;
     justify-content: space-around;
@@ -214,11 +312,14 @@ body {
     display: flex;
 }
 
-.project {
-    font-size: 20px;
-}
-
-.image {
-    width: 500px;
-    border-radius: 10px;
+.projectdesc {
+    flex: 1;
+    display: flex;
+    /* Makes vertical centering precise */
+    flex-direction: column;
+    justify-content: center;
+    /* Centers content inside text box */
+    font-size: 18px;
+    line-height: 1.6;
+    margin-left: 20px;
 }
