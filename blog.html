@@ -11,13 +11,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="ok.css">
     <title>Project Axis | Innovating the Future</title>
+    <link rel="icon" type="image/x-icon" href="logo.png">
 </head>
 
 <body>
     <div class="navbar">
         <img height="50px" width="50px" src="logo.png">
         <div class="navbar-wrapper">
-            <a href="index.html" class="hover">HOME</a>
+            <a href="index.html" class="hover">HOmME</a>
             <a href="aboutus.html" class="hover">INFO</a>
             <a href="blog.html" class="hover">BLOG</a>
             <a href="project.html" class="hover">PROJECTS</a>
@@ -31,10 +32,195 @@
         <div class="line"></div>
         <br>
     </div>
-    <p>"We’re two friends building projects and learning to code together. I’m 13 and I’ve made smart glasses and a
-        plant monitoring project using Arduino. Binbin is 12, and he built a CO₂ and smoke detector system. We both
-        really like working with electronics and turning ideas into real things."</p>
-    <p>"Right now, we’re also developing this website together on CodePen. We’re learning HTML, CSS, and JavaScript as
-        we go, testing ideas, breaking stuff, and fixing it. This site is basically our digital workshop where we share
-        our projects and show what we’re working on next."</p>
+    <p style="text-align: center;">Welcome to the Project AXIS blog! Here, we share our latest
+        updates, insights, and innovations in the world of technology and engineering. Stay tuned for exciting news
+        and behind-the-scenes looks at our projects.</p>
+    <h4 style="text-align: center;">Our Blog Posts:</h4>
+    <div class="container">
+        <button class="accordion">Comparing Air Quality in the Past, Present, and Future</button>
+        <div class="panel">
+            <img style="margin-left:auto;margin-right:auto;display:block;border-radius:10px;" src="binbin-project.webp"
+                width="500px" height="auto">
+            <h4>By Binbin (12) Project: Comparing Air Quality in the Past, Present, and Futures</h4>
+            <p>Our project is about how humans affect and cause bad air quality in the past,
+                present, and future. We have made a device that detects and measures the air quality. The device beeps
+                whenever the air quality increases severely. We are showing examples of how bad the air quality is and
+                was in the past, present, and
+                future.</p>
+            <h2>The Concept</h2>
+            <p>Our detector detects whenever carbon dioxide or sulfure dioxide enters a specific area where the detector
+                is placed, It helps people see how much values carbon or sulfur dioxide is in that area.</p>
+            <h4>The parts of our device:</h4>
+            <ul>
+                <li>Arduino Nano</li>
+                <li>MQ135 Flying Fish Module</li>
+                <li>Jumper Wires</li>
+                <li>Any I2C Display</li>
+            </ul>
+            <table>
+                <tr>
+                    <th>Part</th>
+                    <th>Purpose</th>
+                </tr>
+                <tr>
+                    <td>Arduino Nano</td>
+                    <td>Controls the system and processes sensor data.</td>
+                </tr>
+                <tr>
+                    <td>MQ135 Flying Fish Module</td>
+                    <td>Detects air quality by measuring Sulfur, CO2 concentrations.</td>
+                </tr>
+                <tr>
+                    <td>Jumper Wires</td>
+                    <td>Connects components together.</td>
+                </tr>
+                <tr>
+                    <td>I2C Display</td>
+                    <td>Displays real-time air quality readings.</td>
+                </tr>
+            </table>
+            <h4>Blog Posts:</h4>
+            <p>MQ135 → Arduino</p>
+
+            <p>Jumper Wires → I2C Module → I2C Display</p>
+
+            <p>Laptop → System</p>
+            <ul>
+                <li>
+                    <h4>First Update: Buying the Materials</h4>
+                    <p>My team mostly bought the materials (except when one MQ135 sensor broke)</p>
+                    <img width="300px" height="200px" style="border-radius: 10px;" src="binbin-project-1.webp">
+                </li>
+                <li>
+                    <h4>Second Update: Assembling the Prototype</h4>
+                    <p>I assembled the device first on a breadboard with the youtube code modified to my liking. I
+                        upload the code and tested it for the first time at 9:00 pm.</p>
+                    <iframe width="300" height="200" style="border-radius: 10px;"
+                        src="https://www.youtube-nocookie.com/embed/5jFgHtmS7Vk?si=ttEJQYDZ7gJZhjxt&amp;start=4"
+                        title="YouTube video player" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </li>
+                <li>
+                    <h4>Third Update: Meeting up with my team</h4>
+                    <p>After the prototype I brought all the materials and went to one of team member's house for a
+                        group meetup. I assembled it and it worked on another person's computer, we worked on the future
+                        board and took some high-quality photos of the project because it was really cool in that house.
+                    </p>
+                    <img width="300px" height="200px" style="border-radius: 10px;" src="binbin-project.webp">
+                </li>
+                <li>
+                    <h4>Fourth Update: Final Device</h4>
+                    <p>I grouped up the future board and project.</p>
+                    <img width="300px" height="200px" style="border-radius: 10px;" src="binbin-project-2.webp">
+                </li>
+            </ul>
+        </div>
+        <button class="accordion">Wind Energy vs Sun Energy</button>
+        <div class="panel">
+            <p>blah blah</p>
+        </div>
+
+        <button class="accordion">Soundview Smart Glasses</button>
+        <div class="panel">
+            <p>
+
+            <h4>By Caleb (13)
+                Project: Assistive Smart Glasses</h4>
+            <p>Globally, over 2.2 billion people live with vision impairment. Many rely on glasses, canes, or surgery.
+                But some forms of vision loss can't be easily corrected.
+                So I started wondering:
+                Could a small wearable computer describe the world using sound?
+
+                That idea became SoundView.</p>
+
+
+            <h2>The Concept</h2>
+            <p>SoundView is a pair of DIY smart glasses that can detect objects and convert visual information into
+                audio feedback.
+                Instead of seeing obstacles, the user hears them.</p>
+            <h4>The glasses combine:</h4>
+            <ul>
+                <li>microcontroller processing</li>
+                <li>camera input</li>
+                <li>audio output</li>
+            </ul>
+            <p> The goal is to create real-time environmental awareness.
+                First Prototype
+                The first prototype was extremely simple:
+                glasses frame
+                microcontroller board
+                sensor module
+                wired audio output
+                It looked messy — but it worked.</p>
+            <img style="margin-left:auto;margin-right:auto;display:block;border-radius:10px;" src="caleb-project-1.webp"
+                width="500px" height="auto">
+            <br>
+            <table>
+                <tr>
+                    <th>Part</th>
+                    <th>Purpose</th>
+                </tr>
+                <tr>
+                    <td>Microcontroller</td>
+                    <td>Controls system</td>
+                </tr>
+                <tr>
+                    <td>Camera / sensor</td>
+                    <td>Detects environment</td>
+                </tr>
+                <tr>
+                    <td>Audio module</td>
+                    <td>Produces sound feedback</td>
+                </tr>
+                <tr>
+                    <td>Battery</td>
+                    <td>Power</td>
+                </tr>
+                <tr>
+                    <td>Frame</td>
+                    <td>Wearable mount</td>
+                </tr>
+            </table>
+            <p>The hardest part was fitting everything onto glasses without making them too heavy.</p>
+            <h2>System Design</h2>
+            <h4>The Loop:</h4>
+            <p>
+                Camera → Processing → Audio Feedback
+            </p>
+            <ol>
+                <li>Camera detects objects</li>
+                <li>Microcontroller analyzes distance / position</li>
+                <li>Audio warns user</li>
+            </ol>
+            <h4>Example Feedback Patterns</h4>
+            <p>"In front of you there is a backpack, a small pencil, a blue pen. The lighting is dim and it is difficult
+                to see fine details. A person seems to be standing in the background, along with a smartphone which he
+                is holding."</p>
+            <h4>Basic Electronic Layout</h4>
+
+            <p>Camera Module → Microcontroller</p>
+
+            <p>Audio Pin → Amplifier → Speaker</p>
+
+            <p>Battery → Voltage Regulator → System</p>
+
+            <p>In early prototypes everything was breadboarded first before mounting.</p>
+            <h4>Biggest Challenges</h4>
+            <ol>
+                <li>Weight Electronics quickly make glasses uncomfortable.</li>
+                <li>Future designs will use smaller boards.</li>
+                <li>Power Wearable devices need long battery life.</li>
+            </ol>
+            <h4>Possible improvements:</h4>
+            <ul>
+                <li>Battery optimization Using low-power components and sleep modes.</li>
+                <li>Hardware miniaturization Using smaller microcontrollers and integrated circuits.</li>
+                <li>Software efficiency. Optimizing code to reduce processing time and power consumption.</li>
+            </ul>
+        </div>
+    </div>
 </body>
+<script src="main.js"></script>
+
+</html>

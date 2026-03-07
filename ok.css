@@ -27,15 +27,22 @@
         flex-direction: column;
     }
 
+    .projectdesc {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        font-size: 18px;
+        line-height: 1.6;
+    }
+
+    a {
+        flex-direction: column;
+        font-size: 10px;
+    }
 }
 
 @media only screen and (min-width: 768px) {
-    
-    .navbar {
-        flex-direction: column;
-        padding: 10px;
-    }
-
     a {
         font-size: 1rem;
     }
@@ -67,6 +74,16 @@
 }
 
 @media only screen and (min-width: 700px) {
+    .projectdesc {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        font-size: 18px;
+        line-height: 1.6;
+        margin-left: 20px;
+    }
+
     .project {
         font-size: 20px;
         display: flex;
@@ -105,18 +122,14 @@
         background: rgba(255, 255, 255, 0.322);
         box-shadow: 4px 4px 17px rgba(0, 0, 0, 0.6);
     }
-
-    .navbar {
-        word-spacing: 10px;
-    }
-
-
 }
-.image{
-    width: 100%;          
-    max-width: 500px;     
-    height: auto; 
+
+.image {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
     border-radius: 10px;
+    padding: 6px;
 }
 
 .navbar {
@@ -127,7 +140,7 @@
     justify-content: center;
     align-items: center;
     flex-wrap: nowrap;
-    gap: 20px;
+    gap: 30px;
     font-family: "Rubik", sans-serif;
     padding: 15px;
 }
@@ -146,7 +159,9 @@
 a {
     text-decoration: none;
     color: black;
-    font-size: 1.5em;
+    font-size: 25px;
+    padding: 7px;
+    /*HERE IS CHANGING FOR THE NAVBAR*/
 }
 
 p {
@@ -312,14 +327,43 @@ body {
     display: flex;
 }
 
-.projectdesc {
-    flex: 1;
-    display: flex;
-    /* Makes vertical centering precise */
-    flex-direction: column;
-    justify-content: center;
-    /* Centers content inside text box */
-    font-size: 18px;
-    line-height: 1.6;
-    margin-left: 20px;
+.accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    transition: 0.4s;
+    margin-bottom: 10px;
+}
+
+.active,
+.accordion:hover {
+    background-color: #ccc;
+}
+
+.panel {
+    padding: 0 18px;
+    display: none;
+    background-color: white;
+    overflow: hidden;
+}
+table {
+  font-family: "Rubik", sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
 }
