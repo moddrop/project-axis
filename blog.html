@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US">
 
 <head>
     <meta charset="UTF-8">
@@ -18,17 +18,19 @@
     <div class="navbar">
         <img height="50px" width="50px" src="logo.png">
         <div class="navbar-wrapper">
-            <a href="index.html" class="hover">HOmME</a>
+            <a href="index.html" class="hover">HOME</a>
             <a href="aboutus.html" class="hover">INFO</a>
             <a href="blog.html" class="hover">BLOG</a>
             <a href="project.html" class="hover">PROJECTS</a>
+            <a href="donate.html" class="hover">DONORS</a>
         </div>
     </div>
     <div class="header">
-        <h1>Project AXIS</h1>
-        <i>
+        <h1>~ Project AXIS ~</h1>
+        <i> 
             <p>"Building the future"</p>
         </i>
+        <div id="google_translate_element"></div>
         <div class="line"></div>
         <br>
     </div>
@@ -39,8 +41,9 @@
     <div class="container">
         <button class="accordion">Comparing Air Quality in the Past, Present, and Future</button>
         <div class="panel">
-            <img style="margin-left:auto;margin-right:auto;display:block;border-radius:10px;" src="binbin-project.webp"
-                width="500px" height="auto">
+            <div style="display: flex;justify-content: center;">
+                <img class="image" style="border-radius:20px;" src="binbin-project.webp">
+            </div>
             <h4>By Binbin (12) Project: Comparing Air Quality in the Past, Present, and Futures</h4>
             <p>Our project is about how humans affect and cause bad air quality in the past,
                 present, and future. We have made a device that detects and measures the air quality. The device beeps
@@ -153,8 +156,9 @@
                 sensor module
                 wired audio output
                 It looked messy — but it worked.</p>
-            <img style="margin-left:auto;margin-right:auto;display:block;border-radius:10px;" src="caleb-project-1.webp"
-                width="500px" height="auto">
+            <div style="display: flex;justify-content: center;">
+                <img class="image" style="border-radius:20px;" src="caleb-project-1.webp">
+            </div>
             <br>
             <table>
                 <tr>
@@ -222,5 +226,12 @@
     </div>
 </body>
 <script src="main.js"></script>
+<script type="text/javascript"
+    src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<script type="text/javascript">
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({ pageLanguage: 'en' }, 'google_translate_element');
+    }
+</script>
 
 </html>
