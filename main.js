@@ -1,3 +1,5 @@
+console.log("For translation, when you want to enter English, please click on the 'x' on the Google Translate bar on top of the navbar. Also if you are having trouble with setting your system language to English on your device please search your device model and try to fix the system settings.");
+
 var acc = document.getElementsByClassName("accordion");
 var i;
 
