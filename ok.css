@@ -2,7 +2,7 @@
     .people {
         flex-direction: column;
         align-items: center;
-        margin: 43px;
+        margin: 30px;
     }
 }
 
@@ -42,15 +42,17 @@ body {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.person-card img{
+.person-card img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
+
 .person-card:hover {
     transform: translateY(-8px);
     box-shadow: 0 20px 35px rgba(0, 0, 0, 0.15);
 }
+
 @keyframes navslide {
     from {
         opacity: 0;
@@ -460,6 +462,6 @@ tr:nth-child(even) {
 }
 
 .introduction-wrapper h3 {
-    font-size: 6em;
+    font-size: 13vw;
     margin: auto;
 }
