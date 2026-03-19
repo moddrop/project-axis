@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Portal — Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="ok.css">
+</head>
+
+<body>
+
+    <div class="card">
+        <div class="logo-row">
+            <div class="logo-icon">🔐</div>
+            <div>
+                <div class="logo-text">Acme Corp</div>
+                <div class="logo-sub">Internal Systems</div>
+            </div>
+        </div>
+
+        <h1>Employee Login</h1>
+        <p class="subtitle">AUTHORIZED PERSONNEL ONLY // ACCESS LOGGED</p>
+
+        <div class="error-box" id="errorBox">
+            <span>⚠</span><span id="errorMsg">Invalid credentials.</span>
+        </div>
+
+        <div class="field">
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="your.username" autocomplete="username" autofocus>
+        </div>
+
+        <div class="field">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="••••••••••" autocomplete="current-password">
+        </div>
+
+        <button class="btn" id="loginBtn" onclick="handleLogin()">
+            <span class="btn-label">Authenticate</span>
+            <div class="spinner"></div>
+        </button>
+
+        <div class="demo-hint">
+            Demo credentials:<br>
+            <strong>alice</strong> / password123 &nbsp;·&nbsp; <strong>bob</strong> / hunter2
+        </div>
+    </div>
+
+    <script>
+        // ── Config: point this at your deployed Cloudflare Worker URL ──
+        const API_BASE = "employee-auth.binbinzhao888.workers.dev";
+        // For local dev with wrangler dev, use: const API_BASE = "http://localhost:8787";
+
+        const btn = document.getElementById("loginBtn");
+        const errorBox = document.getElementById("errorBox");
+        const errorMsg = document.getElementById("errorMsg");
+
+        // Allow Enter key
+        document.addEventListener("keydown", e => {
+            if (e.key === "Enter") handleLogin();
+        });
+
+        // Ripple effect
+        btn.addEventListener("mousedown", function (e) {
+            const r = document.createElement("span");
+            r.className = "ripple";
+            const size = Math.max(btn.clientWidth, btn.clientHeight);
+            r.style.cssText = `width:${size}px;height:${size}px;left:${e.offsetX - size / 2}px;top:${e.offsetY - size / 2}px`;
+            btn.appendChild(r);
+            r.addEventListener("animationend", () => r.remove());
+        });
+
+        async function handleLogin() {
+            const username = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value;
+
+            if (!username || !password) {
+                showError("Please enter both username and password.");
+                return;
+            }
+
+            setLoading(true);
+            hideError();
+
+            try {
+                const res = await fetch(`${API_BASE}/api/login`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",          // ← sends/receives cookies
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await res.json();
+
+                if (res.ok && data.ok) {
+                    // Redirect to secret dashboard
+                    window.location.href = "dashboard.html";
+                } else {
+                    showError(data.error ?? "Authentication failed.");
+                }
+            } catch (err) {
+                showError("Could not reach server. Is the Worker deployed?");
+                console.error(err);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        function setLoading(on) {
+            btn.disabled = on;
+            btn.classList.toggle("loading", on);
+        }
+
+        function showError(msg) {
+            errorMsg.textContent = msg;
+            errorBox.classList.add("visible");
+        }
+
+        function hideError() {
+            errorBox.classList.remove("visible");
+        }
+    </script>
+</body>
+
+</html>

@@ -462,6 +462,12 @@ tr:nth-child(even) {
 }
 
 .introduction-wrapper h3 {
-    font-size: 13vw;
+    font-size: 12vw;
     margin: auto;
+}
+
+#timer{
+    text-align:center;
+    font-size:30px;
+    color:rgb(173, 61, 61)
 }
