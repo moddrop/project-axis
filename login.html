@@ -3,52 +3,70 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Portal — Login</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Edu+NSW+ACT+Cursive:wght@400..700&family=Geist+Mono&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
+        rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="ok.css">
+    <title>Project Axis | Innovating the Future</title>
+    <link rel="icon" type="image/x-icon" href="logo.png">
 </head>
 
 <body>
+    <div class="navbar">
+        <img height="50px" width="50px" src="logo.png">
+        <div class="navbar-wrapper">
+            <a href="index.html" class="hover">HOME</a>
+            <a href="aboutus.html" class="hover">INFO</a>
+            <a href="blog.html" class="hover">BLOG</a>
+            <a href="project.html" class="hover">PROJECTS</a>
+            <a href="donate.html" class="hover">DONORS</a>
+            <a href="gallery.html" class="hover">GALLERY</a>
+            <a href="login.html" class="hover">LOGIN</a>
+        </div>
+    </div>
+    <div class="header">
+        <h1>~ Project AXIS ~</h1>
+        <i>
+            <p>"Innovating the future"</p>
+        </i>
+        <div id="google_translate_element"></div>
+        <div class="line"></div>
+        <br>
+    </div>
+    <div class="projects-container">
+        <div class="login-card">
+            <h1>Employee Login</h1>
+            <p class="subtitle">AUTHORIZED PERSONNEL ONLY // ACCESS LOGGED</p>
 
-    <div class="card">
-        <div class="logo-row">
-            <div class="logo-icon">🔐</div>
-            <div>
-                <div class="logo-text">Acme Corp</div>
-                <div class="logo-sub">Internal Systems</div>
+            <div class="field">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="your.username" autocomplete="username" autofocus>
+            </div>
+
+            <div class="field">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="••••••••••" autocomplete="current-password">
+            </div>
+
+            <button class="btn" id="loginBtn" onclick="handleLogin()">
+                <span class="btn-label">Authenticate</span>
+                <div class="spinner"></div>
+            </button>
+            <br>
+            <div class="demo-hint">
+                Demo credentials:<br>
+                <strong>alice</strong> / password123 &nbsp;·&nbsp; <strong>bob</strong> / hunter2
+            </div>
+
+            <div class="error-box" id="errorBox">
+                <span>⚠</span><span id="errorMsg">Invalid credentials.</span>
             </div>
         </div>
 
-        <h1>Employee Login</h1>
-        <p class="subtitle">AUTHORIZED PERSONNEL ONLY // ACCESS LOGGED</p>
-
-        <div class="field">
-            <label for="username">Username</label>
-            <input type="text" id="username" placeholder="your.username" autocomplete="username" autofocus>
-        </div>
-
-        <div class="field">
-            <label for="password">Password</label>
-            <input type="password" id="password" placeholder="••••••••••" autocomplete="current-password">
-        </div>
-
-        <button class="btn" id="loginBtn" onclick="handleLogin()">
-            <span class="btn-label">Authenticate</span>
-            <div class="spinner"></div>
-        </button>
-
-        <div class="demo-hint">
-            Demo credentials:<br>
-            <strong>alice</strong> / password123 &nbsp;·&nbsp; <strong>bob</strong> / hunter2
-        </div>
-
-        <!-- ✅ Move error box HERE (after form fields) -->
-        <div class="error-box" id="errorBox">
-            <span>⚠</span><span id="errorMsg">Invalid credentials.</span>
-        </div>
     </div>
-
 
     <script>
         // ── Config: point this at your deployed Cloudflare Worker URL ──
