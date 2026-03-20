@@ -23,10 +23,6 @@
         <h1>Employee Login</h1>
         <p class="subtitle">AUTHORIZED PERSONNEL ONLY // ACCESS LOGGED</p>
 
-        <div class="error-box" id="errorBox">
-            <span>⚠</span><span id="errorMsg">Invalid credentials.</span>
-        </div>
-
         <div class="field">
             <label for="username">Username</label>
             <input type="text" id="username" placeholder="your.username" autocomplete="username" autofocus>
@@ -46,7 +42,13 @@
             Demo credentials:<br>
             <strong>alice</strong> / password123 &nbsp;·&nbsp; <strong>bob</strong> / hunter2
         </div>
+
+        <!-- ✅ Move error box HERE (after form fields) -->
+        <div class="error-box" id="errorBox">
+            <span>⚠</span><span id="errorMsg">Invalid credentials.</span>
+        </div>
     </div>
+
 
     <script>
         // ── Config: point this at your deployed Cloudflare Worker URL ──
