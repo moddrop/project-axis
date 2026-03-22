@@ -38,31 +38,33 @@
     </div>
     <div class="projects-container">
         <div class="login-card">
-            <h1>Employee Login</h1>
-            <p class="subtitle">AUTHORIZED PERSONNEL ONLY // ACCESS LOGGED</p>
+            <div class="project-content">
+                <h3 class="project-title">Employee Login</h3>
+                <p class="project-description">AUTHORIZED PERSONNEL ONLY // ACCESS LOGGED</p>
 
-            <div class="field">
-                <label for="username">Username</label>
-                <input type="text" id="username" placeholder="your.username" autocomplete="username" autofocus>
-            </div>
+                <div class="field">
+                    <label for="username" class="project-description">Username</label>
+                    <input type="text" id="username" placeholder="Username:" autocomplete="username" autofocus>
+                </div>
 
-            <div class="field">
-                <label for="password">Password</label>
-                <input type="password" id="password" placeholder="••••••••••" autocomplete="current-password">
-            </div>
+                <div class="field">
+                    <label for="password" class="project-description">Password</label>
+                    <input type="password" id="password" placeholder="Password:" autocomplete="current-password">
+                </div>
 
-            <button class="btn" id="loginBtn" onclick="handleLogin()">
-                <span class="btn-label">Authenticate</span>
-                <div class="spinner"></div>
-            </button>
-            <br>
-            <div class="demo-hint">
-                Demo credentials:<br>
-                <strong>alice</strong> / password123 &nbsp;·&nbsp; <strong>bob</strong> / hunter2
-            </div>
+                <button class="btn" id="loginBtn" onclick="handleLogin()">
+                    <span class="btn-label" class="hover">Authenticate</span>
+                    <div class="spinner"></div>
+                </button>
+                <br>
+                <div class="demo-hint" class="project-description">
+                    Demo credentials:<br>
+                    <strong>alice</strong> / password123 &nbsp;·&nbsp; <strong>bob</strong> / hunter2
+                </div>
 
-            <div class="error-box" id="errorBox">
-                <span>⚠</span><span id="errorMsg">Invalid credentials.</span>
+                <div class="error-box" id="errorBox">
+                    <span>⚠</span><span id="errorMsg">Invalid credentials.</span>
+                </div>
             </div>
         </div>
 
@@ -70,7 +72,7 @@
 
     <script>
         // ── Config: point this at your deployed Cloudflare Worker URL ──
-        const API_BASE = "https://employee-auth.binbinzhao888.workers.dev";
+        const API_BASE = "https://employee-auth.calebethan485.workers.dev/";
         // For local dev with wrangler dev, use: const API_BASE = "http://localhost:8787";
 
         const btn = document.getElementById("loginBtn");
