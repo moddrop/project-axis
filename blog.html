@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Edu+NSW+ACT+Cursive:wght@400..700&family=Geist+Mono&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
+        rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="ok.css">
+    <title>Project Axis | Innovating the Future</title>
+    <link rel="icon" type="image/x-icon" href="logo.png">
+</head>
+
+<body>
+    <div class="navbar">
+        <img height="50px" width="50px" src="logo.png">
+        <div class="navbar-wrapper">
+            <a href="index.html" class="hover">HOME</a>
+            <a href="aboutus.html" class="hover">INFO</a>
+            <a href="blog.html" class="hover">BLOG</a>
+            <a href="project.html" class="hover">PROJECTS</a>
+            <a href="donate.html" class="hover">DONORS</a>
+            <a href="gallery.html" class="hover">GALLERY</a>
+            <a href="login.html" class="hover">LOGIN</a>
+        </div>
+    </div>
+    <div class="header">
+        <h1>~ Project AXIS ~</h1>
+        <i>
+            <p>"Building the future"</p>
+        </i>
+        <div id="google_translate_element"></div>
+        <div class="line"></div>
+        <br>
+    </div>
+    <p style="text-align: center;">Welcome to the Project AXIS blog! Here, we share our latest
+        updates, insights, and innovations in the world of technology and engineering. Stay tuned for exciting news
+        and behind-the-scenes looks at our projects.</p>
+    <h4 style="text-align: center;">Our Blog Posts:</h4>
+    <div class="container">
+        <button class="accordion" style="color:rgb(105, 61, 61);background-color:rgb(240, 182, 182)">Project Vending
+            Machine (GROUP PROJECT) WIP</button>
+        <div class="panel">
+            <div style="display: flex;justify-content: center;">
+                <img class="image" style="border-radius:20px; box-shadow: 4px 4px 17px rgba(0, 0, 0, 0.6)"
+                    src="vendingmachine-project.webp">
+            </div>
+            <p class="center"><i>Caleb's prototype diagram on the materials</i></p>
+            <h4 class="center">By Binbin (12), Raver (12), and Caleb (13). And for funding: Caleb's family members, Naru
+                (13), Binbin
+                (12).</h4>
+            <p class="center">
+                This project is an <i><b>automated drink-mixing vending machine</b></i> designed to sit inside a
+                refrigerator and
+                dispense customized beverages on demand. The system is powered by an ESP32 microcontroller and uses
+                multiple small water pumps to move syrups, juices, and soda from separate containers into a cup,
+                allowing the machine to automatically mix drinks.
+                A touchscreen interface built with the LVGL graphics library allows users to select different drink
+                combinations directly on the device. The screen displays available ingredients, lets the user choose a
+                drink, and visually shows the mixing process. Once a drink is selected, the ESP32 activates the correct
+                pumps for specific amounts of time to dispense the ingredients in the correct proportions.
+                Each ingredient is stored in its own container, and tubing connects the containers to the pumps that
+                deliver the liquids into a central mixing area or cup. The system focuses on accurate liquid control and
+                reliable dispensing to ensure consistent drink mixtures.</p>
+            <h2>The Concept</h2>
+            <p class="center">The concept of this project is to create a compact, automated drink-mixing machine that
+                lives inside a
+                refrigerator and functions like a personal vending machine for beverages. Instead of dispensing pre-made
+                drinks, the system stores different liquids such as syrups, juices, and sodas in separate containers and
+                mixes them on demand.
+                Users interact with the machine through a touchscreen interface, allowing them to browse drink options
+                and select a beverage they want. Once a drink is chosen, the system automatically pumps the required
+                ingredients and combines them into a cup, creating a freshly mixed drink. Because the machine operates
+                inside a fridge, all ingredients remain cold and ready to serve.
+                The goal of the concept is to provide a convenient and customizable way to prepare drinks automatically.
+                By combining an embedded control system, liquid pumps, and a touchscreen interface, the machine acts as
+                a small-scale automated beverage station that can create a variety of drinks quickly and consistently.
+            </p>
+            <table>
+                <tr>
+                    <th>Component</th>
+                    <th>Purpose</th>
+                </tr>
+                <tr>
+                    <td>ESP32 Microcontroller</td>
+                    <td>Central control unit that manages pumps and touchscreen interface.</td>
+                </tr>
+                <tr>
+                    <td>Water Pumps</td>
+                    <td>Dispense liquids from ingredient containers into the mixing area.</td>
+                </tr>
+                <tr>
+                    <td>Ingredient Containers</td>
+                    <td>Store syrups, juices, and soda separately for mixing.</td>
+                </tr>
+                <tr>
+                    <td>Touchscreen Interface (LVGL)</td>
+                    <td>Allows users to select drink combinations and displays the mixing process.</td>
+                </tr>
+            </table>
+            <h4>Blog Posts:</h4>
+            <p>LVGL Screen → ESP32S3</p>
+
+            <p>Jumper Wires → ULN2803A → Water Pump</p>
+
+
+            <ul>
+                <li>
+                    <h4>First Update: Buying the Materials (28/2/26)</h4>
+                    <p>I have added the necessary materials in the shopping cart and we are awaiting funding to create
+                        it.</p>
+                    <img width="300px" height="200px"
+                        style="border-radius: 10px;box-shadow: 4px 4px 17px rgba(0, 0, 0, 0.6);"
+                        src="vendingmachine-project-2.webp">
+                </li>
+                <li>
+                    <h4>Second Update: Enlisting donors (8/3/26)</h4>
+                    <p>We convinced Naru to buy Caleb a Pepsi, in the future he will buy the soda needed for our vending
+                        machine.</p>
+                    <img width="300px" height="200px"
+                        style="border-radius: 10px;box-shadow: 4px 4px 17px rgba(0, 0, 0, 0.6);" src="pepsi.jpg">
+                </li>
+                <li>
+                    <h4>Third Update: Buying folders and saving our funds</h4>
+                    <img width="300px" height="200px"
+                        style="border-radius: 10px;box-shadow: 4px 4px 17px rgba(0, 0, 0, 0.6);"
+                        src="vendingmachine-project-3.webp">
+                </li>
+                <li>
+                    <h4>Fourth Update: (To be Continued)</h4>
+                    <p>Update coming soon!</p>
+                    <img width="300px" height="200px"
+                        style="border-radius: 10px;box-shadow: 4px 4px 17px rgba(0, 0, 0, 0.6);"
+                        src="placeholder-horizontal.jpg">
+                </li>
+            </ul>
+        </div>
+        <button class="accordion" style="color:rgb(49, 99, 52);background-color:rgb(169, 245, 174)">Comparing Air
+            Quality in the Past, Present, and Future</button>
+        <div class="panel">
+            <div style="display: flex;justify-content: center;">
+                <img class="image" style="border-radius:20px;box-shadow: 4px 4px 17px rgba(0, 0, 0, 0.6);"
+                    src="binbin-project.webp">
+            </div>
+            <h4 class="center">By Binbin (12) Project: Comparing Air Quality in the Past, Present, and Future (PROJECT
+                DONE)</h4>
+            <p class="center">Our project is about how humans affect and cause bad air quality in the past,
+                present, and future. We have made a device that detects and measures the air quality. The device beeps
+                whenever the air quality increases severely. We are showing examples of how bad the air quality is and
+                was in the past, present, and
+                future.</p>
+            <h2>The Concept</h2>
+            <p class="center">Our detector detects whenever carbon dioxide or sulfure dioxide enters a specific area
+                where the detector
+                is placed, It helps people see how much values carbon or sulfur dioxide is in that area.</p>
+            <h4>The parts of our device:</h4>
+            <ul>
+                <li>Arduino Nano</li>
+                <li>MQ135 Flying Fish Module</li>
+                <li>Jumper Wires</li>
+                <li>Any I2C Display</li>
+            </ul>
+            <table>
+                <tr>
+                    <th>Part</th>
+                    <th>Purpose</th>
+                </tr>
+                <tr>
+                    <td>Arduino Nano</td>
+                    <td>Controls the system and processes sensor data.</td>
+                </tr>
+                <tr>
+                    <td>MQ135 Flying Fish Module</td>
+                    <td>Detects air quality by measuring Sulfur, CO2 concentrations.</td>
+                </tr>
+                <tr>
+                    <td>Jumper Wires</td>
+                    <td>Connects components together.</td>
+                </tr>
+                <tr>
+                    <td>I2C Display</td>
+                    <td>Displays real-time air quality readings.</td>
+                </tr>
+            </table>
+            <h4>Blog Posts:</h4>
+            <p>MQ135 → Arduino</p>
+
+            <p>Jumper Wires → I2C Module → I2C Display</p>
+
+            <p>Laptop → System</p>
+            <ul>
+                <li>
+                    <h4>First Update: Buying the Materials</h4>
+                    <p>My team mostly bought the materials (except when one MQ135 sensor broke)</p>
+                    <img width="300px" height="200px"
+                        style="border-radius: 10px;box-shadow: 4px 4px 17px rgba(0, 0, 0, 0.6);"
+                        src="binbin-project-1.webp">
+                </li>
+                <li>
+                    <h4>Second Update: Assembling the Prototype</h4>
+                    <p>I assembled the device first on a breadboard with the youtube code modified to my liking. I
+                        upload the code and tested it for the first time at 9:00 pm.</p>
+                    <iframe width="300" height="200"
+                        style="border-radius: 10px;box-shadow: 4px 4px 17px rgba(0, 0, 0, 0.6);"
+                        src="https://www.youtube-nocookie.com/embed/5jFgHtmS7Vk?si=ttEJQYDZ7gJZhjxt&amp;start=4"
+                        title="YouTube video player" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </li>
+                <li>
+                    <h4>Third Update: Meeting up with the team</h4>
+                    <p>After the prototype I brought all the materials and went to one of team member's house for a
+                        group meetup. I assembled it and it worked on another person's computer, we worked on the future
+                        board and took some high-quality photos of the project because it was really cool in that house.
+                    </p>
+                    <img width="300px" height="200px"
+                        style="border-radius: 10px;box-shadow: 4px 4px 17px rgba(0, 0, 0, 0.6);"
+                        src="binbin-project.webp">
+                </li>
+                <li>
+                    <h4>Fourth Update: Final Device</h4>
+                    <p>I grouped up the future board and project.</p>
+                    <img width="300px" height="200px"
+                        style="border-radius: 10px;box-shadow: 4px 4px 17px rgba(0, 0, 0, 0.6);"
+                        src="binbin-project-2.webp">
+                </li>
+            </ul>
+        </div>
+        <button class="accordion" style="color:rgb(49, 99, 52);background-color:rgb(169, 245, 174);">Wind Energy vs Sun
+            Energy</button>
+        <div class="panel">
+            <div style="display: flex;justify-content: center;">
+                <img class="image" style="border-radius:20px;box-shadow: 4px 4px 17px rgba(0, 0, 0, 0.6);"
+                    src="raver-project.webp">
+            </div>
+            <h4 class="center">By Raver (12) Project: Wind Energy VS Sun Energy (PROJECT
+                DONE)</h4>
+            <p class="center">Back then fossil fuels were used as our main source of
+                energy, rather than clean
+                energies such as wind
+                and sun energy. So now we are seeing which is better in certain conditions. Our experiment was powering
+                a wind turbine and solar panel to power an LED to see which one has better output. It showed that both
+                energies actually were similar.</p>
+            <h2>The Concept</h2>
+            <p class="center">The goal is to figure out which energy is the best to use. This will help the future by
+                determining which is better for certain conditions.We have two LEDs, one powered via wind turbine and
+                one via solar panels. We will test them by converting the movement and input into electricity and
+                transfer it to the LEDs. Then we measure the voltage, watts, current, efficiency, accessibility, and
+                compare the two</h4>
+            <h2>Conclusion:</h2>
+            <p>
+                After measuring and comparing wind energy and solar energy, we have come to the conclusion that both
+                sources of energy are actually the same in many ways. In our experiment, both systems produced similar
+                electrical outputs, voltage, power, and current measurements under the tested conditions. This shows
+                that both wind turbines and solar panels can be effective, efficient, and useful methods of generating
+                electricity. We also observed that each system accepted its energy input in a similar way. When the wind
+                turbine received a more powerful wind gust, its electrical output increased, and when the solar panel
+                received more sunlight, its output also increased. This shows that both renewable energy systems depend
+                on natural environmental conditions to work efficiently. However, despite these similarities in their
+                results, the way they generate electricity is different. Solar panels create electricity by converting
+                sunlight directly into electrical energy inverting direct currents of electromagnetic energy from the
+                Sun, while wind turbines generate electricity by using moving air to spin their blades, which then turn
+                a generator. Overall, even though wind and solar power operate through different processes, our results
+                show that they can produce a similar electrical output, making both of them valuable and reliable
+                sources of renewable energy.
+            </p>
+            <table>
+                <tr>
+                    <th>Part</th>
+                    <th>Purpose</th>
+                </tr>
+                <tr>
+                    <td>Solar Panels</td>
+                    <td>Secondary generator of energy</td>
+                </tr>
+                <tr>
+                    <td>Plastic Wind Turbine</td>
+                    <td>Primary generator of energy</td>
+                </tr>
+                <tr>
+                    <td>Electrical Wires and Switch</td>
+                    <td>Connects components together.</td>
+                </tr>
+                <tr>
+                    <td>Decoration</td>
+                    <td>Makes the project nicer and aesthetically pleasing.</td>
+                </tr>
+            </table>
+            <h4>Blog Posts:</h4>
+            <p>MQ135 → Arduino</p>
+
+            <p>Jumper Wires → I2C Module → I2C Display</p>
+
+            <p>Laptop → System</p>
+            
+            <ul>
+                <li>
+                    <h4>First Update: Buying the Materials (28/2/26)</h4>
+                    <p>I have most of the materials already present in my house, I just needed to order the electrical materials online. </p>
+                    <img width="300px" height="200px
+                        style="border-radius: 10px;box-shadow: 4px 4px 17px rgba(0, 0, 0, 0.6);"
+                        src="raver-project-2.webp">
+                </li>
+                <li>
+                    <h4>Second Update: Changing Ideas (8/3/26)</h4>
+                    <p>I had the initial idea of just discovering new ways to generate electricity besides fossil fuels. But the idea wouldn't exactly work or make sense. So, we changed the project and aimed it more towards comparing two new sources of energy, sun and wind.
+    .</p>
+                    <img width="300px" height="200px"
+                        style="border-radius: 10px;box-shadow: 4px 4px 17px rgba(0, 0, 0, 0.6);" src="raver-project-3.jpg">
+                </li>
+                <li>
+                    <h4>Third Update: Assembling the Presentation</h4>
+                    <p>We assembled the demo by building houses and a skyscraper to model the use of electricity in daily life. In this case, lighting. We then inserted lights into the houses and wired them to a solar panel and wind turbine. Surprisingly, they worked without any issues! Then, I decorated it to actually look like a miniature city. Finally, I worked on the trifold futureboard by sticking on printed cutouts with text on them describing our project.</p>
+                    <img width="300px" height="200px"
+                        style="border-radius: 10px;box-shadow: 4px 4px 17px rgba(0, 0, 0, 0.6);"
+                        src="raver-project-4.webp">
+                </li>                
+                <li>
+                    <h4>Fourth Update: Event  (2/20/26)</h4>
+                    <p> The Science Fair was here, and our project was done. Our team presented well, and even with a midway battery shortage in the wind turbine, we managed to get 2nd place in our grade level.</p>
+                    <img width="300px" height="200px"
+                        style="border-radius: 10px;box-shadow: 4px 4px 17px rgba(0, 0, 0, 0.6);"
+                        src="raver-project-5.webp">
+                </li>
+            </ul>
+        </div>
+
+        <button class="accordion" style="color:rgb(49, 99, 52);background-color:rgb(169, 245, 174);">Soundview Smart
+            Glasses</button>
+        <div class="panel">
+            <p>
+
+            <h4 class="center">By Caleb (13)
+                Project: Assistive Smart Glasses (PROJECT DONE)</h4>
+            <p class="center">Globally, over 2.2 billion people live with vision impairment. Many rely on glasses,
+                canes, or surgery.
+                But some forms of vision loss can't be easily corrected.
+                So I started wondering:
+                Could a small wearable computer describe the world using sound?
+
+                That idea became SoundView.</p>
+
+
+            <h2>The Concept</h2>
+            <p class="center">SoundView is a pair of DIY smart glasses that can detect objects and convert visual
+                information into
+                audio feedback.
+                Instead of seeing obstacles, the user hears them.</p>
+            <h4>The glasses combine:</h4>
+            <ul>
+                <li>microcontroller processing</li>
+                <li>camera input</li>
+                <li>audio output</li>
+            </ul>
+            <p> The goal is to create real-time environmental awareness.
+                First Prototype
+                The first prototype was extremely simple:
+                glasses frame
+                microcontroller board
+                sensor module
+                wired audio output
+                It looked messy — but it worked.</p>
+            <div style="display: flex;justify-content: center;">
+                <img class="image" style="border-radius:20px;box-shadow: 4px 4px 17px rgba(0, 0, 0, 0.6);" src="
+                    caleb-project-1.webp">
+            </div>
+            <br>
+            <table>
+                <tr>
+                    <th>Part</th>
+                    <th>Purpose</th>
+                </tr>
+                <tr>
+                    <td>Microcontroller</td>
+                    <td>Controls system</td>
+                </tr>
+                <tr>
+                    <td>Camera / sensor</td>
+                    <td>Detects environment</td>
+                </tr>
+                <tr>
+                    <td>Audio module</td>
+                    <td>Produces sound feedback</td>
+                </tr>
+                <tr>
+                    <td>Battery</td>
+                    <td>Power</td>
+                </tr>
+                <tr>
+                    <td>Frame</td>
+                    <td>Wearable mount</td>
+                </tr>
+            </table>
+            <p>The hardest part was fitting everything onto glasses without making them too heavy.</p>
+            <h2>System Design</h2>
+            <h4>The Loop:</h4>
+            <p>
+                Camera → Processing → Audio Feedback
+            </p>
+            <ol>
+                <li>Camera detects objects</li>
+                <li>Microcontroller analyzes distance / position</li>
+                <li>Audio warns user</li>
+            </ol>
+            <h4>Example Feedback Patterns</h4>
+            <p>"In front of you there is a backpack, a small pencil, a blue pen. The lighting is dim and it is difficult
+                to see fine details. A person seems to be standing in the background, along with a smartphone which he
+                is holding."</p>
+            <h4>Basic Electronic Layout</h4>
+
+            <p>Camera Module → Microcontroller</p>
+
+            <p>Audio Pin → Amplifier → Speaker</p>
+
+            <p>Battery → Voltage Regulator → System</p>
+
+            <p>In early prototypes everything was breadboarded first before mounting.</p>
+            <h4>Biggest Challenges</h4>
+            <ol>
+                <li>Weight Electronics quickly make glasses uncomfortable.</li>
+                <li>Future designs will use smaller boards.</li>
+                <li>Power Wearable devices need long battery life.</li>
+            </ol>
+            <h4>Possible improvements:</h4>
+            <ul>
+                <li>Battery optimization Using low-power components and sleep modes.</li>
+                <li>Hardware miniaturization Using smaller microcontrollers and integrated circuits.</li>
+                <li>Software efficiency. Optimizing code to reduce processing time and power consumption.</li>
+            </ul>
+        </div>
+    </div>
+</body>
+<script src="main.js"></script>
+<script type="text/javascript"
+    src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<script type="text/javascript">
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({ pageLanguage: 'en' }, 'google_translate_element');
+    }
+</script>
+
+</html>

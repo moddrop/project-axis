@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Dashboard — Acme Corp</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --surface: #111118;
+            --surface2: #16161f;
+            --border: #1e1e2e;
+            --border-lit: #2e2e4e;
+            --accent: #5b6af0;
+            --accent2: #8b9cff;
+            --green: #4af08e;
+            --yellow: #f0c44a;
+            --danger: #f05b6a;
+            --text: #e8e8f2;
+            --muted: #6b6b88;
+            --glow: rgba(91, 106, 240, .15);
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'DM Mono', monospace;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            opacity: 0;
+            transition: opacity .4s;
+        }
+
+        body.visible {
+            opacity: 1;
+        }
+
+        /* ── Auth gate overlay ── */
+        #authGate {
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            display: grid;
+            place-items: center;
+            z-index: 1000;
+            font-family: 'Syne', sans-serif;
+            font-size: 13px;
+            letter-spacing: .1em;
+            color: var(--muted);
+        }
+
+        #authGate.hidden {
+            display: none;
+        }
+
+        /* ── Top bar ── */
+        .topbar {
+            height: 56px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border-lit);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo-icon {
+            width: 28px;
+            height: 28px;
+            background: var(--accent);
+            border-radius: 2px;
+            display: grid;
+            place-items: center;
+            font-size: 13px;
+        }
+
+        .logo-text {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 13px;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+
+        .badge {
+            font-size: 9px;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            padding: 3px 8px;
+            border-radius: 2px;
+            background: rgba(91, 106, 240, .15);
+            color: var(--accent2);
+            border: 1px solid rgba(91, 106, 240, .3);
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-pill {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .user-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            display: grid;
+            place-items: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: #fff;
+            font-family: 'Syne', sans-serif;
+        }
+
+        .logout-btn {
+            background: transparent;
+            border: 1px solid var(--border-lit);
+            color: var(--muted);
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: .08em;
+            padding: 6px 14px;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: border-color .2s, color .2s;
+        }
+
+        .logout-btn:hover {
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        /* ── Layout ── */
+        .layout {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            min-height: calc(100vh - 56px);
+        }
+
+        /* ── Sidebar ── */
+        .sidebar {
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            padding: 24px 0;
+        }
+
+        .nav-section {
+            margin-bottom: 28px;
+            padding: 0 20px;
+        }
+
+        .nav-label {
+            font-size: 9px;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 8px;
+            padding: 0 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 8px;
+            border-radius: 2px;
+            font-size: 12px;
+            color: var(--muted);
+            cursor: pointer;
+            transition: background .15s, color .15s;
+            letter-spacing: .02em;
+        }
+
+        .nav-item:hover {
+            background: var(--surface2);
+            color: var(--text);
+        }
+
+        .nav-item.active {
+            background: rgba(91, 106, 240, .12);
+            color: var(--accent2);
+        }
+
+        .nav-item .icon {
+            width: 16px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        /* ── Main content ── */
+        main {
+            padding: 40px;
+            background: var(--bg);
+        }
+
+        .page-header {
+            margin-bottom: 36px;
+            animation: fadeUp .5s .1s both;
+        }
+
+        .page-header h2 {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 28px;
+            margin-bottom: 6px;
+        }
+
+        .page-header p {
+            font-size: 12px;
+            color: var(--muted);
+            letter-spacing: .06em;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ── Stats grid ── */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+            animation: fadeUp .5s .2s both;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border-lit);
+            border-radius: 3px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: border-color .2s;
+        }
+
+        .stat-card:hover {
+            border-color: var(--accent);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+        }
+
+        .stat-card.green::before {
+            background: var(--green);
+        }
+
+        .stat-card.blue::before {
+            background: var(--accent);
+        }
+
+        .stat-card.yellow::before {
+            background: var(--yellow);
+        }
+
+        .stat-card.red::before {
+            background: var(--danger);
+        }
+
+        .stat-label {
+            font-size: 10px;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-family: 'Syne', sans-serif;
+            font-size: 32px;
+            font-weight: 800;
+        }
+
+        .stat-value.green {
+            color: var(--green);
+        }
+
+        .stat-value.blue {
+            color: var(--accent2);
+        }
+
+        .stat-value.yellow {
+            color: var(--yellow);
+        }
+
+        .stat-value.red {
+            color: var(--danger);
+        }
+
+        .stat-delta {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 6px;
+        }
+
+        /* ── Panels ── */
+        .panels {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            animation: fadeUp .5s .3s both;
+        }
+
+        .panel {
+            background: var(--surface);
+            border: 1px solid var(--border-lit);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .panel-title {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: .04em;
+        }
+
+        .panel-badge {
+            font-size: 10px;
+            padding: 2px 8px;
+            background: var(--surface2);
+            border-radius: 20px;
+            color: var(--muted);
+            border: 1px solid var(--border-lit);
+        }
+
+        .panel-body {
+            padding: 0;
+        }
+
+        /* table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            font-size: 9px;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            color: var(--muted);
+            padding: 10px 20px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            background: var(--surface2);
+        }
+
+        td {
+            padding: 12px 20px;
+            font-size: 12px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: var(--surface2);
+        }
+
+        .status-dot {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .dot.green {
+            background: var(--green);
+            box-shadow: 0 0 6px var(--green);
+        }
+
+        .dot.yellow {
+            background: var(--yellow);
+            box-shadow: 0 0 6px var(--yellow);
+        }
+
+        .dot.red {
+            background: var(--danger);
+            box-shadow: 0 0 6px var(--danger);
+        }
+
+        /* activity feed */
+        .feed-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--border);
+            font-size: 12px;
+        }
+
+        .feed-item:last-child {
+            border-bottom: none;
+        }
+
+        .feed-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 2px;
+            background: var(--surface2);
+            border: 1px solid var(--border-lit);
+            display: grid;
+            place-items: center;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .feed-body {
+            flex: 1;
+        }
+
+        .feed-title {
+            margin-bottom: 2px;
+        }
+
+        .feed-time {
+            font-size: 10px;
+            color: var(--muted);
+            letter-spacing: .04em;
+        }
+
+        /* ── Secret section ── */
+        .secret-panel {
+            margin-top: 24px;
+            background: linear-gradient(135deg, rgba(91, 106, 240, .08), rgba(139, 156, 255, .05));
+            border: 1px solid rgba(91, 106, 240, .3);
+            border-radius: 3px;
+            padding: 28px;
+            animation: fadeUp .5s .4s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .secret-panel::before {
+            content: '⬡ CLASSIFIED ⬡';
+            position: absolute;
+            top: 12px;
+            right: 20px;
+            font-size: 9px;
+            letter-spacing: .2em;
+            color: rgba(91, 106, 240, .4);
+        }
+
+        .secret-panel h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--accent2);
+            margin-bottom: 12px;
+            letter-spacing: .06em;
+        }
+
+        .secret-panel p {
+            font-size: 12px;
+            color: var(--muted);
+            line-height: 1.8;
+        }
+
+        .secret-panel .secret-key {
+            display: inline-block;
+            margin-top: 16px;
+            background: var(--bg);
+            border: 1px solid var(--border-lit);
+            padding: 10px 16px;
+            border-radius: 2px;
+            font-size: 13px;
+            letter-spacing: .08em;
+            color: var(--green);
+        }
+    </style>
+    <link rel="stylesheet" href="ok.css">
+</head>
+
+<body>
+
+    <!-- Auth gate while verifying cookie -->
+    <div id="authGate">VERIFYING SESSION…</div>
+
+    <!-- Top bar -->
+    <div class="topbar">
+        <div class="topbar-left">
+            <div class="logo-text">PROJECT AXIS</div>
+            <div class="badge">Internal</div>
+        </div>
+        <div class="topbar-right">
+            <div class="user-pill">
+                <div class="user-avatar" id="userAvatar">?</div>
+                <span id="userName">Loading…</span>
+                <span style="color:var(--border-lit)">·</span>
+                <span id="userRole" style="color:var(--accent2)">—</span>
+            </div>
+            <button class="logout-btn" onclick="handleLogout()">Logout</button>
+        </div>
+    </div>
+
+    <div class="layout">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="nav-section">
+                <div class="nav-label">Main</div>
+                <div class="nav-item active"><span class="icon">⊞</span><a href=""></a></div>
+                <div class="nav-item"><span class="icon">◈</span> Projects</div>
+                <div class="nav-item"><span class="icon">◉</span> Analytics</div>
+            </div>
+            <div class="nav-section">
+                <div class="nav-label">Team</div>
+                <div class="nav-item"><span class="icon">◎</span> Directory</div>
+                <div class="nav-item"><span class="icon">⊕</span> Requests</div>
+            </div>
+            <div class="nav-section">
+                <div class="nav-label">System</div>
+                <div class="nav-item"><span class="icon">⊛</span> Settings</div>
+                <div class="nav-item"><span class="icon">◌</span> Docs</div>
+            </div>
+        </nav>
+
+        <!-- Main -->
+        <main>
+            <div class="page-header">
+                <h2>Welcome back, <span id="greetName">Employee</span> 👋</h2>
+                <p id="sessionInfo">SESSION AUTHENTICATED · <span id="currentTime"></span></p>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card green">
+                    <div class="stat-label">Days since last disaster:</div>
+                    <div class="stat-value green">1</div>
+                    <div class="stat-delta">↑ All healthy</div>
+                </div>
+                <div class="stat-card blue">
+                    <div class="stat-label">Updated progress reports:</div>
+                    <div class="stat-value blue">2</div>
+                    <div class="stat-delta">↑ All healthy</div>
+                </div>
+                <div class="stat-card yellow">
+                    <div class="stat-label">P</div>
+                    <div class="stat-value yellow">9</div>
+                    <div class="stat-delta">→ 2 urgent</div>
+                </div>
+                <div class="stat-card red">
+                    <div class="stat-label">Open Incidents</div>
+                    <div class="stat-value red">1</div>
+                    <div class="stat-delta">↓ Down from 3</div>
+                </div>
+            </div>
+
+            <!-- Panels -->
+            <div class="panels">
+                <!-- Services table -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <span class="panel-title">Service Status</span>
+                        <span class="panel-badge">Live</span>
+                    </div>
+                    <div class="panel-body">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Service</th>
+                                    <th>Status</th>
+                                    <th>Uptime</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Auth API</td>
+                                    <td>
+                                        <div class="status-dot">
+                                            <div class="dot green"></div>Online
+                                        </div>
+                                    </td>
+                                    <td>99.98%</td>
+                                </tr>
+                                <tr>
+                                    <td>Worker Edge</td>
+                                    <td>
+                                        <div class="status-dot">
+                                            <div class="dot green"></div>Online
+                                        </div>
+                                    </td>
+                                    <td>100%</td>
+                                </tr>
+                                <tr>
+                                    <td>Database</td>
+                                    <td>
+                                        <div class="status-dot">
+                                            <div class="dot green"></div>Online
+                                        </div>
+                                    </td>
+                                    <td>99.95%</td>
+                                </tr>
+                                <tr>
+                                    <td>CDN</td>
+                                    <td>
+                                        <div class="status-dot">
+                                            <div class="dot yellow"></div>Degraded
+                                        </div>
+                                    </td>
+                                    <td>98.2%</td>
+                                </tr>
+                                <tr>
+                                    <td>Email Service</td>
+                                    <td>
+                                        <div class="status-dot">
+                                            <div class="dot red"></div>Incident
+                                        </div>
+                                    </td>
+                                    <td>94.1%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Activity feed -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <span class="panel-title">Recent Activity</span>
+                        <span class="panel-badge">Today</span>
+                    </div>
+                    <div class="panel-body">
+                        <div class="feed-item">
+                            <div class="feed-icon">🚀</div>
+                            <div class="feed-body">
+                                <div class="feed-title">v2.4.1 deployed to production</div>
+                                <div class="feed-time">2 min ago · alice</div>
+                            </div>
+                        </div>
+                        <div class="feed-item">
+                            <div class="feed-icon">🔧</div>
+                            <div class="feed-body">
+                                <div class="feed-title">CDN config updated</div>
+                                <div class="feed-time">18 min ago · system</div>
+                            </div>
+                        </div>
+                        <div class="feed-item">
+                            <div class="feed-icon">⚠️</div>
+                            <div class="feed-body">
+                                <div class="feed-title">Email service incident opened</div>
+                                <div class="feed-time">41 min ago · ops-bot</div>
+                            </div>
+                        </div>
+                        <div class="feed-item">
+                            <div class="feed-icon">✅</div>
+                            <div class="feed-body">
+                                <div class="feed-title">Security audit completed</div>
+                                <div class="feed-time">3 hrs ago · bob</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Secret section -->
+            <div class="secret-panel">
+                <h3>🔒 Restricted Access Area</h3>
+                <p>
+                    You have successfully authenticated and have been granted access to internal systems.
+                    This page is only accessible to verified employees — unauthorized access attempts are logged
+                    and monitored. Session cookies are HttpOnly and expire after 8 hours.
+                </p>
+                <div class="secret-key">SESSION_KEY: <span id="sessionKey">—</span></div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // ── Config ──────────────────────────────────────────────────────────────
+        const API_BASE = "https://employee-auth.calebethan485.workers.dev";
+        // Local dev: const API_BASE = "http://localhost:8787";
+
+        // ── On load: verify the session cookie with the Worker ──────────────────
+        (async function init() {
+            try {
+                const res = await fetch(`${API_BASE}/api/me`, {
+                    credentials: "include"   // ← send the session cookie
+                });
+                
+                if (!res.ok) {
+                    // Not authenticated → kick back to login
+                    window.location.href = "login.html";
+                    return;
+                }
+
+                const user = await res.json();
+
+                // Populate UI
+                document.getElementById("userName").textContent = user.name;
+                document.getElementById("greetName").textContent = user.name.split(" ")[0];
+                document.getElementById("userRole").textContent = user.role;
+                document.getElementById("userAvatar").textContent = user.name.charAt(0).toUpperCase();
+                document.getElementById("sessionKey").textContent =
+                    `${user.sub.toUpperCase()}-${Math.random().toString(36).slice(2, 10).toUpperCase()}`;
+                // Update clock
+                const tick = () => {
+                    document.getElementById("currentTime").textContent =
+                        new Date().toLocaleTimeString("en-US", { hour12: false });
+                };
+                tick(); setInterval(tick, 1000);
+
+                document.getElementById("sessionInfo").textContent =
+                    `SESSION AUTHENTICATED · ${user.sub.toUpperCase()} · `;
+                document.getElementById("sessionInfo").appendChild(
+                    Object.assign(document.createElement("span"), { id: "currentTime" })
+                );
+                tick();
+
+                // Hide auth gate, reveal page
+                document.getElementById("authGate").classList.add("hidden");
+                document.body.classList.add("visible");
+
+            } catch (err) {
+                console.error(err);
+                window.location.href = "login.html";
+            }
+        })();
+
+        async function handleLogout() {
+            await fetch(`${API_BASE}/api/logout`, {
+                method: "POST",
+                credentials: "include"
+            });
+            window.location.href = "login.html";
+        } 
+    </script>
+</body>
+
+</html>

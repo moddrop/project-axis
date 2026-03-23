@@ -1,0 +1,1 @@
+-We should add the project card property to all <center> elements because it is dynamic
