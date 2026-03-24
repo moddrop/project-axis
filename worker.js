@@ -1,3 +1,4 @@
+
 async function loadCountdown() {
 
     const res = await fetch(
@@ -30,5 +31,3 @@ function startTimer(target) {
 
     }, 1000);
 }
-
-loadCountdown();
