@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -711,22 +710,10 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Secret section -->
-            <div class="secret-panel">
-                <h3>🔒 Restricted Access Area</h3>
-                <p>
-                    You have successfully authenticated and have been granted access to internal systems.
-                    This page is only accessible to verified employees — unauthorized access attempts are logged
-                    and monitored. Session cookies are HttpOnly and expire after 8 hours.
-                </p>
-                <div class="secret-key">SESSION_KEY: <span id="sessionKey">—</span></div>
-            </div>
         </main>
     </div>
 
     <script>
-        document.body.classList.add("visible");
         // ── Config ──────────────────────────────────────────────────────────────
         const API_BASE = "https://employee-auth.calebethan485.workers.dev";
         // Local dev: const API_BASE = "http://localhost:8787";
@@ -737,11 +724,11 @@
                 const res = await fetch(`${API_BASE}/api/me`, {
                     credentials: "include"   // ← send the session cookie
                 });
-                
+
                 if (!res.ok) {
                     // Not authenticated → kick back to login
                     window.location.href = "login.html";
-                    return;
+                    retu
                 }
 
                 const user = await res.json();
@@ -786,4 +773,5 @@
         } 
     </script>
 </body>
+
 </html>
