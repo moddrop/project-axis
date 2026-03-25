@@ -60,6 +60,10 @@
             color: var(--muted);
         }
 
+        #authGate.hidden {
+            display: none;
+        }
+
         /* ── Top bar ── */
         .topbar {
             height: 56px;
@@ -523,7 +527,6 @@
             color: var(--green);
         }
     </style>
-    <link rel="stylesheet" href="ok.css">
 </head>
 
 <body>
@@ -534,7 +537,8 @@
     <!-- Top bar -->
     <div class="topbar">
         <div class="topbar-left">
-            <div class="logo-text">PROJECT AXIS</div>
+            <div class="logo-icon">🔐</div>
+            <div class="logo-text">Acme Corp</div>
             <div class="badge">Internal</div>
         </div>
         <div class="topbar-right">
@@ -553,7 +557,7 @@
         <nav class="sidebar">
             <div class="nav-section">
                 <div class="nav-label">Main</div>
-                <div class="nav-item active"><span class="icon">⊞</span><a href=""></a></div>
+                <div class="nav-item active"><span class="icon">⊞</span> Dashboard</div>
                 <div class="nav-item"><span class="icon">◈</span> Projects</div>
                 <div class="nav-item"><span class="icon">◉</span> Analytics</div>
             </div>
@@ -579,17 +583,17 @@
             <!-- Stats -->
             <div class="stats-grid">
                 <div class="stat-card green">
-                    <div class="stat-label">Days since last disaster:</div>
-                    <div class="stat-value green">1</div>
+                    <div class="stat-label">Systems Online</div>
+                    <div class="stat-value green">12/12</div>
                     <div class="stat-delta">↑ All healthy</div>
                 </div>
                 <div class="stat-card blue">
-                    <div class="stat-label">Updated progress reports:</div>
-                    <div class="stat-value blue">2</div>
-                    <div class="stat-delta">↑ All healthy</div>
+                    <div class="stat-label">Active Sessions</div>
+                    <div class="stat-value blue">47</div>
+                    <div class="stat-delta">↑ +3 from yesterday</div>
                 </div>
                 <div class="stat-card yellow">
-                    <div class="stat-label">P</div>
+                    <div class="stat-label">Pending Reviews</div>
                     <div class="stat-value yellow">9</div>
                     <div class="stat-delta">→ 2 urgent</div>
                 </div>
@@ -704,16 +708,18 @@
                             </div>
                         </div>
                     </div>
-                    <div class="secret-panel">
-                        <h3>🔒 Restricted Access Area</h3>
-                        <p>
-                            You have successfully authenticated and have been granted access to internal systems.
-                            This page is only accessible to verified employees — unauthorized access attempts are logged
-                            and monitored. Session cookies are HttpOnly and expire after 8 hours.
-                        </p>
-                        <div class="secret-key">SESSION_KEY: <span id="sessionKey">—</span></div>
-                    </div>
                 </div>
+            </div>
+
+            <!-- Secret section -->
+            <div class="secret-panel">
+                <h3>🔒 Restricted Access Area</h3>
+                <p>
+                    You have successfully authenticated and have been granted access to internal systems.
+                    This page is only accessible to verified employees — unauthorized access attempts are logged
+                    and monitored. Session cookies are HttpOnly and expire after 8 hours.
+                </p>
+                <div class="secret-key">SESSION_KEY: <span id="sessionKey">—</span></div>
             </div>
         </main>
     </div>
@@ -733,7 +739,7 @@
                 if (!res.ok) {
                     // Not authenticated → kick back to login
                     window.location.href = "login.html";
-                    retu
+                    return;
                 }
 
                 const user = await res.json();
@@ -745,6 +751,7 @@
                 document.getElementById("userAvatar").textContent = user.name.charAt(0).toUpperCase();
                 document.getElementById("sessionKey").textContent =
                     `${user.sub.toUpperCase()}-${Math.random().toString(36).slice(2, 10).toUpperCase()}`;
+
                 // Update clock
                 const tick = () => {
                     document.getElementById("currentTime").textContent =
@@ -775,7 +782,7 @@
                 credentials: "include"
             });
             window.location.href = "login.html";
-        } 
+        }
     </script>
 </body>
 
