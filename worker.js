@@ -1,19 +1,16 @@
-
 async function loadCountdown() {
-
-    const target = Number(1778976000000);
-
+    const target = 1778976000000; // your fixed time
     startTimer(target);
 }
 
 function startTimer(target) {
-
-    setInterval(() => {
+    const interval = setInterval(() => {
 
         const diff = target - Date.now();
 
         if (diff <= 0) {
             document.getElementById("timer").textContent = "LAUNCHED";
+            clearInterval(interval);
             return;
         }
 
@@ -22,8 +19,12 @@ function startTimer(target) {
         const m = Math.floor(diff % 3600000 / 60000);
         const s = Math.floor(diff % 60000 / 1000);
 
-        document.getElementById("timer").textContent = "Project Coming Soon: "+
+        document.getElementById("timer").textContent =
+            "Project Coming Soon: " +
             `${d}d ${h}h ${m}m ${s}s`;
 
     }, 1000);
 }
+
+// start it
+window.onload = loadCountdown;
