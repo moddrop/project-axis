@@ -1,7 +1,7 @@
 
 async function loadCountdown() {
 
-    const target = 1778976000000;
+    const target = Number(1778976000000);
 
     startTimer(target);
 }
