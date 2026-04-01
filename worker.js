@@ -1,11 +1,7 @@
 
 async function loadCountdown() {
 
-    const res = await fetch(
-        "https://countdown-api.calebethan485.workers.dev/countdown"
-    );
-
-    const target = Number(await res.text());
+    const target = 1778976000000;
 
     startTimer(target);
 }
