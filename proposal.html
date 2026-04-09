@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Glasses | Project AXIS Proposal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Edu+NSW+ACT+Cursive:wght@400..700&family=Geist+Mono&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
+        rel="stylesheet">
+    <style>
+        html {
+            scroll-behavior: smooth;
+            padding: 3px;
+        }
+
+        body {
+            font-family: "Rubik", sans-serif;
+            margin: 0;
+            background: #f9f9f9;
+            color: #222;
+        }
+
+        /* ── NAVBAR ── */
+        .navbar {
+            background-color: rgb(245, 243, 243);
+            color: rgb(39, 39, 39);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            padding: 15px;
+            flex-direction: row;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            animation: navslide 0.8s ease forwards;
+        }
+
+        @keyframes navslide {
+            from {
+                opacity: 0;
+                transform: translateY(-40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .navbar img {
+            height: 50px;
+            width: 50px;
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+            font-size: 25px;
+        }
+
+        .hover {
+            transition: transform .2s, color .2s;
+            padding: 10px;
+            display: inline-block;
+        }
+
+        .hover:hover {
+            transform: scale(1.1);
+            color: rgb(133, 133, 133);
+        }
+
+        .navbar a {
+            position: relative;
+        }
+
+        .navbar a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 5px;
+            width: 0%;
+            height: 3px;
+            background: rgb(117, 170, 255);
+            transition: width 0.3s ease;
+        }
+
+        .navbar a:hover::after {
+            width: 100%;
+        }
+
+        /* ── HEADER / HERO ── */
+        .header {
+            text-align: center;
+        }
+
+        .header h1 {
+            margin-bottom: 10px;
+        }
+
+        .header i {
+            font-size: 20px;
+            color: #555;
+            display: block;
+            margin-bottom: 24px;
+        }
+
+        .line {
+            height: 2px;
+            width: 100%;
+            background: black;
+        }
+
+        /* ── INTRODUCTION BANNER ── */
+        .introduction {
+            background-image: url("caleb-project-1.webp");
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            color: white;
+            text-shadow: 4px 4px 17px rgba(0, 0, 0, 0.6);
+            width: 100%;
+            height: 250px;
+            border-radius: 20px;
+            animation: slideUpFade 0.8s ease-out forwards;
+            overflow: hidden;
+        }
+
+        @keyframes slideUpFade {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .introduction-wrapper {
+            background-color: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(5px);
+            border-radius: 20px;
+            width: 100%;
+            height: 250px;
+            text-align: center;
+            align-items: center;
+            display: flex;
+        }
+
+        .introduction-wrapper h3 {
+            font-size: 10vw;
+            margin: auto;
+            font-weight: lighter;
+            color: #111;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        /* ── SECTION HEADINGS ── */
+        h3 {
+            font-weight: lighter;
+            font-size: 30px;
+            text-align: center;
+        }
+
+        p {
+            font-size: 22px;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        /* ── STATS ROW ── */
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 40px 40px 20px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 28px 36px;
+            text-align: center;
+            min-width: 160px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-number {
+            font-size: 40px;
+            font-weight: 700;
+            color: #2d6cdf;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            margin: 0;
+            text-shadow: none;
+        }
+
+        /* ── PROJECTS CONTAINER (cards) ── */
+        .projects-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 40px;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            width: 400px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .project-content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .project-title {
+            margin: 0;
+            font-size: 22px;
+            color: #222;
+        }
+
+        .project-description {
+            font-size: 15px;
+            color: #555;
+            line-height: 1.5;
+            text-shadow: none;
+        }
+
+        .project-button {
+            margin-top: 10px;
+            padding: 10px 18px;
+            background: #2d6cdf;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            width: fit-content;
+            font-size: 15px;
+            transition: background 0.3s ease;
+        }
+
+        .project-button:hover {
+            background: #1f4fb5;
+            color: white;
+        }
+
+        /* ── PROBLEM / SOLUTION WIDE CARD ── */
+        .wide-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 36px 40px;
+            max-width: 900px;
+            margin: 0 auto 40px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .wide-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .wide-card h4 {
+            font-size: 22px;
+            font-weight: 500;
+            margin: 0 0 12px;
+            color: #2d6cdf;
+        }
+
+        .wide-card p {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.7;
+            text-shadow: none;
+            margin: 0;
+        }
+
+        /* ── MARKET BARS ── */
+        .market-wrap {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 40px 40px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .market-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 28px 32px;
+            flex: 1 1 260px;
+            max-width: 420px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .market-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .market-card .label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 15px;
+            color: #444;
+            margin-bottom: 10px;
+            text-shadow: none;
+        }
+
+        .market-card .label span:last-child {
+            font-weight: 700;
+            color: #2d6cdf;
+        }
+
+        .bar-track {
+            height: 8px;
+            background: #eee;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: #2d6cdf;
+            border-radius: 4px;
+            animation: grow 1.4s ease forwards;
+            transform-origin: left;
+            transform: scaleX(0);
+        }
+
+        @keyframes grow {
+            to {
+                transform: scaleX(1);
+            }
+        }
+
+        /* ── ROADMAP TABLE ── */
+        .table-wrap {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 40px 60px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        td,
+        th {
+            border: 1px solid #ddd;
+            padding: 14px 16px;
+            font-size: 15px;
+        }
+
+        th {
+            background: #2d6cdf;
+            color: white;
+            font-weight: 500;
+            font-size: 16px;
+        }
+
+        tr:nth-child(even) {
+            background: #f0f4ff;
+        }
+
+        tr:nth-child(odd) {
+            background: #fff;
+        }
+
+        td:first-child {
+            font-weight: 500;
+            color: #2d6cdf;
+        }
+
+        /* ── TEAM ── */
+        .people {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            padding: 0 40px 60px;
+        }
+
+        .person-card {
+            width: 260px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+            padding-bottom: 20px;
+        }
+
+        .person-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .person-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .person-card h4 {
+            font-size: 18px;
+            margin: 14px 0 4px;
+            font-weight: 500;
+        }
+
+        .person-card .role {
+            font-size: 13px;
+            color: #2d6cdf;
+            text-shadow: none;
+            margin: 0;
+        }
+
+        .person-card .bio {
+            font-size: 13px;
+            color: #666;
+            padding: 8px 16px 0;
+            text-shadow: none;
+            line-height: 1.5;
+        }
+
+        /* ── INVESTMENT BOX ── */
+        .invest-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            padding: 0 40px 60px;
+        }
+
+        .invest-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 32px 36px;
+            flex: 1 1 260px;
+            max-width: 420px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .invest-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .invest-card h4 {
+            font-size: 20px;
+            color: #2d6cdf;
+            margin: 0 0 16px;
+            font-weight: 500;
+        }
+
+        .invest-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 15px;
+            color: #444;
+            text-shadow: none;
+        }
+
+        .invest-row:last-child {
+            border-bottom: none;
+        }
+
+        .invest-row span:last-child {
+            font-weight: 600;
+            color: #222;
+        }
+
+        .ask-amount {
+            font-size: 56px;
+            font-weight: 700;
+            color: #2d6cdf;
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+
+        .ask-sub {
+            font-size: 14px;
+            color: #888;
+            text-shadow: none;
+            margin: 0 0 20px;
+        }
+
+        /* ── CTA BANNER ── */
+        .cta-banner {
+            background: #2d6cdf;
+            color: white;
+            text-align: center;
+            padding: 60px 40px;
+            margin: 0 0 0;
+        }
+
+        .cta-banner h2 {
+            font-size: clamp(32px, 5vw, 56px);
+            font-weight: 700;
+            margin-bottom: 14px;
+            text-shadow: none;
+        }
+
+        .cta-banner p {
+            font-size: 18px;
+            opacity: 0.85;
+            text-shadow: none;
+            margin-bottom: 30px;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background: white;
+            color: #2d6cdf;
+            padding: 14px 36px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .cta-btn:hover {
+            background: #f0f4ff;
+            color: #1f4fb5;
+        }
+
+        /* footer */
+        .footer-bar {
+            text-align: center;
+            padding: 24px;
+            font-size: 14px;
+            color: #aaa;
+            border-top: 1px solid #ddd;
+        }
+
+        .footer-bar p {
+            font-size: 14px;
+            text-shadow: none;
+            color: #aaa;
+        }
+
+        @media only screen and (max-width: 900px) {
+            .people {
+                flex-direction: column;
+                align-items: center;
+                margin: 30px;
+            }
+
+            .stats-row {
+                padding: 24px;
+            }
+
+            .table-wrap,
+            .market-wrap,
+            .invest-wrap {
+                padding: 0 20px 40px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <img height="50px" width="50px" src="logo.png" onerror="this.style.display='none'">
+        <div class="navbar-wrapper">
+            <a href="index.html" class="hover">HOME</a>
+            <a href="aboutus.html" class="hover">INFO</a>
+            <a href="blog.html" class="hover">HISTORY</a>
+            <a href="project.html" class="hover">OVERVIEW</a>
+            <a href="donate.html" class="hover">DONORS</a>
+            <a href="gallery.html" class="hover">GALLERY</a>
+            <a href="login.html" class="hover">LOGIN</a>
+            <a href="#" class="hover">PROPOSAL</a>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <div class="header">
+        <h1>~ Project AXIS ~</h1>
+        <i>"Vision for 2.2 billion people"</i>
+        <div class="line"></div>
+    </div>
+
+    <p
+        style="text-align:center; padding: 20px 40px; font-size: 18px; color: #555; text-shadow: none; max-width: 700px; margin: 0 auto;">
+        A business proposal for smart glasses designed to help the 2.2 billion visually impaired people worldwide —
+        built with affordable microcontroller technology.
+    </p>
+
+    <!-- STATS -->
+    <h3>At a Glance</h3>
+    <div class="stats-row">
+        <div class="stat-card">
+            <div class="stat-number">$42B</div>
+            <p class="stat-label">Market Size by 2030</p>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">2.2B</div>
+            <p class="stat-label">Visually Impaired People</p>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">31g</div>
+            <p class="stat-label">Total Weight</p>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">14hr</div>
+            <p class="stat-label">Battery Life</p>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">$890</div>
+            <p class="stat-label">Target Retail Price</p>
+        </div>
+    </div>
+
+    <!-- PROBLEM -->
+    <h3>The Problem</h3>
+    <div style="padding: 0 40px;">
+        <div class="wide-card">
+            <h4>01 — Blindness & Visual Impairment</h4>
+            <p>2.2 billion people worldwide live with vision impairment. Existing assistive technologies are expensive,
+                bulky, and inaccessible to those in developing countries.</p>
+        </div>
+        <div class="wide-card">
+            <h4>02 — Existing Devices Are Too Costly</h4>
+            <p>Current smart glasses solutions retail for $3,000–$5,000. This puts them out of reach for the majority of
+                people who need them most, particularly in lower-income regions.</p>
+        </div>
+        <div class="wide-card">
+            <h4>03 — No Lightweight, Open-Source Option</h4>
+            <p>There is no affordable, community-driven, open-source smart glasses solution powered by accessible
+                microcontroller hardware available today.</p>
+        </div>
+    </div>
+
+    <!-- SOLUTION: FEATURES -->
+    <h3>Our Solution</h3>
+    <div class="projects-container">
+        <div class="project-card">
+            <img src="caleb-project-1.webp" alt="Smart Glasses" class="project-image"
+                onerror="this.src='https://images.unsplash.com/photo-1574258495973-f010dfbb5371?w=600&q=80'">
+            <div class="project-content">
+                <h3 class="project-title">AR Display Layer</h3>
+                <p class="project-description">Ultra-thin waveguide optics project high-contrast information into the
+                    user's field of view with zero visual obstruction — all in a lightweight frame.</p>
+                <a href="project.html" class="project-button">Read More</a>
+            </div>
+        </div>
+        <div class="project-card">
+            <img src="nano.webp" alt="Edge AI" class="project-image"
+                onerror="this.src='https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&q=80'">
+            <div class="project-content">
+                <h3 class="project-title">Edge AI Engine</h3>
+                <p class="project-description">An on-device microcontroller delivers real-time object recognition, scene
+                    understanding, and text-to-speech — no internet connection required.</p>
+                <a href="project.html" class="project-button">Read More</a>
+            </div>
+        </div>
+        <div class="project-card">
+            <img src="pico.webp" alt="Voice Control" class="project-image"
+                onerror="this.src='https://images.unsplash.com/photo-1546054454-aa26e2b734c7?w=600&q=80'">
+            <div class="project-content">
+                <h3 class="project-title">Voice Control</h3>
+                <p class="project-description">Dual directional microphones enable natural hands-free navigation and
+                    audio feedback, making the glasses usable without any physical interaction.</p>
+                <a href="project.html" class="project-button">Read More</a>
+            </div>
+        </div>
+        <div class="project-card">
+            <img src="smart-glasses.webp" alt="Health Monitoring" class="project-image"
+                onerror="this.src='https://images.unsplash.com/photo-1559757175-5700dde675bc?w=600&q=80'">
+            <div class="project-content">
+                <h3 class="project-title">Health Monitoring</h3>
+                <p class="project-description">Integrated sensors track eye movement, activity levels, and environmental
+                    conditions — delivering real-time health data to caregivers.</p>
+                <a href="project.html" class="project-button">Read More</a>
+            </div>
+        </div>
+        <div class="project-card">
+            <img src="uno.webp" alt="Open Source" class="project-image"
+                onerror="this.src='https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600&q=80'">
+            <div class="project-content">
+                <h3 class="project-title">Open Source Hardware</h3>
+                <p class="project-description">All schematics, firmware, and designs are open-source under MIT license —
+                    allowing anyone to build, modify, or improve the device for their community.</p>
+                <a href="project.html" class="project-button">Read More</a>
+            </div>
+        </div>
+        <div class="project-card">
+            <img src="m5stack.webp" alt="Battery" class="project-image"
+                onerror="this.src='https://images.unsplash.com/photo-1609592422597-dc4a32f3fc1c?w=600&q=80'">
+            <div class="project-content">
+                <h3 class="project-title">14-Hour Battery</h3>
+                <p class="project-description">Custom-engineered solid-state micro-cells and adaptive power management
+                    deliver all-day performance in a frame weighing just 31 grams.</p>
+                <a href="project.html" class="project-button">Read More</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MARKET -->
+    <h3>Market Opportunity</h3>
+    <div class="market-wrap">
+        <div class="market-card">
+            <div class="label"><span>Smart Glasses Global Market</span><span>$42B</span></div>
+            <div class="bar-track">
+                <div class="bar-fill" style="width:90%"></div>
+            </div>
+        </div>
+        <div class="market-card">
+            <div class="label"><span>Enterprise Wearables</span><span>$18B</span></div>
+            <div class="bar-track">
+                <div class="bar-fill" style="width:65%; animation-delay:0.2s"></div>
+            </div>
+        </div>
+        <div class="market-card">
+            <div class="label"><span>Consumer AR Devices</span><span>$12B</span></div>
+            <div class="bar-track">
+                <div class="bar-fill" style="width:45%; animation-delay:0.4s"></div>
+            </div>
+        </div>
+        <div class="market-card">
+            <div class="label"><span>AI-Enabled Eyewear</span><span>$7B</span></div>
+            <div class="bar-track">
+                <div class="bar-fill" style="width:28%; animation-delay:0.6s"></div>
+            </div>
+        </div>
+        <div class="market-card">
+            <div class="label"><span>Assistive Tech Devices</span><span>$5B</span></div>
+            <div class="bar-track">
+                <div class="bar-fill" style="width:20%; animation-delay:0.8s"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ROADMAP TABLE -->
+    <h3>Roadmap</h3>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Phase</th>
+                    <th>Timeline</th>
+                    <th>Goal</th>
+                    <th>Milestones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>01 — R&D</td>
+                    <td>Q1–Q2 2025</td>
+                    <td>Prototype & IP</td>
+                    <td>Working prototype, IP filing, core team</td>
+                </tr>
+                <tr>
+                    <td>02 — Beta</td>
+                    <td>Q3–Q4 2025</td>
+                    <td>500-unit beta program</td>
+                    <td>Enterprise pilots, MFG partner locked</td>
+                </tr>
+                <tr>
+                    <td>03 — Launch</td>
+                    <td>Q1–Q2 2026</td>
+                    <td>Market launch</td>
+                    <td>D2C launch, 50K units, 4 flagship cities</td>
+                </tr>
+                <tr>
+                    <td>04 — Scale</td>
+                    <td>Q3 2026+</td>
+                    <td>Platform & SDK</td>
+                    <td>VISN SDK, B2B vertical, Series B raise</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- TEAM -->
+    <h3>The Team</h3>
+    <div class="people">
+        <div class="person-card">
+            <img src="aboutus-project.PNG" alt="Alex Kim"
+                onerror="this.src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=300&q=80'">
+            <h4>Alex Kim</h4>
+            <p class="role">CEO & Co-Founder</p>
+            <p class="bio">Former Director of Product at Meta Reality Labs. 12 years in consumer hardware.</p>
+        </div>
+        <div class="person-card">
+            <img src="aboutus-project.PNG" alt="Sara Reyes"
+                onerror="this.src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&q=80'">
+            <h4>Sara Reyes</h4>
+            <p class="role">CTO & Co-Founder</p>
+            <p class="bio">Ph.D Optics, MIT. 8 patents in waveguide display technology.</p>
+        </div>
+        <div class="person-card">
+            <img src="aboutus-project.PNG" alt="Marcus Okoro"
+                onerror="this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&q=80'">
+            <h4>Marcus Okoro</h4>
+            <p class="role">Chief Design Officer</p>
+            <p class="bio">Led eyewear design for Oakley and Lindberg. Obsessed with the 1-gram problem.</p>
+        </div>
+        <div class="person-card">
+            <img src="aboutus-project.PNG" alt="Jana Park"
+                onerror="this.src='https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&q=80'">
+            <h4>Jana Park</h4>
+            <p class="role">VP Engineering</p>
+            <p class="bio">Ex-Apple silicon team. Architected power management in 3 Apple Watch generations.</p>
+        </div>
+    </div>
+
+    <!-- INVESTMENT -->
+    <h3>Investment</h3>
+    <div class="invest-wrap">
+        <div class="invest-card">
+            <h4>Use of Funds</h4>
+            <div class="invest-row"><span>Hardware R&D & Engineering</span><span>45%</span></div>
+            <div class="invest-row"><span>Manufacturing & Supply Chain</span><span>25%</span></div>
+            <div class="invest-row"><span>Sales, Marketing & Brand</span><span>15%</span></div>
+            <div class="invest-row"><span>Software Platform & AI</span><span>10%</span></div>
+            <div class="invest-row"><span>Operations & Legal</span><span>5%</span></div>
+        </div>
+        <div class="invest-card">
+            <h4>Seed Round</h4>
+            <div class="ask-amount">$8M</div>
+            <p class="ask-sub">SAFE Note — Series A Target</p>
+            <div class="invest-row"><span>Round Type</span><span>SAFE Note</span></div>
+            <div class="invest-row"><span>Valuation Cap</span><span>$40M</span></div>
+            <div class="invest-row"><span>Discount Rate</span><span>20%</span></div>
+            <div class="invest-row"><span>Minimum Ticket</span><span>$250K</span></div>
+            <div class="invest-row"><span>Projected Series A</span><span>$35M @ $140M</span></div>
+        </div>
+    </div>
+
+    <!-- CTA BANNER -->
+    <div class="cta-banner">
+        <h2>Ready to Back the Future?</h2>
+        <p>Schedule a confidential investor briefing today.</p>
+        <a href="mailto:invest@axis.com" class="cta-btn">Request a Meeting →</a>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer-bar">
+        <p>© 2025 Project AXIS — Smart Glasses Proposal — Open Source</p>
+    </div>
+
+</body>
+
+</html>
