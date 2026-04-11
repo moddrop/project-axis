@@ -20,6 +20,7 @@ html {
 body {
     font-family: "Rubik", sans-serif;
     margin: 0;
+    overflow-x: hidden;
 }
 
 .navbar {
@@ -93,6 +94,7 @@ h3 {
     font-weight: lighter;
     font-size: 30px;
     text-align: center;
+    margin-bottom: auto;
 }
 
 p {
@@ -431,7 +433,7 @@ tr:nth-child(even) {
 
 .project-title {
     margin: 0;
-    font-size: 22px;
+    font-size: 30px;
     color: #222;
 }
 
@@ -456,33 +458,6 @@ tr:nth-child(even) {
     background: #1f4fb5;
 }
 
-.introduction {
-    background-image: url("nano.webp"), url('uno.webp'), url("pico.webp");
-    background-position: top left, bottom right, center;
-    background-repeat: no-repeat, no-repeat;
-    color: white;
-    text-shadow: 4px 4px 17px rgba(0, 0, 0, 0.6);
-    width: 100%;
-    height: 250px;
-    border-radius: 20px;
-    animation: slideUpFade 0.8s ease-out forwards;
-}
-
-.introduction-wrapper {
-    background-color: rgba(255, 255, 255, 0.5);
-    backdrop-filter: blur(5px);
-    border-radius: 20px;
-    width: 100%;
-    height: 250px;
-    text-align: center;
-    align-items: center;
-    display: flex;
-}
-
-.introduction-wrapper h3 {
-    font-size: 12vw;
-    margin: auto;
-}
 
 #timer {
     text-align: center;
