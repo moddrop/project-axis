@@ -7,6 +7,8 @@ const numimages = 3;
 
 const end = (100 * (numimages - 1));
 let start = 0;
+const acc = document.getElementsByClassName("accordion");
+let i;
 
 caroselleftbtnEl.addEventListener("click", () => {
     if (start < 0) {
@@ -26,10 +28,7 @@ caroselrightbtnEl.addEventListener("click", () => {
     })
 })
 
-var acc = document.getElementsByClassName("accordion");
-var i;
-
-for (i = 0; i < acc.length; i++) {
+for (let i = 0; i < acc.length; i++) {
     acc[i].addEventListener("click", function () {
         this.classList.toggle("active");
         var panel = this.nextElementSibling;
@@ -41,9 +40,6 @@ for (i = 0; i < acc.length; i++) {
     });
 }
 
-
-
-console.log("For translation, when you want to enter English, please click on the 'x' on the Google Translate bar on top of the navbar. Also if you are having trouble with setting your system language to English on your device please search your device model and try to fix the system settings.");
 //Claude
 
 hamburgerBtn.addEventListener('click', () => {
@@ -58,3 +54,5 @@ mobileMenu.querySelectorAll('a').forEach(link => {
         mobileMenu.classList.remove('open');
     });
 });
+
+console.log("For translation, when you want to enter English, please click on the 'x' on the Google Translate bar on top of the navbar. Also if you are having trouble with setting your system language to English on your device please search your device model and try to fix the system settings.");
