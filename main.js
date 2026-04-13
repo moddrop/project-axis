@@ -1,5 +1,29 @@
+const caroselleftbtnEl = document.getElementById('caroselleftbtn');
+const caroselrightbtnEl = document.getElementById('caroselrightbtn');
+const caroselitemEl = document.querySelectorAll('.carosel-item');
 
-console.log ("For translation, when you want to enter English, please click on the 'x' on the Google Translate bar on top of the navbar. Also if you are having trouble with setting your system language to English on your device please search your device model and try to fix the system settings.");
+const numimages = 3;
+
+const end = (100 * (numimages - 1));
+let start = 0;
+
+caroselleftbtnEl.addEventListener("click", () => {
+    if (start < 0) {
+        start = start + 100;
+    }
+    caroselitemEl.forEach(element => {
+        element.style.transform = `translateX(${start}%)`;
+    })
+})
+
+caroselrightbtnEl.addEventListener("click", () => {
+    if (start > -end) {
+        start = start - 100;
+    }
+    caroselitemEl.forEach(element => {
+        element.style.transform = `translateX(${start}%)`;
+    })
+})
 
 var acc = document.getElementsByClassName("accordion");
 var i;
@@ -16,14 +40,6 @@ for (i = 0; i < acc.length; i++) {
     });
 }
 
-// error
-function submit() {
-    let password = document.getElementById("portal").value;
-    let caleb = "caleb";
 
-    if (password === caleb) {
-        document.body.style.backgroundColor="red";
-    } else {
-        alert("Incorrect Password")
-    }
-}
+
+console.log("For translation, when you want to enter English, please click on the 'x' on the Google Translate bar on top of the navbar. Also if you are having trouble with setting your system language to English on your device please search your device model and try to fix the system settings.");
