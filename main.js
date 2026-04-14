@@ -1,14 +1,10 @@
-// ===== ELEMENTS =====
 const carouselLeftBtn = document.getElementById('caroselleftbtn');
 const carouselRightBtn = document.getElementById('caroselrightbtn');
 const carouselItems = document.querySelectorAll('.carosel-item');
-
 const hamburgerBtn = document.getElementById('hamburgerBtn');
 const mobileMenu = document.getElementById('mobileMenu');
-
 const acc = document.getElementsByClassName("accordion");
 
-// ===== CAROUSEL =====
 let start = 0;
 const numImages = carouselItems.length;
 const end = 100 * (numImages - 1);
@@ -32,8 +28,6 @@ if (carouselLeftBtn && carouselRightBtn && carouselItems.length > 0) {
     });
 }
 
-// ===== ACCORDION (IMPROVED) =====
-// ===== ACCORDION (SINGLE OPEN) =====
 if (acc.length > 0) {
     for (let i = 0; i < acc.length; i++) {
         acc[i].addEventListener("click", function () {
@@ -41,13 +35,11 @@ if (acc.length > 0) {
             const panel = this.nextElementSibling;
             const isOpen = panel.style.maxHeight;
 
-            // 🔥 CLOSE ALL
             for (let j = 0; j < acc.length; j++) {
                 acc[j].classList.remove("active");
                 acc[j].nextElementSibling.style.maxHeight = null;
             }
 
-            // 🔥 OPEN CLICKED ONE (if it was closed)
             if (!isOpen) {
                 this.classList.add("active");
                 panel.style.maxHeight = panel.scrollHeight + "px";
@@ -56,7 +48,6 @@ if (acc.length > 0) {
     }
 }
 
-// ===== MOBILE MENU (SAFE) =====
 if (hamburgerBtn && mobileMenu) {
 
     hamburgerBtn.addEventListener('click', () => {
@@ -71,6 +62,3 @@ if (hamburgerBtn && mobileMenu) {
         });
     });
 }
-
-// ===== DEBUG =====
-console.log("Translation tip: click 'X' on Google Translate bar to return to English.");
