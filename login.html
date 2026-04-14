@@ -27,10 +27,10 @@
             <a href="login.html" class="hover">LOGIN</a>
             <a href="proposal.html" class="hover">PROPOSAL</a>
         </div>
+        <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </button>
     </div>
-    <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle menu">
-        <span></span><span></span><span></span>
-    </button>
 
     <nav class="mobile-menu" id="mobileMenu">
         <a href="index.html">HOME</a>
@@ -42,6 +42,7 @@
         <a href="login.html">LOGIN</a>
         <a href="proposal.html">PROPOSAL</a>
     </nav>
+
     <div class="header">
         <h1>~ Project AXIS ~</h1>
         <i>
@@ -84,10 +85,10 @@
         </div>
 
     </div>
+    <script src="main.js"></script>
     <script>
         // ── Config: point this at your deployed Cloudflare Worker URL ──
         const API_BASE = "https://employee-auth.calebethan485.workers.dev";
-        // For local dev with wrangler dev, use: const API_BASE = "http://localhost:8787";
 
         const btn = document.getElementById("loginBtn");
         const errorBox = document.getElementById("errorBox");
@@ -124,14 +125,13 @@
                 const res = await fetch(`${API_BASE}/api/login`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    credentials: "include",          // ← sends/receives cookies
+                    credentials: "include",
                     body: JSON.stringify({ username, password })
                 });
 
                 const data = await res.json();
 
                 if (res.ok && data.ok) {
-                    // Redirect to secret dashboard
                     window.location.href = "dashboard.html";
                 } else {
                     showError(data.error ?? "Authentication failed.");
@@ -166,3 +166,4 @@
         }
     </script>
 </body>
+</html>
