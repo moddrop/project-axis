@@ -664,3 +664,13 @@ tr:nth-child(even) {
         position: sticky;
     }
 }
+
+@media (max-width: 768px) {
+  .navbar-wrapper { display: none !important; }
+  .hamburger-btn  { display: flex !important; }
+}
+
+@media (min-width: 769px) {
+  .mobile-menu    { display: none !important; }
+  .hamburger-btn  { display: none !important; }
+}
