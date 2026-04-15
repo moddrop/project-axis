@@ -6,8 +6,10 @@ const mobileMenu = document.getElementById('mobileMenu');
 const acc = document.getElementsByClassName("accordion");
 
 let start = 0;
+let awaytime;
 const numImages = carouselItems.length;
 const end = 100 * (numImages - 1);
+const AWAYTIME = 5000;
 
 function updateCarousel() {
     carouselItems.forEach(el => {
@@ -20,12 +22,33 @@ if (carouselLeftBtn && carouselRightBtn && carouselItems.length > 0) {
     carouselLeftBtn.addEventListener("click", () => {
         if (start < 0) start += 100;
         updateCarousel();
+        resetCaroseltimer();
     });
 
     carouselRightBtn.addEventListener("click", () => {
         if (start > -end) start -= 100;
         updateCarousel();
+        resetCaroseltimer();
     });
+}
+
+// fix this
+if (start === 300) {
+    carouselRightBtn.addEventListener("click", () => {
+        resetCarosel();
+    })
+}
+
+function resetCarosel() {
+    start = 0;
+    updateCarousel();
+}
+
+function resetCaroseltimer() {
+    clearTimeout(awaytime);
+    awaytime = setTimeout(() => {
+        resetCarosel();
+    }, AWAYTIME);
 }
 
 if (acc.length > 0) {
@@ -62,3 +85,5 @@ if (hamburgerBtn && mobileMenu) {
         });
     });
 }
+
+resetCaroseltimer();
