@@ -14,13 +14,12 @@
 
 html {
     scroll-behavior: smooth;
-    padding: 3px;
 }
 
 body {
     font-family: "Rubik", sans-serif;
     margin: 0;
-    overflow-x: clip;
+    overflow-x: hidden;
 }
 
 .navbar {
@@ -39,6 +38,7 @@ body {
     position: sticky;
     top: 0;
     z-index: 1000;
+    min-width: 100%;
 }
 
 .person-card {
@@ -276,6 +276,7 @@ tr:nth-child(even) {
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease;
+    padding: 3px;
 }
 
 @media (min-width:1058px) {
@@ -665,7 +666,14 @@ tr:nth-child(even) {
     }
 }
 
-/* NEW add*/
+.footer {
+    background-color: #2d6cdf;
+    color: white;
+    padding: 5px;
+    margin-bottom: 0;
+}
+
+/* news site*/
 
 :root {
     --color-bg: #ffffff;

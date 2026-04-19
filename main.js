@@ -32,13 +32,6 @@ if (carouselLeftBtn && carouselRightBtn && carouselItems.length > 0) {
     });
 }
 
-// fix this
-if (start === 300) {
-    carouselRightBtn.addEventListener("click", () => {
-        resetCarosel();
-    })
-}
-
 function resetCarosel() {
     start = 0;
     updateCarousel();
