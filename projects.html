@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects — Project Axis</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --surface: #111118;
+            --surface2: #16161f;
+            --border: #1e1e2e;
+            --border-lit: #2e2e4e;
+            --accent: #5b6af0;
+            --accent2: #8b9cff;
+            --green: #4af08e;
+            --yellow: #f0c44a;
+            --danger: #f05b6a;
+            --text: #e8e8f2;
+            --muted: #6b6b88;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'DM Mono', monospace;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            opacity: 0;
+            transition: opacity .4s;
+        }
+        body.visible { opacity: 1; }
+
+        #authGate {
+            position: fixed; inset: 0;
+            background: var(--bg);
+            display: grid; place-items: center;
+            z-index: 1000;
+            font-family: 'Syne', sans-serif;
+            font-size: 13px; letter-spacing: .1em;
+            color: var(--muted);
+        }
+        #authGate.hidden { display: none; }
+
+        /* ── Top bar ── */
+        .topbar {
+            height: 56px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border-lit);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 32px;
+            position: sticky; top: 0; z-index: 100;
+        }
+        .topbar-left { display: flex; align-items: center; gap: 16px; }
+        .logo-icon {
+            width: 28px; height: 28px;
+            background: var(--accent);
+            border-radius: 2px;
+            display: grid; place-items: center;
+            font-size: 13px;
+        }
+        .logo-text { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; }
+        .badge { font-size: 9px; letter-spacing: .14em; text-transform: uppercase; padding: 3px 8px; border-radius: 2px; background: rgba(91,106,240,.15); color: var(--accent2); border: 1px solid rgba(91,106,240,.3); }
+        .topbar-right { display: flex; align-items: center; gap: 20px; }
+        .user-pill { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
+        .user-avatar { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: grid; place-items: center; font-size: 11px; font-weight: 700; color: #fff; font-family: 'Syne', sans-serif; }
+        .logout-btn { background: transparent; border: 1px solid var(--border-lit); color: var(--muted); font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: .08em; padding: 6px 14px; border-radius: 2px; cursor: pointer; transition: border-color .2s, color .2s; }
+        .logout-btn:hover { border-color: var(--danger); color: var(--danger); }
+
+        /* ── Layout ── */
+        .layout { display: grid; grid-template-columns: 220px 1fr; min-height: calc(100vh - 56px); }
+
+        /* ── Sidebar ── */
+        .sidebar { background: var(--surface); border-right: 1px solid var(--border); padding: 24px 0; }
+        .nav-section { margin-bottom: 28px; padding: 0 20px; }
+        .nav-label { font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; padding: 0 8px; }
+        .nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 8px; border-radius: 2px; font-size: 12px; color: var(--muted); cursor: pointer; transition: background .15s, color .15s; letter-spacing: .02em; text-decoration: none; }
+        .nav-item:hover { background: var(--surface2); color: var(--text); }
+        .nav-item.active { background: rgba(91,106,240,.12); color: var(--accent2); }
+        .nav-item .icon { width: 16px; text-align: center; font-size: 14px; }
+
+        /* ── Main ── */
+        main { padding: 40px; background: var(--bg); }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-header { margin-bottom: 36px; animation: fadeUp .5s .1s both; }
+        .page-header h2 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 28px; margin-bottom: 6px; }
+        .page-header p { font-size: 12px; color: var(--muted); letter-spacing: .06em; }
+
+        /* ── Toolbar ── */
+        .toolbar {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 20px;
+            animation: fadeUp .5s .15s both;
+        }
+        .toolbar-left { display: flex; gap: 8px; }
+        .filter-btn {
+            background: var(--surface); border: 1px solid var(--border-lit);
+            color: var(--muted); font-family: 'DM Mono', monospace; font-size: 11px;
+            letter-spacing: .06em; padding: 7px 14px; border-radius: 2px; cursor: pointer;
+            transition: all .15s;
+        }
+        .filter-btn:hover, .filter-btn.active { border-color: var(--accent); color: var(--accent2); background: rgba(91,106,240,.08); }
+        .new-btn {
+            background: var(--accent); border: none; color: #fff;
+            font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: .08em;
+            padding: 7px 18px; border-radius: 2px; cursor: pointer;
+            transition: opacity .15s;
+        }
+        .new-btn:hover { opacity: .85; }
+
+        /* ── Projects grid ── */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 16px;
+            animation: fadeUp .5s .2s both;
+        }
+
+        .project-card {
+            background: var(--surface);
+            border: 1px solid var(--border-lit);
+            border-radius: 3px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: border-color .2s, transform .2s;
+            cursor: pointer;
+        }
+        .project-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+        .project-card::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 2px;
+        }
+        .project-card.green::before { background: var(--green); }
+        .project-card.blue::before  { background: var(--accent); }
+        .project-card.yellow::before { background: var(--yellow); }
+        .project-card.red::before   { background: var(--danger); }
+        .project-card.purple::before { background: #c084fc; }
+
+        .project-top {
+            display: flex; align-items: flex-start; justify-content: space-between;
+            margin-bottom: 14px;
+        }
+        .project-icon {
+            width: 38px; height: 38px; border-radius: 2px;
+            background: var(--surface2); border: 1px solid var(--border-lit);
+            display: grid; place-items: center; font-size: 17px;
+        }
+        .project-status {
+            font-size: 9px; letter-spacing: .14em; text-transform: uppercase;
+            padding: 3px 8px; border-radius: 20px;
+        }
+        .project-status.active   { background: rgba(74,240,142,.1); color: var(--green); border: 1px solid rgba(74,240,142,.25); }
+        .project-status.review   { background: rgba(240,196,74,.1); color: var(--yellow); border: 1px solid rgba(240,196,74,.25); }
+        .project-status.paused   { background: rgba(107,107,136,.1); color: var(--muted); border: 1px solid var(--border-lit); }
+        .project-status.critical { background: rgba(240,91,106,.1); color: var(--danger); border: 1px solid rgba(240,91,106,.25); }
+
+        .project-name {
+            font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; margin-bottom: 6px;
+        }
+        .project-desc { font-size: 11px; color: var(--muted); line-height: 1.7; margin-bottom: 18px; }
+
+        .project-meta {
+            display: flex; gap: 16px; margin-bottom: 16px;
+        }
+        .meta-item { font-size: 10px; color: var(--muted); letter-spacing: .04em; }
+        .meta-item span { color: var(--text); }
+
+        /* Progress bar */
+        .progress-wrap { margin-bottom: 16px; }
+        .progress-label {
+            display: flex; justify-content: space-between;
+            font-size: 10px; color: var(--muted); margin-bottom: 6px;
+        }
+        .progress-bar {
+            height: 3px; background: var(--border); border-radius: 2px; overflow: hidden;
+        }
+        .progress-fill { height: 100%; border-radius: 2px; transition: width .6s ease; }
+        .progress-fill.green  { background: var(--green); }
+        .progress-fill.blue   { background: var(--accent); }
+        .progress-fill.yellow { background: var(--yellow); }
+        .progress-fill.red    { background: var(--danger); }
+        .progress-fill.purple { background: #c084fc; }
+
+        /* Avatars */
+        .project-footer { display: flex; align-items: center; justify-content: space-between; }
+        .avatars { display: flex; }
+        .av {
+            width: 24px; height: 24px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            border: 2px solid var(--surface);
+            display: grid; place-items: center;
+            font-size: 9px; font-weight: 700; font-family: 'Syne', sans-serif;
+            color: #fff; margin-right: -6px;
+        }
+        .av:nth-child(2) { background: linear-gradient(135deg, #4af08e, #22c55e); }
+        .av:nth-child(3) { background: linear-gradient(135deg, #f0c44a, #f97316); }
+        .av:nth-child(4) { background: linear-gradient(135deg, #c084fc, #8b5cf6); }
+
+        .project-updated { font-size: 10px; color: var(--muted); }
+
+        /* ── Stats bar ── */
+        .stats-row {
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            gap: 16px; margin-bottom: 28px;
+            animation: fadeUp .5s .1s both;
+        }
+        .stat-mini {
+            background: var(--surface); border: 1px solid var(--border-lit);
+            border-radius: 3px; padding: 16px 20px;
+            display: flex; align-items: center; gap: 14px;
+        }
+        .stat-mini-icon { font-size: 20px; }
+        .stat-mini-val { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; }
+        .stat-mini-label { font-size: 10px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; margin-top: 2px; }
+    </style>
+</head>
+<body>
+
+<div id="authGate">VERIFYING SESSION…</div>
+
+<div class="topbar">
+    <div class="topbar-left">
+        <div class="logo-icon">⬡</div>
+        <div class="logo-text">Project Axis</div>
+        <div class="badge">Internal</div>
+    </div>
+    <div class="topbar-right">
+        <div class="user-pill">
+            <div class="user-avatar" id="userAvatar">?</div>
+            <span id="userName">Loading…</span>
+            <span style="color:var(--border-lit)">·</span>
+            <span id="userRole" style="color:var(--accent2)">—</span>
+        </div>
+        <button class="logout-btn" onclick="handleLogout()">Logout</button>
+    </div>
+</div>
+
+<div class="layout">
+    <nav class="sidebar">
+        <div class="nav-section">
+            <div class="nav-label">Main</div>
+            <a href="index.html" class="nav-item"><span class="icon">⊞</span> Dashboard</a>
+            <a href="projects.html" class="nav-item active"><span class="icon">◈</span> Projects</a>
+            <a href="#" class="nav-item"><span class="icon">◉</span> Analytics</a>
+        </div>
+        <div class="nav-section">
+            <div class="nav-label">Team</div>
+            <a href="#" class="nav-item"><span class="icon">◎</span> Directory</a>
+            <a href="#" class="nav-item"><span class="icon">⊕</span> Requests</a>
+        </div>
+        <div class="nav-section">
+            <div class="nav-label">System</div>
+            <a href="security.html" class="nav-item"><span class="icon">⊛</span> Settings</a>
+            <a href="#" class="nav-item"><span class="icon">◌</span> Docs</a>
+        </div>
+    </nav>
+
+    <main>
+        <div class="page-header">
+            <h2>Projects 🗂️</h2>
+            <p>ALL ACTIVE INITIATIVES · <span id="currentTime"></span></p>
+        </div>
+
+        <!-- Mini stats -->
+        <div class="stats-row">
+            <div class="stat-mini">
+                <div class="stat-mini-icon">◈</div>
+                <div>
+                    <div class="stat-mini-val" style="color:var(--accent2)">14</div>
+                    <div class="stat-mini-label">Total Projects</div>
+                </div>
+            </div>
+            <div class="stat-mini">
+                <div class="stat-mini-icon">🟢</div>
+                <div>
+                    <div class="stat-mini-val" style="color:var(--green)">9</div>
+                    <div class="stat-mini-label">Active</div>
+                </div>
+            </div>
+            <div class="stat-mini">
+                <div class="stat-mini-icon">🟡</div>
+                <div>
+                    <div class="stat-mini-val" style="color:var(--yellow)">3</div>
+                    <div class="stat-mini-label">In Review</div>
+                </div>
+            </div>
+            <div class="stat-mini">
+                <div class="stat-mini-icon">🔴</div>
+                <div>
+                    <div class="stat-mini-val" style="color:var(--danger)">2</div>
+                    <div class="stat-mini-label">Critical</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="toolbar">
+            <div class="toolbar-left">
+                <button class="filter-btn active" onclick="setFilter(this,'all')">All</button>
+                <button class="filter-btn" onclick="setFilter(this,'active')">Active</button>
+                <button class="filter-btn" onclick="setFilter(this,'review')">Review</button>
+                <button class="filter-btn" onclick="setFilter(this,'paused')">Paused</button>
+                <button class="filter-btn" onclick="setFilter(this,'critical')">Critical</button>
+            </div>
+            <button class="new-btn">+ New Project</button>
+        </div>
+
+        <!-- Projects grid -->
+        <div class="projects-grid" id="projectsGrid"></div>
+    </main>
+</div>
+
+<script>
+    const API_BASE = "https://employee-auth.calebethan485.workers.dev";
+
+    const PROJECTS = [
+        {
+            color: "green", icon: "🚀", status: "active", name: "Axis Core v3",
+            desc: "Next-generation platform rewrite with improved latency and a new module architecture.",
+            lead: "alice", members: ["A","B","C"], updated: "2 min ago",
+            progress: 72, progressColor: "green", tasks: "48/66", due: "Jun 12"
+        },
+        {
+            color: "blue", icon: "🔌", status: "active", name: "API Gateway Overhaul",
+            desc: "Unified gateway layer replacing three legacy services. Rate limiting & circuit breakers included.",
+            lead: "bob", members: ["B","C","D"], updated: "18 min ago",
+            progress: 54, progressColor: "blue", tasks: "29/54", due: "Jul 3"
+        },
+        {
+            color: "yellow", icon: "📊", status: "review", name: "Analytics Pipeline",
+            desc: "Real-time event streaming from edge workers into warehouse with sub-5s latency target.",
+            lead: "carol", members: ["C","A"], updated: "1 hr ago",
+            progress: 88, progressColor: "yellow", tasks: "61/70", due: "May 30"
+        },
+        {
+            color: "purple", icon: "🤖", status: "active", name: "ML Inference Cluster",
+            desc: "GPU cluster provisioning for on-prem model inference. Cuts cloud spend by ~40%.",
+            lead: "dave", members: ["D","B","A","C"], updated: "3 hrs ago",
+            progress: 31, progressColor: "purple", tasks: "12/39", due: "Aug 20"
+        },
+        {
+            color: "red", icon: "⚠️", status: "critical", name: "Email Delivery Fix",
+            desc: "Critical incident: email service degraded. Investigating SMTP relay misconfiguration.",
+            lead: "ops-bot", members: ["A","B"], updated: "41 min ago",
+            progress: 15, progressColor: "red", tasks: "3/20", due: "TODAY"
+        },
+        {
+            color: "green", icon: "🔒", status: "active", name: "Zero-Trust Rollout",
+            desc: "Company-wide zero-trust network architecture. mTLS between all internal services.",
+            lead: "alice", members: ["A","C"], updated: "Yesterday",
+            progress: 60, progressColor: "green", tasks: "36/60", due: "Jun 28"
+        },
+        {
+            color: "yellow", icon: "📱", status: "review", name: "Mobile App v2",
+            desc: "Full redesign of the employee mobile app with offline support and biometric auth.",
+            lead: "eve", members: ["B","D"], updated: "2 days ago",
+            progress: 95, progressColor: "yellow", tasks: "57/60", due: "May 22"
+        },
+        {
+            color: "blue", icon: "🗄️", status: "paused", name: "DB Migration PG16",
+            desc: "Upgrade Postgres cluster from 14 to 16. Paused pending schema audit sign-off.",
+            lead: "frank", members: ["C"], updated: "5 days ago",
+            progress: 40, progressColor: "blue", tasks: "18/45", due: "TBD"
+        },
+        {
+            color: "red", icon: "🌐", status: "critical", name: "CDN Edge Nodes",
+            desc: "Expanding edge presence to APAC region. Current degradation in SEA nodes under investigation.",
+            lead: "sys", members: ["A","B","C","D"], updated: "12 min ago",
+            progress: 22, progressColor: "red", tasks: "8/36", due: "May 25"
+        },
+    ];
+
+    let currentFilter = "all";
+
+    function setFilter(el, filter) {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+        currentFilter = filter;
+        renderProjects();
+    }
+
+    function renderProjects() {
+        const grid = document.getElementById('projectsGrid');
+        const filtered = currentFilter === 'all' ? PROJECTS : PROJECTS.filter(p => p.status === currentFilter);
+        grid.innerHTML = filtered.map(p => `
+            <div class="project-card ${p.color}">
+                <div class="project-top">
+                    <div class="project-icon">${p.icon}</div>
+                    <div class="project-status ${p.status}">${p.status.toUpperCase()}</div>
+                </div>
+                <div class="project-name">${p.name}</div>
+                <div class="project-desc">${p.desc}</div>
+                <div class="project-meta">
+                    <div class="meta-item">LEAD <span>${p.lead}</span></div>
+                    <div class="meta-item">TASKS <span>${p.tasks}</span></div>
+                    <div class="meta-item">DUE <span>${p.due}</span></div>
+                </div>
+                <div class="progress-wrap">
+                    <div class="progress-label">
+                        <span>Progress</span><span>${p.progress}%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill ${p.progressColor}" style="width:${p.progress}%"></div>
+                    </div>
+                </div>
+                <div class="project-footer">
+                    <div class="avatars">
+                        ${p.members.map(m => `<div class="av">${m}</div>`).join('')}
+                    </div>
+                    <div class="project-updated">Updated ${p.updated}</div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    (async function init() {
+        try {
+            const res = await fetch(`${API_BASE}/api/me`, { credentials: "include" });
+            if (!res.ok) { window.location.href = "login.html"; return; }
+            const user = await res.json();
+            document.getElementById("userName").textContent = user.name;
+            document.getElementById("userRole").textContent = user.role;
+            document.getElementById("userAvatar").textContent = user.name.charAt(0).toUpperCase();
+            const tick = () => { document.getElementById("currentTime").textContent = new Date().toLocaleTimeString("en-US", { hour12: false }); };
+            tick(); setInterval(tick, 1000);
+            document.getElementById("authGate").classList.add("hidden");
+            document.body.classList.add("visible");
+        } catch (err) {
+            window.location.href = "login.html";
+        }
+    })();
+
+    async function handleLogout() {
+        await fetch(`${API_BASE}/api/logout`, { method: "POST", credentials: "include" });
+        window.location.href = "login.html";
+    }
+
+    renderProjects();
+</script>
+</body>
+</html>
