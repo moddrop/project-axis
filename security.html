@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security — Project Axis</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --surface: #111118;
+            --surface2: #16161f;
+            --border: #1e1e2e;
+            --border-lit: #2e2e4e;
+            --accent: #5b6af0;
+            --accent2: #8b9cff;
+            --green: #4af08e;
+            --yellow: #f0c44a;
+            --danger: #f05b6a;
+            --text: #e8e8f2;
+            --muted: #6b6b88;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'DM Mono', monospace;
+            background: var(--bg); color: var(--text);
+            min-height: 100vh; opacity: 0; transition: opacity .4s;
+        }
+        body.visible { opacity: 1; }
+
+        #authGate {
+            position: fixed; inset: 0; background: var(--bg);
+            display: grid; place-items: center; z-index: 1000;
+            font-family: 'Syne', sans-serif; font-size: 13px; letter-spacing: .1em; color: var(--muted);
+        }
+        #authGate.hidden { display: none; }
+
+        .topbar {
+            height: 56px; background: var(--surface);
+            border-bottom: 1px solid var(--border-lit);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 32px; position: sticky; top: 0; z-index: 100;
+        }
+        .topbar-left { display: flex; align-items: center; gap: 16px; }
+        .logo-icon { width: 28px; height: 28px; background: var(--accent); border-radius: 2px; display: grid; place-items: center; font-size: 13px; }
+        .logo-text { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; }
+        .badge { font-size: 9px; letter-spacing: .14em; text-transform: uppercase; padding: 3px 8px; border-radius: 2px; background: rgba(91,106,240,.15); color: var(--accent2); border: 1px solid rgba(91,106,240,.3); }
+        .topbar-right { display: flex; align-items: center; gap: 20px; }
+        .user-pill { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
+        .user-avatar { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: grid; place-items: center; font-size: 11px; font-weight: 700; color: #fff; font-family: 'Syne', sans-serif; }
+        .logout-btn { background: transparent; border: 1px solid var(--border-lit); color: var(--muted); font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: .08em; padding: 6px 14px; border-radius: 2px; cursor: pointer; transition: border-color .2s, color .2s; }
+        .logout-btn:hover { border-color: var(--danger); color: var(--danger); }
+
+        .layout { display: grid; grid-template-columns: 220px 1fr; min-height: calc(100vh - 56px); }
+
+        .sidebar { background: var(--surface); border-right: 1px solid var(--border); padding: 24px 0; }
+        .nav-section { margin-bottom: 28px; padding: 0 20px; }
+        .nav-label { font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; padding: 0 8px; }
+        .nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 8px; border-radius: 2px; font-size: 12px; color: var(--muted); cursor: pointer; transition: background .15s, color .15s; letter-spacing: .02em; text-decoration: none; }
+        .nav-item:hover { background: var(--surface2); color: var(--text); }
+        .nav-item.active { background: rgba(91,106,240,.12); color: var(--accent2); }
+        .nav-item .icon { width: 16px; text-align: center; font-size: 14px; }
+
+        main { padding: 40px; background: var(--bg); }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-header { margin-bottom: 36px; animation: fadeUp .5s .1s both; }
+        .page-header h2 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 28px; margin-bottom: 6px; }
+        .page-header p { font-size: 12px; color: var(--muted); letter-spacing: .06em; }
+
+        /* ── Security score ── */
+        .score-banner {
+            background: var(--surface);
+            border: 1px solid var(--border-lit);
+            border-radius: 3px;
+            padding: 28px 32px;
+            display: flex; align-items: center; gap: 32px;
+            margin-bottom: 28px;
+            animation: fadeUp .5s .15s both;
+            position: relative; overflow: hidden;
+        }
+        .score-banner::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, var(--green), var(--accent), var(--accent2));
+        }
+        .score-ring {
+            width: 90px; height: 90px; flex-shrink: 0;
+            border-radius: 50%;
+            background: conic-gradient(var(--green) 0% 84%, var(--border-lit) 84% 100%);
+            display: grid; place-items: center;
+            position: relative;
+        }
+        .score-ring::after {
+            content: ''; position: absolute;
+            width: 68px; height: 68px; border-radius: 50%;
+            background: var(--surface);
+        }
+        .score-num {
+            position: relative; z-index: 1;
+            font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; color: var(--green);
+        }
+        .score-info h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; margin-bottom: 6px; }
+        .score-info p { font-size: 12px; color: var(--muted); line-height: 1.7; max-width: 480px; }
+        .score-meta { margin-left: auto; display: flex; flex-direction: column; gap: 8px; align-items: flex-end; }
+        .score-tag { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; padding: 4px 12px; border-radius: 2px; }
+        .score-tag.good { background: rgba(74,240,142,.1); color: var(--green); border: 1px solid rgba(74,240,142,.25); }
+        .score-tag.warn { background: rgba(240,196,74,.1); color: var(--yellow); border: 1px solid rgba(240,196,74,.25); }
+
+        /* ── Two-col layout ── */
+        .sec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; animation: fadeUp .5s .2s both; }
+        .sec-grid.single { grid-template-columns: 1fr; }
+
+        /* ── Panel ── */
+        .panel { background: var(--surface); border: 1px solid var(--border-lit); border-radius: 3px; overflow: hidden; }
+        .panel-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+        .panel-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: .04em; }
+        .panel-badge { font-size: 10px; padding: 2px 8px; background: var(--surface2); border-radius: 20px; color: var(--muted); border: 1px solid var(--border-lit); }
+        .panel-body { padding: 0; }
+
+        /* ── Setting rows ── */
+        .setting-row {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 16px 20px; border-bottom: 1px solid var(--border);
+            transition: background .15s;
+        }
+        .setting-row:last-child { border-bottom: none; }
+        .setting-row:hover { background: var(--surface2); }
+
+        .setting-left { flex: 1; }
+        .setting-name { font-size: 12px; margin-bottom: 3px; }
+        .setting-desc { font-size: 10px; color: var(--muted); letter-spacing: .03em; line-height: 1.5; }
+
+        /* Toggle switch */
+        .toggle { position: relative; width: 36px; height: 20px; flex-shrink: 0; }
+        .toggle input { opacity: 0; width: 0; height: 0; }
+        .toggle-track {
+            position: absolute; inset: 0;
+            background: var(--border-lit); border-radius: 20px; cursor: pointer;
+            transition: background .2s;
+        }
+        .toggle input:checked + .toggle-track { background: var(--green); }
+        .toggle-thumb {
+            position: absolute; top: 3px; left: 3px;
+            width: 14px; height: 14px; border-radius: 50%;
+            background: #fff; transition: transform .2s;
+            pointer-events: none;
+        }
+        .toggle input:checked ~ .toggle-thumb { transform: translateX(16px); }
+
+        /* Action btn */
+        .action-btn {
+            background: transparent; border: 1px solid var(--border-lit);
+            color: var(--muted); font-family: 'DM Mono', monospace;
+            font-size: 10px; letter-spacing: .08em; padding: 5px 12px;
+            border-radius: 2px; cursor: pointer; transition: all .2s; white-space: nowrap;
+        }
+        .action-btn:hover { border-color: var(--accent); color: var(--accent2); }
+        .action-btn.danger:hover { border-color: var(--danger); color: var(--danger); }
+
+        /* ── Access log table ── */
+        table { width: 100%; border-collapse: collapse; }
+        th { font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); padding: 10px 20px; text-align: left; border-bottom: 1px solid var(--border); background: var(--surface2); }
+        td { padding: 12px 20px; font-size: 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: var(--surface2); }
+
+        .status-dot { display: inline-flex; align-items: center; gap: 6px; }
+        .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+        .dot.green { background: var(--green); box-shadow: 0 0 6px var(--green); }
+        .dot.red   { background: var(--danger); box-shadow: 0 0 6px var(--danger); }
+        .dot.yellow { background: var(--yellow); box-shadow: 0 0 6px var(--yellow); }
+
+        /* ── Checklist ── */
+        .check-item {
+            display: flex; align-items: center; gap: 12px;
+            padding: 14px 20px; border-bottom: 1px solid var(--border);
+            font-size: 12px;
+        }
+        .check-item:last-child { border-bottom: none; }
+        .check-icon { font-size: 15px; flex-shrink: 0; }
+        .check-body { flex: 1; }
+        .check-title { margin-bottom: 2px; }
+        .check-sub { font-size: 10px; color: var(--muted); }
+        .check-state { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; }
+        .check-state.pass { background: rgba(74,240,142,.1); color: var(--green); border: 1px solid rgba(74,240,142,.2); }
+        .check-state.warn { background: rgba(240,196,74,.1); color: var(--yellow); border: 1px solid rgba(240,196,74,.2); }
+        .check-state.fail { background: rgba(240,91,106,.1); color: var(--danger); border: 1px solid rgba(240,91,106,.2); }
+
+        /* ── Active sessions ── */
+        .session-item {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 14px 20px; border-bottom: 1px solid var(--border);
+        }
+        .session-item:last-child { border-bottom: none; }
+        .session-left { display: flex; align-items: center; gap: 12px; }
+        .session-icon { width: 34px; height: 34px; background: var(--surface2); border: 1px solid var(--border-lit); border-radius: 2px; display: grid; place-items: center; font-size: 15px; flex-shrink: 0; }
+        .session-name { font-size: 12px; margin-bottom: 2px; }
+        .session-meta { font-size: 10px; color: var(--muted); }
+        .current-tag { font-size: 9px; letter-spacing: .12em; text-transform: uppercase; padding: 2px 8px; border-radius: 2px; background: rgba(91,106,240,.15); color: var(--accent2); border: 1px solid rgba(91,106,240,.3); margin-left: 8px; }
+    </style>
+</head>
+<body>
+
+<div id="authGate">VERIFYING SESSION…</div>
+
+<div class="topbar">
+    <div class="topbar-left">
+        <div class="logo-icon">⬡</div>
+        <div class="logo-text">Project Axis</div>
+        <div class="badge">Internal</div>
+    </div>
+    <div class="topbar-right">
+        <div class="user-pill">
+            <div class="user-avatar" id="userAvatar">?</div>
+            <span id="userName">Loading…</span>
+            <span style="color:var(--border-lit)">·</span>
+            <span id="userRole" style="color:var(--accent2)">—</span>
+        </div>
+        <button class="logout-btn" onclick="handleLogout()">Logout</button>
+    </div>
+</div>
+
+<div class="layout">
+    <nav class="sidebar">
+        <div class="nav-section">
+            <div class="nav-label">Main</div>
+            <a href="dashboard.html" class="nav-item"><span class="icon">⊞</span> Dashboard</a>
+            <a href="projects.html" class="nav-item"><span class="icon">◈</span> Projects</a>
+            <a href="#" class="nav-item"><span class="icon">◉</span> Analytics</a>
+        </div>
+        <div class="nav-section">
+            <div class="nav-label">Team</div>
+            <a href="#" class="nav-item"><span class="icon">◎</span> Directory</a>
+            <a href="#" class="nav-item"><span class="icon">⊕</span> Requests</a>
+        </div>
+        <div class="nav-section">
+            <div class="nav-label">System</div>
+            <a href="security.html" class="nav-item active"><span class="icon">⊛</span> Settings</a>
+            <a href="#" class="nav-item"><span class="icon">◌</span> Docs</a>
+        </div>
+    </nav>
+
+    <main>
+        <div class="page-header">
+            <h2>Security & Settings 🔐</h2>
+            <p>ACCOUNT SECURITY · <span id="currentTime"></span></p>
+        </div>
+
+        <!-- Security score banner -->
+        <div class="score-banner">
+            <div class="score-ring">
+                <div class="score-num">84</div>
+            </div>
+            <div class="score-info">
+                <h3>Security Score: Good</h3>
+                <p>Your account security is above average. Enable hardware MFA and rotate your API keys to reach an Excellent score. Last full audit completed 3 hours ago by bob.</p>
+            </div>
+            <div class="score-meta">
+                <div class="score-tag good">MFA Enabled</div>
+                <div class="score-tag warn">Keys due rotation</div>
+            </div>
+        </div>
+
+        <!-- Row 1: Auth settings + Security checklist -->
+        <div class="sec-grid">
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title">Authentication</span>
+                    <span class="panel-badge">Live</span>
+                </div>
+                <div class="panel-body">
+                    <div class="setting-row">
+                        <div class="setting-left">
+                            <div class="setting-name">Two-Factor Authentication</div>
+                            <div class="setting-desc">TOTP via authenticator app · Backup codes generated</div>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" checked onchange="showToast('2FA setting updated')">
+                            <div class="toggle-track"></div>
+                            <div class="toggle-thumb"></div>
+                        </label>
+                    </div>
+                    <div class="setting-row">
+                        <div class="setting-left">
+                            <div class="setting-name">Hardware Key (FIDO2)</div>
+                            <div class="setting-desc">YubiKey or platform authenticator</div>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" onchange="showToast('Hardware key setting updated')">
+                            <div class="toggle-track"></div>
+                            <div class="toggle-thumb"></div>
+                        </label>
+                    </div>
+                    <div class="setting-row">
+                        <div class="setting-left">
+                            <div class="setting-name">Passkey Login</div>
+                            <div class="setting-desc">Biometric / device PIN — passwordless</div>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" checked onchange="showToast('Passkey setting updated')">
+                            <div class="toggle-track"></div>
+                            <div class="toggle-thumb"></div>
+                        </label>
+                    </div>
+                    <div class="setting-row">
+                        <div class="setting-left">
+                            <div class="setting-name">Login Notifications</div>
+                            <div class="setting-desc">Email alert on new device sign-in</div>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" checked onchange="showToast('Notification setting updated')">
+                            <div class="toggle-track"></div>
+                            <div class="toggle-thumb"></div>
+                        </label>
+                    </div>
+                    <div class="setting-row">
+                        <div class="setting-left">
+                            <div class="setting-name">Session Timeout</div>
+                            <div class="setting-desc">Auto-logout after 8 hours of inactivity</div>
+                        </div>
+                        <button class="action-btn" onclick="showToast('Session timeout config')">8h · Configure</button>
+                    </div>
+                    <div class="setting-row">
+                        <div class="setting-left">
+                            <div class="setting-name">Password</div>
+                            <div class="setting-desc">Last changed 42 days ago</div>
+                        </div>
+                        <button class="action-btn" onclick="showToast('Password change initiated')">Change</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title">Security Checklist</span>
+                    <span class="panel-badge">7/9 pass</span>
+                </div>
+                <div class="panel-body">
+                    <div class="check-item">
+                        <div class="check-icon">✅</div>
+                        <div class="check-body">
+                            <div class="check-title">Strong password set</div>
+                            <div class="check-sub">Entropy: high · Changed 42 days ago</div>
+                        </div>
+                        <div class="check-state pass">Pass</div>
+                    </div>
+                    <div class="check-item">
+                        <div class="check-icon">✅</div>
+                        <div class="check-body">
+                            <div class="check-title">TOTP MFA active</div>
+                            <div class="check-sub">Google Authenticator linked</div>
+                        </div>
+                        <div class="check-state pass">Pass</div>
+                    </div>
+                    <div class="check-item">
+                        <div class="check-icon">⚠️</div>
+                        <div class="check-body">
+                            <div class="check-title">Hardware key not enrolled</div>
+                            <div class="check-sub">FIDO2 key adds phishing protection</div>
+                        </div>
+                        <div class="check-state warn">Warn</div>
+                    </div>
+                    <div class="check-item">
+                        <div class="check-icon">✅</div>
+                        <div class="check-body">
+                            <div class="check-title">Login alerts enabled</div>
+                            <div class="check-sub">Notified on unknown device</div>
+                        </div>
+                        <div class="check-state pass">Pass</div>
+                    </div>
+                    <div class="check-item">
+                        <div class="check-icon">❌</div>
+                        <div class="check-body">
+                            <div class="check-title">API keys need rotation</div>
+                            <div class="check-sub">2 keys older than 90 days</div>
+                        </div>
+                        <div class="check-state fail">Action</div>
+                    </div>
+                    <div class="check-item">
+                        <div class="check-icon">✅</div>
+                        <div class="check-body">
+                            <div class="check-title">Inactive sessions cleared</div>
+                            <div class="check-sub">2 stale sessions revoked this week</div>
+                        </div>
+                        <div class="check-state pass">Pass</div>
+                    </div>
+                    <div class="check-item">
+                        <div class="check-icon">✅</div>
+                        <div class="check-body">
+                            <div class="check-title">SSO enforced</div>
+                            <div class="check-sub">Okta SAML 2.0 active</div>
+                        </div>
+                        <div class="check-state pass">Pass</div>
+                    </div>
+                    <div class="check-item">
+                        <div class="check-icon">✅</div>
+                        <div class="check-body">
+                            <div class="check-title">Audit logging active</div>
+                            <div class="check-sub">90-day retention · Immutable</div>
+                        </div>
+                        <div class="check-state pass">Pass</div>
+                    </div>
+                    <div class="check-item">
+                        <div class="check-icon">⚠️</div>
+                        <div class="check-body">
+                            <div class="check-title">Recovery codes not downloaded</div>
+                            <div class="check-sub">Store securely in case of MFA loss</div>
+                        </div>
+                        <div class="check-state warn">Warn</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 2: Active sessions + Access log -->
+        <div class="sec-grid">
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title">Active Sessions</span>
+                    <span class="panel-badge" id="sessionCount">3 sessions</span>
+                </div>
+                <div class="panel-body" id="sessionsList">
+                    <div class="session-item">
+                        <div class="session-left">
+                            <div class="session-icon">💻</div>
+                            <div>
+                                <div class="session-name">Chrome · macOS <span class="current-tag">Current</span></div>
+                                <div class="session-meta">Bangkok, TH · 127.0.0.1 · Active now</div>
+                            </div>
+                        </div>
+                        <button class="action-btn" disabled style="opacity:.3;cursor:default">Current</button>
+                    </div>
+                    <div class="session-item">
+                        <div class="session-left">
+                            <div class="session-icon">📱</div>
+                            <div>
+                                <div class="session-name">Safari · iPhone 15</div>
+                                <div class="session-meta">Bangkok, TH · 2 hrs ago</div>
+                            </div>
+                        </div>
+                        <button class="action-btn danger" onclick="revokeSession(this, 'iPhone')">Revoke</button>
+                    </div>
+                    <div class="session-item">
+                        <div class="session-left">
+                            <div class="session-icon">🖥️</div>
+                            <div>
+                                <div class="session-name">Firefox · Windows 11</div>
+                                <div class="session-meta">Singapore · 18 hrs ago</div>
+                            </div>
+                        </div>
+                        <button class="action-btn danger" onclick="revokeSession(this, 'Firefox')">Revoke</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title">Recent Access Log</span>
+                    <span class="panel-badge">Last 24h</span>
+                </div>
+                <div class="panel-body">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Event</th>
+                                <th>Result</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Session login</td>
+                                <td><div class="status-dot"><div class="dot green"></div>Success</div></td>
+                                <td style="color:var(--muted)">Just now</td>
+                            </tr>
+                            <tr>
+                                <td>API key used</td>
+                                <td><div class="status-dot"><div class="dot green"></div>Success</div></td>
+                                <td style="color:var(--muted)">2 min ago</td>
+                            </tr>
+                            <tr>
+                                <td>2FA challenge</td>
+                                <td><div class="status-dot"><div class="dot green"></div>Passed</div></td>
+                                <td style="color:var(--muted)">2 hrs ago</td>
+                            </tr>
+                            <tr>
+                                <td>Password check</td>
+                                <td><div class="status-dot"><div class="dot red"></div>Failed</div></td>
+                                <td style="color:var(--muted)">6 hrs ago</td>
+                            </tr>
+                            <tr>
+                                <td>Session login</td>
+                                <td><div class="status-dot"><div class="dot green"></div>Success</div></td>
+                                <td style="color:var(--muted)">6 hrs ago</td>
+                            </tr>
+                            <tr>
+                                <td>API key rotated</td>
+                                <td><div class="status-dot"><div class="dot yellow"></div>Manual</div></td>
+                                <td style="color:var(--muted)">Yesterday</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 3: API Keys (full width) -->
+        <div class="sec-grid single" style="animation: fadeUp .5s .35s both;">
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title">API Keys</span>
+                    <button class="new-btn" style="background:var(--accent);border:none;color:#fff;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.08em;padding:5px 14px;border-radius:2px;cursor:pointer;" onclick="showToast('New API key generated')">+ Generate Key</button>
+                </div>
+                <div class="panel-body">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Key</th>
+                                <th>Created</th>
+                                <th>Last Used</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Production Deploy</td>
+                                <td style="color:var(--muted); font-size:11px">axis_pk_••••••••9f3a</td>
+                                <td style="color:var(--muted)">Jan 12</td>
+                                <td style="color:var(--muted)">2 min ago</td>
+                                <td><div class="status-dot"><div class="dot green"></div>Active</div></td>
+                                <td><button class="action-btn danger" onclick="showToast('Key revoked')">Revoke</button></td>
+                            </tr>
+                            <tr>
+                                <td>CI/CD Pipeline</td>
+                                <td style="color:var(--muted); font-size:11px">axis_pk_••••••••c17b</td>
+                                <td style="color:var(--muted)">Nov 8</td>
+                                <td style="color:var(--muted)">18 min ago</td>
+                                <td><div class="status-dot"><div class="dot yellow"></div>Expiring</div></td>
+                                <td><button class="action-btn" onclick="showToast('Key rotated')">Rotate</button></td>
+                            </tr>
+                            <tr>
+                                <td>Analytics Ingest</td>
+                                <td style="color:var(--muted); font-size:11px">axis_pk_••••••••88de</td>
+                                <td style="color:var(--muted)">Sep 3</td>
+                                <td style="color:var(--muted)">1 day ago</td>
+                                <td><div class="status-dot"><div class="dot red"></div>Overdue</div></td>
+                                <td><button class="action-btn" onclick="showToast('Key rotated')">Rotate</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<!-- Toast -->
+<div id="toast" style="
+    position:fixed; bottom:28px; right:28px;
+    background:var(--surface); border:1px solid var(--border-lit);
+    color:var(--text); font-size:12px; letter-spacing:.04em;
+    padding:12px 20px; border-radius:3px;
+    opacity:0; transform:translateY(8px);
+    transition:opacity .25s, transform .25s;
+    z-index:999; pointer-events:none;
+">⊛ &nbsp;<span id="toastMsg"></span></div>
+
+<script>
+    const API_BASE = "https://employee-auth.calebethan485.workers.dev";
+
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        document.getElementById('toastMsg').textContent = msg;
+        t.style.opacity = '1'; t.style.transform = 'translateY(0)';
+        setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateY(8px)'; }, 2500);
+    }
+
+    function revokeSession(btn, name) {
+        const row = btn.closest('.session-item');
+        row.style.opacity = '0';
+        row.style.transform = 'translateX(12px)';
+        row.style.transition = 'all .3s';
+        setTimeout(() => {
+            row.remove();
+            const list = document.getElementById('sessionsList');
+            const count = list.querySelectorAll('.session-item').length;
+            document.getElementById('sessionCount').textContent = `${count} session${count !== 1 ? 's' : ''}`;
+        }, 300);
+        showToast(`${name} session revoked`);
+    }
+
+    (async function init() {
+        try {
+            const res = await fetch(`${API_BASE}/api/me`, { credentials: "include" });
+            if (!res.ok) { window.location.href = "login.html"; return; }
+            const user = await res.json();
+            document.getElementById("userName").textContent = user.name;
+            document.getElementById("userRole").textContent = user.role;
+            document.getElementById("userAvatar").textContent = user.name.charAt(0).toUpperCase();
+            const tick = () => { document.getElementById("currentTime").textContent = new Date().toLocaleTimeString("en-US", { hour12: false }); };
+            tick(); setInterval(tick, 1000);
+            document.getElementById("authGate").classList.add("hidden");
+            document.body.classList.add("visible");
+        } catch (err) {
+            window.location.href = "login.html";
+        }
+    })();
+
+    async function handleLogout() {
+        await fetch(`${API_BASE}/api/logout`, { method: "POST", credentials: "include" });
+        window.location.href = "login.html";
+    }
+</script>
+</body>
+</html>
