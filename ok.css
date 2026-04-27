@@ -669,8 +669,8 @@ tr:nth-child(even) {
 .footer {
     background-color: #2d6cdf;
     color: white;
-    padding: 5px;
     margin-bottom: 0;
+    font-size: 3px;
 }
 
 /* news site*/
