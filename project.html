@@ -44,85 +44,78 @@
         <a href="proposal.html">PROPOSAL</a>
         <a href="news.html">NEWS</a>
     </nav>
-    <div class="header">
-        <h1>~ Project AXIS ~</h1>
-        <i>
-            <p>"Building the future"</p>
-        </i>
-        <div id="google_translate_element"></div>
-        <div class="line"></div>
-        <br>
-    </div>
-    <center>
-        <h1 id="wvs">Wind Energy Vs Sun Energy</h1>
-        <div class="project">
-            <img src="raver-project.webp" class="image">
-            <p class="projectdesc">Back then fossil fuels were used as our main source of
-                energy, rather than clean
-                energies such as wind
-                and sun energy. So now we are seeing which is better in certain conditions. Our experiment was powering
-                a wind turbine and solar panel to power an LED to see which one has better output. It showed that both
-                energies actually were similar.
-            </p>
-            <p class="projectdesc">In the future, we will be using more clean energy and less
-                fossil fuels. We will
-                be using more wind and
-                sun energy to power our homes and cars. We will be using more wind turbines and solar panels to power
-                our homes and cars. We will be using more clean energy to power our homes and cars.</p>
+    <main>
+    <section class="page-hero">
+        <p class="page-hero-eyebrow">Project Axis</p>
+        <h1>Our Projects</h1>
+        <p>From clean energy experiments to AI-powered assistive glasses — here's what we build.</p>
+        <div class="page-hero-divider"></div>
+    </section>
+    <div class="page-content">
 
-        </div>
-        <a href="blog.html/.accordion/"
-            style="text-align:left;max-width:500px; color: rgb(109, 109, 255);text-decoration: underline;"
-            class="hover">Learn more about Wind Vs. Sun Energy</a>
-        <h1 style="padding:3px;" id="CO2">Comparing Air Quality in the past, present, future</h1>
-        <div class="project">
-            <img src="binbin-project.webp" class="image">
-            <p class="projectdesc">Our project is about how humans affect and cause bad air
-                quality in the past,
-                present, and future. We
-                have
-                made a device that detects and measures the air quality. The device beeps whenever the air quality
-                increases
-                severely. We are showing examples of how bad the air quality is and was in the past, present, and
-                future.
-            </p>
-            <p class="projectdesc">Our group wants to see how human activity causes bad air
-                quality, and by using
-                our device and future perspectives, we could possibly help people come up with ideas to improve the air
-                quality</p>
-        </div>
-        <a href="blog.html"
-            style="text-align:left;max-width:500px; color: rgb(109, 109, 255);text-decoration: underline;"
-            class="hover">Learn more about air quality</a>
-        <h1 style="padding:3px;" id="SmartGlass">SoundView Smart Glasses</h1>
-        <div class="project">
-            <img src="caleb-project.webp" class="image">
-            <p class="projectdesc">Globally, at least 2.2 billion people have a near or
-                distance vision impairment.
-                In at least 1 billion of
-                these, vision impairment could have been prevented or is yet to be addressed. That leaves roughly
-                1.1-2.2
-                billion people with vision problems not easily solved by glasses. They need to find a better way to
-                live. I
-                believe we have found a solution. This is SoundView. As the name suggests, these glasses provide an
-                accurate
-                description of the world around them. With a microcontroller, a few wires, and a speaker, something
-                great
-                can be made.</p>
-            <p class="projectdesc">SoundView works by using a microcontroller to process the
-                data from the camera.
-                The camera detects the
-                objects around the user and sends that information to the microcontroller. The microcontroller then
-                processes that information and sends it to the speaker, which provides an accurate description of the
-                world around them.</p>
-        </div>
-        <a href="blog.html"
-            style="text-align:left;max-width:500px; color: rgb(109, 109, 255);text-decoration: underline;"
-            class="hover">Learn more about SoundView</a>
-    </center>
+        <section class="proj-section" id="wvs">
+            <p class="proj-section-eyebrow" style="color:var(--accent-green)">Energy</p>
+            <div class="proj-section-body">
+                <div class="proj-section-img">
+                    <img src="raver-project.webp" alt="Wind turbine and solar panel energy comparison experiment">
+                </div>
+                <div class="proj-section-text">
+                    <h2 class="proj-section-title">Wind Energy vs Sun Energy</h2>
+                    <p>Back then, fossil fuels dominated our energy grid. We set out to compare two clean alternatives: wind and solar. By powering LEDs through a wind turbine and a solar panel, we measured voltage, current, and efficiency under real conditions. The result? Both sources performed similarly — suggesting neither is strictly superior, and the right choice depends on environment.</p>
+                    <p>As the world shifts to renewables, understanding where each technology excels becomes critical. Our experiment gave us a hands-on foundation for that question.</p>
+                    <a href="blog.html" class="project-button">Read Full Report</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="proj-section proj-section--reverse" id="CO2">
+            <p class="proj-section-eyebrow" style="color:var(--accent-teal)">Environment</p>
+            <div class="proj-section-body">
+                <div class="proj-section-img">
+                    <img src="binbin-project.webp" alt="CO2 and air quality sensor using Arduino Nano and MQ135">
+                </div>
+                <div class="proj-section-text">
+                    <h2 class="proj-section-title">Comparing Air Quality</h2>
+                    <p>Human activity has measurably degraded air quality over decades. We built a compact device using an Arduino Nano and MQ135 sensor to detect CO₂ and sulfur dioxide levels in real time — displaying readings on an I2C screen and alerting users when levels rise dangerously.</p>
+                    <p>The project makes invisible pollution tangible, helping people understand how their environment is changing and why it matters for long-term health.</p>
+                    <a href="blog.html" class="project-button">Read Full Report</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="proj-section" id="SmartGlass">
+            <p class="proj-section-eyebrow" style="color:var(--accent-purple)">AI / Vision</p>
+            <div class="proj-section-body">
+                <div class="proj-section-img">
+                    <img src="caleb-project.webp" alt="SoundView smart glasses prototype for visually impaired users">
+                </div>
+                <div class="proj-section-text">
+                    <h2 class="proj-section-title">SoundView Smart Glasses</h2>
+                    <p>At least 2.2 billion people live with vision impairment worldwide. SoundView is our answer — a wearable device that captures the world through a camera, processes it with an AI model, and delivers a real-time spoken description through a speaker. Built with a microcontroller, a few wires, and minimal cost.</p>
+                    <p>The hardware fits inside a standard glasses frame, making it discreet and practical. The system is designed to be affordable enough to reach people who need it most — not just those who can afford $4,000 commercial devices.</p>
+                    <a href="blog.html" class="project-button">Read Full Report</a>
+                </div>
+            </div>
+        </section>
+
+    </div>
     <footer class="footer">
-        <h3 class="footer-text">Project Axis @2026</h3>
+        <div class="footer-inner">
+            <p class="footer-logo">Project Axis</p>
+            <p class="footer-tagline">Innovating assistive technology for the visually impaired.</p>
+            <nav class="footer-nav" aria-label="Footer navigation">
+                <a href="index.html">Home</a>
+                <a href="aboutus.html">Team</a>
+                <a href="project.html">Projects</a>
+                <a href="blog.html">Blog</a>
+                <a href="gallery.html">Gallery</a>
+                <a href="donate.html">Donors</a>
+                <a href="news.html">News</a>
+            </nav>
+            <p class="footer-copy">© 2026 Project Axis. All rights reserved.</p>
+        </div>
     </footer>
+    </main>
 </body>
 <script src="main.js"></script>
 <script type="text/javascript"

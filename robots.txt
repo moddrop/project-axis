@@ -1,2 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /login.html
+Disallow: /portal.html
+Disallow: /dashboard.html
+
+Sitemap: https://projectaxis.com/sitemap.xml

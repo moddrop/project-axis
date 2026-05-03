@@ -1,6 +1,7 @@
 const carouselLeftBtn = document.getElementById('caroselleftbtn');
 const carouselRightBtn = document.getElementById('caroselrightbtn');
 const carouselItems = document.querySelectorAll('.carosel-item');
+const carouselDots = document.querySelectorAll('.carosel-dot');
 const hamburgerBtn = document.getElementById('hamburgerBtn');
 const mobileMenu = document.getElementById('mobileMenu');
 const acc = document.getElementsByClassName("accordion");
@@ -14,6 +15,10 @@ const AWAYTIME = 5000;
 function updateCarousel() {
     carouselItems.forEach(el => {
         el.style.transform = `translateX(${start}%)`;
+    });
+    const activeIndex = Math.round(-start / 100);
+    carouselDots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === activeIndex);
     });
 }
 
@@ -29,6 +34,14 @@ if (carouselLeftBtn && carouselRightBtn && carouselItems.length > 0) {
         if (start > -end) start -= 100;
         updateCarousel();
         resetCaroseltimer();
+    });
+
+    carouselDots.forEach((dot, i) => {
+        dot.addEventListener('click', () => {
+            start = -100 * i;
+            updateCarousel();
+            resetCaroseltimer();
+        });
     });
 }
 

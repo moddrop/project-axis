@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Axis — AI Smart Glasses for the Blind</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ===================== RESET & ROOT ===================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink: #0a0a0a;
+  --ink-soft: #3a3a3a;
+  --ink-muted: #888;
+  --rule: #e2dfd9;
+  --bg: #fafaf8;
+  --bg-warm: #f5f1ea;
+  --bg-dark: #0e0f0e;
+  --accent: #1a6b3a;
+  --accent-light: #e8f2ec;
+  --accent-glow: rgba(26,107,58,0.15);
+  --gold: #c9a84c;
+  --glass: rgba(255,255,255,0.6);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Instrument Sans', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  overflow-x: hidden;
+}
+
+/* ===================== SCROLLBAR ===================== */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg-warm); }
+::-webkit-scrollbar-thumb { background: var(--ink); }
+
+/* ===================== NAVIGATION ===================== */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 18px 56px;
+  background: rgba(250,250,248,0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--rule);
+  transition: padding 0.3s ease;
+}
+nav.scrolled { padding: 12px 56px; }
+
+.nav-logo {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px; font-weight: 500; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--ink); text-decoration: none;
+  display: flex; align-items: center; gap: 10px;
+}
+.nav-logo-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--accent);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+.nav-links { display: flex; gap: 36px; list-style: none; }
+.nav-links a {
+  font-size: 12px; color: var(--ink-muted); text-decoration: none;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  position: relative; padding-bottom: 2px;
+  transition: color 0.2s;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+  height: 1px; background: var(--accent);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.25s ease;
+}
+.nav-links a:hover { color: var(--ink); }
+.nav-links a:hover::after { transform: scaleX(1); }
+
+.nav-cta {
+  font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 11px 24px;
+  background: var(--ink); color: var(--bg);
+  text-decoration: none;
+  position: relative; overflow: hidden;
+  transition: color 0.3s;
+}
+.nav-cta::before {
+  content: ''; position: absolute; inset: 0;
+  background: var(--accent);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.3s ease; z-index: 0;
+}
+.nav-cta span { position: relative; z-index: 1; }
+.nav-cta:hover::before { transform: scaleX(1); }
+
+/* ===================== HERO ===================== */
+.hero {
+  min-height: 100vh;
+  display: grid; grid-template-columns: 1fr 1fr;
+  position: relative; overflow: hidden;
+}
+
+.hero-left {
+  padding: 160px 56px 80px;
+  display: flex; flex-direction: column; justify-content: center;
+  position: relative; z-index: 2;
+}
+
+.hero-right {
+  background: var(--bg-warm);
+  display: flex; align-items: center; justify-content: center;
+  padding: 140px 56px 80px;
+  position: relative; overflow: hidden;
+}
+
+/* Geometric background decoration */
+.hero-right::before {
+  content: '';
+  position: absolute; top: 20%; right: -100px;
+  width: 400px; height: 400px;
+  border: 1px solid var(--rule);
+  border-radius: 50%;
+}
+.hero-right::after {
+  content: '';
+  position: absolute; bottom: 10%; left: -60px;
+  width: 200px; height: 200px;
+  border: 1px solid var(--rule);
+  border-radius: 50%;
+}
+
+.eyebrow {
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent);
+  margin-bottom: 28px;
+  display: flex; align-items: center; gap: 14px;
+  opacity: 0; animation: fadeUp 0.7s 0.1s forwards;
+}
+.eyebrow-line { width: 40px; height: 1px; background: var(--accent); }
+
+h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(54px, 5.5vw, 84px);
+  font-weight: 300; line-height: 1.0;
+  letter-spacing: -0.025em;
+  margin-bottom: 32px;
+  opacity: 0; animation: fadeUp 0.8s 0.25s forwards;
+}
+h1 em { font-style: italic; color: var(--accent); }
+h1 .word-line { display: block; overflow: hidden; }
+
+.hero-desc {
+  font-size: 15px; line-height: 1.8; color: var(--ink-soft);
+  max-width: 440px; margin-bottom: 48px;
+  opacity: 0; animation: fadeUp 0.7s 0.4s forwards;
+}
+
+.hero-actions {
+  display: flex; gap: 20px; align-items: center;
+  opacity: 0; animation: fadeUp 0.7s 0.55s forwards;
+}
+
+.btn-primary {
+  background: var(--ink); color: var(--bg);
+  padding: 15px 36px; font-size: 12px; font-weight: 500;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  border: 2px solid var(--ink); text-decoration: none;
+  position: relative; overflow: hidden;
+  transition: color 0.3s;
+  display: inline-block;
+}
+.btn-primary::before {
+  content: ''; position: absolute; inset: 0;
+  background: var(--accent);
+  transform: scaleY(0); transform-origin: bottom;
+  transition: transform 0.3s ease; z-index: 0;
+}
+.btn-primary span { position: relative; z-index: 1; }
+.btn-primary:hover::before { transform: scaleY(1); }
+
+.btn-ghost {
+  font-size: 13px; color: var(--ink-muted);
+  text-decoration: none; letter-spacing: 0.04em;
+  display: flex; align-items: center; gap: 8px;
+  transition: color 0.2s;
+}
+.btn-ghost:hover { color: var(--ink); }
+.btn-ghost .arrow { transition: transform 0.2s; }
+.btn-ghost:hover .arrow { transform: translateX(4px); }
+
+/* Hero Scroll Indicator */
+.scroll-indicator {
+  position: absolute; bottom: 40px; left: 56px;
+  display: flex; align-items: center; gap: 12px;
+  font-family: 'DM Mono', monospace; font-size: 9px;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-muted);
+  opacity: 0; animation: fadeUp 0.7s 0.9s forwards;
+}
+.scroll-line {
+  width: 40px; height: 1px; background: var(--ink-muted);
+  position: relative; overflow: hidden;
+}
+.scroll-line::after {
+  content: ''; position: absolute; top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: var(--accent);
+  animation: scrollSlide 2s 1.5s infinite;
+}
+@keyframes scrollSlide {
+  0% { left: -100%; } 100% { left: 100%; }
+}
+
+/* ===================== GLASSES CARD ===================== */
+.glasses-card {
+  width: 100%; max-width: 400px;
+  background: white;
+  border: 1px solid rgba(0,0,0,0.07);
+  box-shadow: 0 32px 80px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
+  position: relative; z-index: 2;
+  opacity: 0; animation: fadeUp 0.9s 0.35s forwards;
+}
+
+.glasses-card-header {
+  background: var(--ink); color: #7fff9a;
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  letter-spacing: 0.1em; padding: 12px 18px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.status-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #7fff9a; display: inline-block;
+  margin-right: 8px; animation: blink 1.4s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.25;} }
+
+.glasses-body { padding: 36px; }
+
+/* SVG glasses inline */
+.glasses-svg { width: 100%; margin-bottom: 24px; }
+
+.ai-label {
+  font-family: 'DM Mono', monospace; font-size: 9px;
+  letter-spacing: 0.14em; color: var(--ink-muted);
+  text-align: center; line-height: 1.9;
+}
+
+.glasses-metrics {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--rule); background: var(--bg-warm);
+}
+.g-metric { padding: 18px 12px; text-align: center; }
+.g-metric + .g-metric { border-left: 1px solid var(--rule); }
+.g-metric-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px; font-weight: 600; color: var(--ink);
+  line-height: 1;
+}
+.g-metric-label {
+  font-family: 'DM Mono', monospace; font-size: 8px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink-muted); margin-top: 4px;
+}
+
+/* Counter animation */
+.count-up { display: inline-block; }
+
+/* ===================== SHARED SECTION STYLES ===================== */
+.section { padding: 110px 56px; max-width: 1240px; margin: 0 auto; }
+.section-full { padding: 110px 56px; }
+
+.section-tag {
+  font-family: 'DM Mono', monospace; font-size: 9px;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold);
+  margin-bottom: 14px; display: flex; align-items: center; gap: 12px;
+}
+.section-tag::before { content: '[ '; }
+.section-tag::after { content: ' ]'; }
+
+h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 3.5vw, 56px); font-weight: 300;
+  line-height: 1.08; letter-spacing: -0.015em;
+  margin-bottom: 56px;
+}
+
+/* Reveal on scroll */
+.reveal {
+  opacity: 0; transform: translateY(32px);
+  transition: opacity 0.75s ease, transform 0.75s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ===================== PROBLEM ===================== */
+.problem-bg { background: white; }
+.problem-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 88px; align-items: start; }
+
+.stat-block {
+  background: var(--bg-warm); padding: 48px 40px;
+  border-left: 3px solid var(--accent);
+  position: relative; overflow: hidden;
+}
+.stat-block::after {
+  content: '';
+  position: absolute; bottom: -40px; right: -40px;
+  width: 160px; height: 160px;
+  border: 1px solid var(--rule); border-radius: 50%;
+}
+
+.stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 96px; font-weight: 300; line-height: 1;
+  color: var(--ink); margin-bottom: 8px;
+}
+.stat-sub {
+  font-size: 15px; line-height: 1.65; color: var(--ink-soft);
+}
+
+.problem-text p {
+  font-size: 15px; line-height: 1.85; color: var(--ink-soft);
+  margin-bottom: 22px;
+}
+.problem-divider { width: 48px; height: 2px; background: var(--accent); margin-bottom: 36px; }
+
+.pill-group { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; }
+.pill {
+  display: inline-block; padding: 5px 13px;
+  background: var(--accent-light); color: var(--accent);
+  font-family: 'DM Mono', monospace; font-size: 9px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+}
+
+/* ===================== SOLUTION ===================== */
+.solution-bg { background: var(--bg-dark); }
+.solution-bg .section-tag { color: #7fff9a; }
+.solution-bg h2 { color: white; }
+
+.sol-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 0; }
+
+.sol-card {
+  background: rgba(255,255,255,0.03);
+  padding: 44px 36px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  transition: background 0.3s;
+  position: relative; overflow: hidden;
+}
+.sol-card::before {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 2px; background: var(--accent);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.4s ease;
+}
+.sol-card:hover { background: rgba(255,255,255,0.06); }
+.sol-card:hover::before { transform: scaleX(1); }
+
+.sol-num {
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  letter-spacing: 0.18em; color: rgba(255,255,255,0.25);
+  margin-bottom: 28px;
+}
+.sol-icon {
+  width: 44px; height: 44px; margin-bottom: 20px;
+  color: var(--accent);
+}
+.sol-title {
+  font-family: 'Cormorant Garamond', serif; font-size: 28px;
+  font-weight: 400; color: white; margin-bottom: 14px;
+}
+.sol-desc { font-size: 13px; line-height: 1.75; color: rgba(255,255,255,0.5); }
+
+/* ===================== TECH ===================== */
+.tech-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 2px; background: var(--rule);
+}
+.tech-card {
+  background: white; padding: 44px;
+  display: flex; gap: 28px; align-items: flex-start;
+  position: relative; overflow: hidden;
+  transition: background 0.25s;
+}
+.tech-card::after {
+  content: '';
+  position: absolute; top: 0; left: 0; bottom: 0;
+  width: 3px; background: var(--accent);
+  transform: scaleY(0); transform-origin: bottom;
+  transition: transform 0.3s ease;
+}
+.tech-card:hover { background: var(--accent-light); }
+.tech-card:hover::after { transform: scaleY(1); }
+
+.tech-badge {
+  width: 52px; height: 52px; flex-shrink: 0;
+  background: var(--ink); color: white;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Mono', monospace; font-size: 9px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+}
+.tech-info h3 {
+  font-size: 17px; font-weight: 600; color: var(--ink);
+  margin-bottom: 10px;
+}
+.tech-info p { font-size: 13px; line-height: 1.7; color: var(--ink-muted); }
+
+/* ===================== ROADMAP ===================== */
+.roadmap-bg { background: var(--bg-warm); }
+.timeline { max-width: 720px; }
+
+.tl-item {
+  display: grid; grid-template-columns: 110px 1fr;
+  gap: 36px; position: relative;
+}
+.tl-item::before {
+  content: '';
+  position: absolute; left: 109px; top: 22px; bottom: -1px;
+  width: 1px; background: var(--rule);
+}
+.tl-item:last-child::before { display: none; }
+
+.tl-date {
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  letter-spacing: 0.1em; color: var(--ink-muted);
+  padding-top: 20px; text-align: right;
+}
+
+.tl-body {
+  padding: 0 0 52px 36px;
+  border-left: 1px solid var(--rule);
+  position: relative;
+}
+.tl-body::before {
+  content: ''; position: absolute; left: -5.5px; top: 20px;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: white; border: 2px solid var(--ink-muted);
+  transition: all 0.3s;
+}
+.tl-body.done::before { background: var(--accent); border-color: var(--accent); }
+.tl-body.active::before { background: white; border: 2.5px solid var(--accent); box-shadow: 0 0 0 4px var(--accent-glow); }
+
+.tl-badge {
+  font-family: 'DM Mono', monospace; font-size: 8px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 10px;
+}
+.tl-title { font-size: 18px; font-weight: 600; color: var(--ink); margin-bottom: 10px; }
+.tl-desc { font-size: 13px; line-height: 1.75; color: var(--ink-muted); }
+
+/* ===================== TEAM ===================== */
+.team-bg { background: white; }
+.team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+
+.team-card {
+  padding: 36px;
+  border: 1px solid var(--rule);
+  position: relative; overflow: hidden;
+  transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+}
+.team-card::before {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+  height: 2px; background: var(--accent);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.35s ease;
+}
+.team-card:hover { border-color: transparent; box-shadow: 0 12px 48px rgba(0,0,0,0.1); transform: translateY(-4px); }
+.team-card:hover::before { transform: scaleX(1); }
+
+.team-avatar {
+  width: 60px; height: 60px; border-radius: 50%;
+  background: var(--bg-warm); margin-bottom: 22px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cormorant Garamond', serif; font-size: 28px; color: var(--ink);
+  font-style: italic;
+}
+.team-name { font-weight: 600; font-size: 16px; color: var(--ink); margin-bottom: 4px; }
+.team-role {
+  font-family: 'DM Mono', monospace; font-size: 9px;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 16px;
+}
+.team-bio { font-size: 13px; line-height: 1.7; color: var(--ink-muted); }
+
+/* ===================== FUNDING ===================== */
+.funding-bg { background: var(--bg-warm); }
+.funding-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 96px; }
+
+.ask-amount {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(64px, 7vw, 96px); font-weight: 300;
+  color: var(--ink); line-height: 1; margin-bottom: 8px;
+}
+.ask-note {
+  font-size: 13px; color: var(--ink-muted); margin-bottom: 48px;
+  font-family: 'DM Mono', monospace; letter-spacing: 0.08em;
+}
+.ask-desc { font-size: 15px; line-height: 1.8; color: var(--ink-soft); }
+
+.alloc-title {
+  font-size: 16px; font-weight: 600; color: var(--ink);
+  margin-bottom: 32px;
+}
+.alloc-list { display: flex; flex-direction: column; gap: 18px; }
+.alloc-item { display: flex; flex-direction: column; gap: 8px; }
+.alloc-header { display: flex; justify-content: space-between; align-items: center; }
+.alloc-name { font-size: 13px; color: var(--ink-soft); }
+.alloc-pct {
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  color: var(--ink); font-weight: 500;
+}
+.alloc-bar-track { height: 3px; background: var(--rule); position: relative; overflow: hidden; }
+.alloc-bar-fill {
+  height: 100%; background: var(--accent);
+  width: 0; transition: width 1.2s ease;
+}
+
+.investor-perks {
+  margin-top: 44px; padding-top: 32px;
+  border-top: 1px solid var(--rule);
+}
+.perks-label {
+  font-family: 'DM Mono', monospace; font-size: 9px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--ink-muted); margin-bottom: 16px;
+}
+.perks-list { display: flex; flex-direction: column; gap: 10px; }
+.perk-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  font-size: 13px; line-height: 1.6; color: var(--ink-soft);
+}
+.perk-bullet {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent); flex-shrink: 0; margin-top: 7px;
+}
+
+/* ===================== CTA / CONTACT ===================== */
+.contact-section {
+  max-width: 1240px; margin: 0 auto;
+  padding: 110px 56px;
+  display: grid; grid-template-columns: 1fr auto;
+  align-items: end; gap: 80px;
+  border-top: 1px solid var(--rule);
+}
+
+.contact-left h2 { margin-bottom: 16px; }
+.contact-sub { font-size: 15px; color: var(--ink-muted); max-width: 480px; line-height: 1.7; }
+
+.contact-right {
+  display: flex; flex-direction: column;
+  gap: 14px; align-items: flex-end;
+}
+.contact-link {
+  font-family: 'DM Mono', monospace; font-size: 12px;
+  color: var(--ink); text-decoration: none;
+  letter-spacing: 0.08em; padding-bottom: 2px;
+  border-bottom: 1px solid var(--ink);
+  transition: color 0.2s, border-color 0.2s;
+}
+.contact-link:hover { color: var(--accent); border-color: var(--accent); }
+.contact-actions { margin-top: 10px; }
+
+/* ===================== FOOTER ===================== */
+footer {
+  border-top: 1px solid var(--rule);
+  padding: 28px 56px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.footer-logo {
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  color: var(--ink-muted); letter-spacing: 0.12em;
+}
+.footer-meta { font-size: 11px; color: var(--ink-muted); }
+
+/* ===================== ANIMATIONS ===================== */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===================== PROGRESS BAR ===================== */
+#progress-bar {
+  position: fixed; top: 0; left: 0; z-index: 9999;
+  height: 2px; background: var(--accent);
+  width: 0%; transition: width 0.1s linear;
+}
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 960px) {
+  nav { padding: 16px 24px; }
+  nav.scrolled { padding: 12px 24px; }
+  .nav-links { display: none; }
+  .hero { grid-template-columns: 1fr; }
+  .hero-right { padding: 60px 24px; }
+  .hero-left { padding: 120px 24px 60px; }
+  .scroll-indicator { left: 24px; }
+  .section { padding: 72px 24px; }
+  .section-full { padding: 72px 24px; }
+  .problem-grid, .funding-grid, .contact-section { grid-template-columns: 1fr; gap: 48px; }
+  .sol-grid { grid-template-columns: 1fr; }
+  .tech-grid { grid-template-columns: 1fr; }
+  .team-grid { grid-template-columns: 1fr; }
+  .contact-section { grid-template-columns: 1fr; }
+  .contact-right { align-items: flex-start; }
+  footer { flex-direction: column; gap: 10px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div id="progress-bar"></div>
+
+<!-- ===================== NAV ===================== -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">
+    <span class="nav-logo-dot"></span>
+    Project Axis
+  </a>
+  <ul class="nav-links">
+    <li><a href="#problem">Problem</a></li>
+    <li><a href="#solution">Solution</a></li>
+    <li><a href="#tech">Technology</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#team">Team</a></li>
+    <li><a href="#funding">Funding</a></li>
+  </ul>
+  <a href="#funding" class="nav-cta"><span>Invest Now</span></a>
+</nav>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero" id="home">
+  <div class="hero-left">
+    <div class="eyebrow">
+      <span class="eyebrow-line"></span>
+      Student Project · Seed Round 2025
+    </div>
+    <h1>
+      <span class="word-line">Seeing the</span>
+      <span class="word-line">world through</span>
+      <span class="word-line"><em>AI.</em></span>
+    </h1>
+    <p class="hero-desc">
+      Project Axis is building AI-powered smart glasses for the visually impaired — real-time scene recognition, voice feedback, and navigation assistance embedded in a lightweight wearable frame. Powered by ESP32-S3 Sense and OpenAI.
+    </p>
+    <div class="hero-actions">
+      <a href="#funding" class="btn-primary"><span>View Funding Ask</span></a>
+      <a href="#solution" class="btn-ghost">Explore the tech <span class="arrow">→</span></a>
+    </div>
+    <div class="scroll-indicator">
+      <div class="scroll-line"></div>
+      Scroll to explore
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="glasses-card">
+      <div class="glasses-card-header">
+        <span><span class="status-dot"></span>AI VISION ACTIVE</span>
+        <span>ESP32-S3 SENSE</span>
+      </div>
+      <div class="glasses-body">
+        <!-- Smart Glasses SVG — round lenses -->
+        <svg class="glasses-svg" viewBox="0 0 360 160" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="lens-glow-l" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#1a6b3a" stop-opacity="0.18"/>
+              <stop offset="100%" stop-color="#1a6b3a" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="lens-glow-r" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#1a6b3a" stop-opacity="0.18"/>
+              <stop offset="100%" stop-color="#1a6b3a" stop-opacity="0"/>
+            </radialGradient>
+            <clipPath id="clip-l">
+              <circle cx="90" cy="80" r="52"/>
+            </clipPath>
+            <clipPath id="clip-r">
+              <circle cx="270" cy="80" r="52"/>
+            </clipPath>
+          </defs>
+
+          <!-- Lens glow fill — pulses -->
+          <circle cx="90" cy="80" r="52" fill="url(#lens-glow-l)">
+            <animate attributeName="r" values="46;54;46" dur="3s" repeatCount="indefinite"/>
+            <animate attributeName="fill-opacity" values="0.7;1;0.7" dur="3s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="270" cy="80" r="52" fill="url(#lens-glow-r)">
+            <animate attributeName="r" values="46;54;46" dur="3s" begin="0.3s" repeatCount="indefinite"/>
+            <animate attributeName="fill-opacity" values="0.7;1;0.7" dur="3s" begin="0.3s" repeatCount="indefinite"/>
+          </circle>
+
+          <!-- Left lens round frame -->
+          <circle cx="90" cy="80" r="52" fill="rgba(26,107,58,0.03)" stroke="#0a0a0a" stroke-width="3.5"/>
+          <!-- Right lens round frame -->
+          <circle cx="270" cy="80" r="52" fill="rgba(26,107,58,0.03)" stroke="#0a0a0a" stroke-width="3.5"/>
+
+          <!-- Bridge -->
+          <path d="M142 80 Q180 68 218 80" stroke="#0a0a0a" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+
+          <!-- Left temple -->
+          <path d="M43 62 Q18 56 10 70" stroke="#0a0a0a" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+          <!-- Right temple -->
+          <path d="M317 62 Q342 56 350 70" stroke="#0a0a0a" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+
+          <!-- Camera dot left — gentle pulse -->
+          <circle cx="90" cy="80" r="6" fill="#1a6b3a"/>
+          <circle cx="90" cy="80" r="11" fill="none" stroke="#1a6b3a" stroke-width="1.2">
+            <animate attributeName="r" values="10;15;10" dur="2.4s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0.5;0.1;0.5" dur="2.4s" repeatCount="indefinite"/>
+          </circle>
+
+          <!-- Camera dot right — gentle pulse -->
+          <circle cx="270" cy="80" r="6" fill="#1a6b3a"/>
+          <circle cx="270" cy="80" r="11" fill="none" stroke="#1a6b3a" stroke-width="1.2">
+            <animate attributeName="r" values="10;15;10" dur="2.4s" begin="0.3s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0.5;0.1;0.5" dur="2.4s" begin="0.3s" repeatCount="indefinite"/>
+          </circle>
+
+          <!-- Subtle horizontal scan line inside left lens -->
+          <line x1="44" y1="80" x2="136" y2="80" stroke="#1a6b3a" stroke-width="1" clip-path="url(#clip-l)" opacity="0">
+            <animate attributeName="opacity" values="0;0.3;0" dur="2.4s" repeatCount="indefinite"/>
+            <animate attributeName="y1" values="55;105;55" dur="2.4s" repeatCount="indefinite"/>
+            <animate attributeName="y2" values="55;105;55" dur="2.4s" repeatCount="indefinite"/>
+          </line>
+          <!-- Subtle horizontal scan line inside right lens -->
+          <line x1="224" y1="80" x2="316" y2="80" stroke="#1a6b3a" stroke-width="1" clip-path="url(#clip-r)" opacity="0">
+            <animate attributeName="opacity" values="0;0.3;0" dur="2.4s" begin="0.3s" repeatCount="indefinite"/>
+            <animate attributeName="y1" values="55;105;55" dur="2.4s" begin="0.3s" repeatCount="indefinite"/>
+            <animate attributeName="y2" values="55;105;55" dur="2.4s" begin="0.3s" repeatCount="indefinite"/>
+          </line>
+        </svg>
+
+        <div class="ai-label">
+          OV2640 CAMERA · ESP32-S3 SENSE MCU<br>
+          OPENAI GPT-4o VISION · BLUETOOTH AUDIO
+        </div>
+      </div>
+      <div class="glasses-metrics">
+        <div class="g-metric">
+          <div class="g-metric-num"><span class="count-up" data-target="95">0</span>%</div>
+          <div class="g-metric-label">Accuracy</div>
+        </div>
+        <div class="g-metric">
+          <div class="g-metric-num">&lt;2s</div>
+          <div class="g-metric-label">Response</div>
+        </div>
+        <div class="g-metric">
+          <div class="g-metric-num"><span class="count-up" data-target="8">0</span>h</div>
+          <div class="g-metric-label">Battery</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PROBLEM ===================== -->
+<div class="problem-bg" id="problem">
+  <div class="section">
+    <div class="section-tag reveal">The Problem</div>
+    <div class="problem-grid">
+      <div class="reveal">
+        <h2>253 million people live with vision impairment</h2>
+        <div class="stat-block">
+          <div class="stat-num"><span class="count-up" data-target="39">0</span>M</div>
+          <div class="stat-sub">people worldwide are completely blind, with limited access to affordable, modern assistive technology.</div>
+        </div>
+      </div>
+      <div class="problem-text reveal" style="transition-delay:0.2s;">
+        <div class="problem-divider"></div>
+        <p>Current assistive devices — white canes, guide dogs, and screen readers — are severely limited in their ability to interpret and describe visual environments in real time. They cannot identify faces, read labels, or describe scenes contextually.</p>
+        <p>Existing commercial solutions like OrCam cost upward of <strong>$4,500</strong>, placing them out of reach for the vast majority of those who need them most — especially in developing countries like Thailand, where we are based.</p>
+        <p>We believe every blind person deserves a device powered by the same AI breakthroughs reshaping the tech industry — at a price that makes it truly accessible.</p>
+        <div class="pill-group">
+          <span class="pill">39M Blind</span>
+          <span class="pill">214M Low Vision</span>
+          <span class="pill">$4,500+ Commercial Devices</span>
+          <span class="pill">Massively Underserved</span>
+          <span class="pill">Growing Market</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SOLUTION ===================== -->
+<div class="solution-bg" id="solution">
+  <div class="section">
+    <div class="section-tag reveal">Our Solution</div>
+    <h2 class="reveal" style="color:white;max-width:560px;transition-delay:0.1s;">Smart glasses that describe reality — in real time.</h2>
+    <div class="sol-grid">
+      <div class="sol-card reveal" style="transition-delay:0.05s;">
+        <div class="sol-num">01</div>
+        <svg class="sol-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="22" cy="22" r="10" stroke="currentColor" stroke-width="1.5"/>
+          <circle cx="22" cy="22" r="3" fill="currentColor"/>
+          <path d="M22 4v4M22 36v4M4 22h4M36 22h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M9 9l3 3M32 32l3 3M35 9l-3 3M12 32l-3 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+        <div class="sol-title">AI Scene Recognition</div>
+        <div class="sol-desc">OpenAI's GPT-4o Vision API interprets camera frames and narrates the environment — objects, people, text, and hazards — through bone-conduction audio in under 2 seconds.</div>
+      </div>
+      <div class="sol-card reveal" style="transition-delay:0.15s;">
+        <div class="sol-num">02</div>
+        <svg class="sol-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="6" y="16" width="32" height="20" rx="4" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M14 16v-4a8 8 0 0116 0v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="22" cy="26" r="3" fill="currentColor"/>
+        </svg>
+        <div class="sol-title">Wearable Hardware</div>
+        <div class="sol-desc">Built on the ESP32-S3 Sense with an OV2640 camera module and WiFi/BT. Custom-designed to fit inside a standard glasses frame — lightweight and discreet.</div>
+      </div>
+      <div class="sol-card reveal" style="transition-delay:0.25s;">
+        <div class="sol-num">03</div>
+        <svg class="sol-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22 6c-5.52 0-10 4.48-10 10v8c0 5.52 4.48 10 10 10s10-4.48 10-10V16c0-5.52-4.48-10-10-10z" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M8 22c0 7.73 6.27 14 14 14s14-6.27 14-14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="22" y1="36" x2="22" y2="42" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <div class="sol-title">Voice Interaction</div>
+        <div class="sol-desc">Users trigger AI with a single button press and ask natural language questions. "What's in front of me?" "Can you read this label?" — answered instantly via wireless audio.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== TECH ===================== -->
+<div id="tech" style="background:var(--bg);">
+  <div class="section">
+    <div class="section-tag reveal">Technology Stack</div>
+    <h2 class="reveal" style="transition-delay:0.1s;">Built on proven, accessible hardware & AI.</h2>
+    <div class="tech-grid">
+      <div class="tech-card reveal">
+        <div class="tech-badge">MCU</div>
+        <div class="tech-info">
+          <h3>ESP32-S3 Sense</h3>
+          <p>Espressif's AIoT chip with dual-core Xtensa LX7, 8MB PSRAM, and native AI acceleration. Low cost, high performance — ideal for always-on edge processing in a wearable form factor.</p>
+        </div>
+      </div>
+      <div class="tech-card reveal" style="transition-delay:0.1s;">
+        <div class="tech-badge">AI</div>
+        <div class="tech-info">
+          <h3>OpenAI GPT-4o Vision</h3>
+          <p>Frames are captured, JPEG-compressed, and sent to OpenAI's Vision API over WiFi. GPT-4o interprets scenes with remarkable accuracy and returns natural, context-aware audio descriptions.</p>
+        </div>
+      </div>
+      <div class="tech-card reveal" style="transition-delay:0.15s;">
+        <div class="tech-badge">CAM</div>
+        <div class="tech-info">
+          <h3>OV2640 Camera Module</h3>
+          <p>2MP CMOS sensor with auto-exposure and auto-white balance. Compact enough to integrate seamlessly into a glasses frame without sacrificing aesthetics or wearing comfort.</p>
+        </div>
+      </div>
+      <div class="tech-card reveal" style="transition-delay:0.2s;">
+        <div class="tech-badge">I/O</div>
+        <div class="tech-info">
+          <h3>Audio & Connectivity</h3>
+          <p>Bluetooth 5.0 for wireless streaming to bone-conduction headphones. WiFi for real-time OpenAI API calls. Single-button UX deliberately designed to be fully operable without sight.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== ROADMAP ===================== -->
+<div class="roadmap-bg" id="roadmap">
+  <div class="section">
+    <div class="section-tag reveal">Roadmap</div>
+    <h2 class="reveal" style="transition-delay:0.1s;">Where we are.<br>Where we're going.</h2>
+    <div class="timeline">
+      <div class="tl-item reveal">
+        <div class="tl-date">Q3 2024</div>
+        <div class="tl-body done">
+          <div class="tl-badge">✓ Completed</div>
+          <div class="tl-title">Proof of Concept</div>
+          <div class="tl-desc">Core AI pipeline validated. ESP32-S3 Sense connected end-to-end to OpenAI Vision API on breadboard. Object recognition and scene narration working reliably.</div>
+        </div>
+      </div>
+      <div class="tl-item reveal" style="transition-delay:0.1s;">
+        <div class="tl-date">Q1 2025</div>
+        <div class="tl-body done">
+          <div class="tl-badge">✓ Completed</div>
+          <div class="tl-title">Wearable Prototype v0.1</div>
+          <div class="tl-desc">Hardware miniaturized and integrated into a modified glasses frame. Voice interaction and Bluetooth audio working. Field-tested with 3 visually impaired volunteer users.</div>
+        </div>
+      </div>
+      <div class="tl-item reveal" style="transition-delay:0.2s;">
+        <div class="tl-date">Q3 2025</div>
+        <div class="tl-body active">
+          <div class="tl-badge">→ Seeking Funding</div>
+          <div class="tl-title">Pilot Program & v0.2 Hardware</div>
+          <div class="tl-desc">Custom PCB design, improved battery life, lighter frame. Partnership with 2 local NGOs to run a 20-person blind user pilot. Collect structured feedback for product-market fit.</div>
+        </div>
+      </div>
+      <div class="tl-item reveal" style="transition-delay:0.3s;">
+        <div class="tl-date">Q2 2026</div>
+        <div class="tl-body">
+          <div class="tl-badge">Target</div>
+          <div class="tl-title">Production-Ready v1.0</div>
+          <div class="tl-desc">CE/FCC certification, companion mobile app, custom ASIC exploration. Target retail price under $300. First launch in Southeast Asian markets, then global expansion.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== TEAM ===================== -->
+<div class="team-bg" id="team">
+  <div class="section">
+    <div class="section-tag reveal">The Team</div>
+    <h2 class="reveal" style="transition-delay:0.1s;">Students building<br>for real impact.</h2>
+    <div class="team-grid">
+      <div class="team-card reveal">
+        <div class="team-avatar">A</div>
+        <div class="team-name">Student Founder</div>
+        <div class="team-role">Hardware Lead</div>
+        <div class="team-bio">Embedded systems specialist. Designed the ESP32-S3 circuit board and physical prototype. Experienced in PCB design, microcontroller firmware, and sensor integration.</div>
+      </div>
+      <div class="team-card reveal" style="transition-delay:0.12s;">
+        <div class="team-avatar">B</div>
+        <div class="team-name">Student Founder</div>
+        <div class="team-role">AI & Software Lead</div>
+        <div class="team-bio">Built the OpenAI API pipeline, real-time image capture firmware, and voice I/O stack. Background in Python, C++, and machine learning from academic and personal projects.</div>
+      </div>
+      <div class="team-card reveal" style="transition-delay:0.24s;">
+        <div class="team-avatar">C</div>
+        <div class="team-name">Student Founder</div>
+        <div class="team-role">Product & UX Lead</div>
+        <div class="team-bio">Led user research and inclusive design thinking. Conducted interviews with visually impaired users to shape the interaction model, use cases, and overall product vision.</div>
+      </div>
+    </div>
+    <p class="reveal" style="font-size:12px;color:var(--ink-muted);margin-top:28px;font-style:italic;transition-delay:0.3s;">Full team bios and academic advisor details available upon investor request.</p>
+  </div>
+</div>
+
+<!-- ===================== FUNDING ===================== -->
+<div class="funding-bg" id="funding">
+  <div class="section">
+    <div class="section-tag reveal">Funding Ask</div>
+    <div class="funding-grid">
+      <div class="reveal">
+        <h2>Seed round to take prototype to pilot.</h2>
+        <div class="ask-amount">$50K</div>
+        <div class="ask-note">Seed Target — Equity or Grant</div>
+        <div class="ask-desc">We have a working prototype and validated technology stack. This round funds our v0.2 hardware production, a structured pilot program, and 6 months of API and operational costs to reach clear product-market fit.</div>
+      </div>
+      <div class="reveal" style="transition-delay:0.15s;">
+        <div class="alloc-title">Allocation of Funds</div>
+        <div class="alloc-list">
+          <div class="alloc-item">
+            <div class="alloc-header">
+              <span class="alloc-name">Hardware & PCB Production</span>
+              <span class="alloc-pct">40%</span>
+            </div>
+            <div class="alloc-bar-track"><div class="alloc-bar-fill" data-width="40"></div></div>
+          </div>
+          <div class="alloc-item">
+            <div class="alloc-header">
+              <span class="alloc-name">AI API & Cloud Costs</span>
+              <span class="alloc-pct">20%</span>
+            </div>
+            <div class="alloc-bar-track"><div class="alloc-bar-fill" data-width="20"></div></div>
+          </div>
+          <div class="alloc-item">
+            <div class="alloc-header">
+              <span class="alloc-name">Pilot Program & NGO</span>
+              <span class="alloc-pct">20%</span>
+            </div>
+            <div class="alloc-bar-track"><div class="alloc-bar-fill" data-width="20"></div></div>
+          </div>
+          <div class="alloc-item">
+            <div class="alloc-header">
+              <span class="alloc-name">Software Development</span>
+              <span class="alloc-pct">12%</span>
+            </div>
+            <div class="alloc-bar-track"><div class="alloc-bar-fill" data-width="12"></div></div>
+          </div>
+          <div class="alloc-item">
+            <div class="alloc-header">
+              <span class="alloc-name">Operations & Legal</span>
+              <span class="alloc-pct">8%</span>
+            </div>
+            <div class="alloc-bar-track"><div class="alloc-bar-fill" data-width="8"></div></div>
+          </div>
+        </div>
+        <div class="investor-perks">
+          <div class="perks-label">What investors receive</div>
+          <div class="perks-list">
+            <div class="perk-item"><div class="perk-bullet"></div>Equity stake or convertible note — terms open to discussion</div>
+            <div class="perk-item"><div class="perk-bullet"></div>Monthly spending transparency reports</div>
+            <div class="perk-item"><div class="perk-bullet"></div>Early prototype access and live demo sessions</div>
+            <div class="perk-item"><div class="perk-bullet"></div>Direct advisory role in product direction</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== CONTACT ===================== -->
+<div class="contact-section reveal">
+  <div class="contact-left">
+    <div class="section-tag">Get in Touch</div>
+    <h2>Let's build the future of assistive tech together.</h2>
+    <p class="contact-sub">We're actively seeking investors, advisors, and NGO partners. If you believe AI can transform lives for the blind, we'd love to show you our working prototype.</p>
+  </div>
+  <div class="contact-right">
+    <a href="http://projectaxis.net" class="contact-link" target="_blank">projectaxis.net ↗</a>
+    <a href="mailto:hello@projectaxis.net" class="contact-link">hello@projectaxis.net</a>
+    <div class="contact-actions" style="margin-top:16px;">
+      <a href="mailto:hello@projectaxis.net" class="btn-primary"><span>Request a Demo</span></a>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="footer-logo">PROJECT AXIS · projectaxis.net</div>
+  <div class="footer-meta">© 2025 Project Axis. Student project. Prototype stage. Seeking seed funding.</div>
+</footer>
+
+<!-- ===================== JAVASCRIPT ===================== -->
+<script>
+/* -------- Navbar scroll -------- */
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 40);
+  // Progress bar
+  const scrolled = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+  document.getElementById('progress-bar').style.width = scrolled + '%';
+});
+
+/* -------- Scroll Reveal -------- */
+const reveals = document.querySelectorAll('.reveal');
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      revealObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+reveals.forEach(el => revealObs.observe(el));
+
+/* -------- Count-Up Animation -------- */
+function countUp(el) {
+  const target = parseInt(el.dataset.target);
+  const duration = 1600;
+  const start = performance.now();
+  function update(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.round(eased * target);
+    if (progress < 1) requestAnimationFrame(update);
+    else el.textContent = target;
+  }
+  requestAnimationFrame(update);
+}
+
+const countEls = document.querySelectorAll('.count-up');
+const countObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      countUp(e.target);
+      countObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.5 });
+countEls.forEach(el => countObs.observe(el));
+
+/* -------- Allocation Bars -------- */
+const bars = document.querySelectorAll('.alloc-bar-fill');
+const barObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.width = e.target.dataset.width + '%';
+      barObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+bars.forEach(el => barObs.observe(el));
+
+/* -------- Smooth anchor scroll -------- */
+document.querySelectorAll('a[href^="#"]').forEach(link => {
+  link.addEventListener('click', e => {
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+</body>
+</html>
