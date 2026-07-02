@@ -9,7 +9,7 @@
         href="https://fonts.googleapis.com/css2?family=Edu+NSW+ACT+Cursive:wght@400..700&family=Geist+Mono&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
         rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="ok.css">
+    <link rel="stylesheet" href="ok.css?v=4">
     <title>Hardware Gallery | ESP32, Arduino, Raspberry Pi & More — Project Axis</title>
     <meta name="description" content="Browse Project Axis's gallery of hardware: ESP32 Nano, Arduino UNO, Raspberry Pi Pico, M5 Stack, smart glasses, and more microcontrollers used in our projects.">
     <meta name="robots" content="index, follow">
@@ -17,6 +17,7 @@
     <meta property="og:title" content="Hardware Gallery | Project Axis">
     <meta property="og:description" content="See the microcontrollers and hardware behind Project Axis smart glasses and environmental monitors.">
     <meta property="og:url" content="https://projectaxis.com/gallery.html">
+    <link rel="icon" type="image/x-icon" href="logo.png">
 </head>
 
 <body>
@@ -49,75 +50,167 @@
         <a href="proposal.html">PROPOSAL</a>
         <a href="news.html">NEWS</a>
     </nav>
+
     <main>
-    <section class="page-hero">
-        <p class="page-hero-eyebrow">Project Axis</p>
-        <h1>Hardware Gallery</h1>
-        <p>The microcontrollers and components behind every Project Axis build.</p>
-        <div class="page-hero-divider"></div>
-    </section>
-    <div class="gallery-box">
-        <div class="photo-card">
-            <div class="gallery-1"></div>
-            <div class="photo-caption">ESP32 Nano</div>
+        <section class="page-hero">
+            <p class="page-hero-eyebrow">Project Axis // Hardware</p>
+            <h1>Component Gallery</h1>
+            <p>Every board we've touched, fried, or fallen in love with. Organized by project.</p>
+            <div class="page-hero-divider"></div>
+        </section>
+
+        <!-- ── SoundView: Smart Glasses Stack ── -->
+        <section class="hw-section">
+            <div class="hw-section-inner">
+                <p class="proj-section-eyebrow">SoundView // Vision Platform</p>
+                <h2 class="proj-section-title">Smart Glasses Hardware</h2>
+                <p class="hw-intro">The boards and modules that ended up in the SoundView prototype. We went through several iterations before this stack — the burn marks on the bench tell the rest of the story.</p>
+
+                <div class="hw-grid">
+                    <div class="hw-item hw-item--large">
+                        <div class="hw-img gallery-4"></div>
+                        <div class="hw-meta">
+                            <span class="hw-spec">// Prototype v3 · Active Build</span>
+                            <h3 class="hw-name">SoundView Glasses</h3>
+                            <p class="hw-desc">3D-printed frame housing an ESP32 camera module, bone-conduction speaker, and rechargeable LiPo cell. This is the thing we're actually building — for the 2.2 billion people with vision impairment who deserve better tools than what exists.</p>
+                            <div class="pcb-badge pcb-badge--light"><span class="pcb-badge-ref">PRT-003</span><span class="pcb-badge-specs">Frame v3 · LiPo · BT Audio</span></div>
+                        </div>
+                    </div>
+                    <div class="hw-item">
+                        <div class="hw-img gallery-5"></div>
+                        <div class="hw-meta">
+                            <span class="hw-spec">// Main MCU · 240MHz dual-core</span>
+                            <h3 class="hw-name">M5 Stack ESP32</h3>
+                            <p class="hw-desc">Handles vision inference and BLE audio output simultaneously. Built-in display made debugging without a laptop possible during outdoor tests.</p>
+                            <div class="pcb-badge pcb-badge--light"><span class="pcb-badge-ref">U2</span><span class="pcb-badge-specs">ESP32 · 240MHz · WiFi+BT</span></div>
+                        </div>
+                    </div>
+                    <div class="hw-item">
+                        <div class="hw-img gallery-8"></div>
+                        <div class="hw-meta">
+                            <span class="hw-spec">// Firmware Dev · 16MB flash</span>
+                            <h3 class="hw-name">Nano ESP32 Board</h3>
+                            <p class="hw-desc">Arduino form-factor ESP32 used for rapid firmware iteration. When you need to flash 40 times in an afternoon, this is the board you reach for.</p>
+                            <div class="pcb-badge pcb-badge--light"><span class="pcb-badge-ref">U3</span><span class="pcb-badge-specs">ESP32-S3 · 16MB · Arduino</span></div>
+                        </div>
+                    </div>
+                    <div class="hw-item">
+                        <div class="hw-img gallery-6"></div>
+                        <div class="hw-meta">
+                            <span class="hw-spec">// WiFi + BLE · USB-C native</span>
+                            <h3 class="hw-name">ESP32 S2 MINI</h3>
+                            <p class="hw-desc">Compact enough to fit the glasses frame — barely. Tested as the primary MCU before we needed Bluetooth audio, which the S2 doesn't support.</p>
+                            <div class="pcb-badge pcb-badge--light"><span class="pcb-badge-ref">U4</span><span class="pcb-badge-specs">ESP32-S2 · WiFi only · 4MB</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PCB trace divider -->
+        <div class="pcb-rule" aria-hidden="true">
+            <div class="pcb-rule-pads">
+                <div class="pcb-rule-pad"></div>
+                <div class="pcb-rule-pad"></div>
+                <div class="pcb-rule-pad"></div>
+            </div>
         </div>
-        <div class="photo-card">
-            <div class="gallery-2"></div>
-            <div class="photo-caption">Arduino UNO</div>
+
+        <!-- ── Environmental + Sensor Work ── -->
+        <section class="hw-section hw-section--dark">
+            <div class="hw-section-inner">
+                <p class="proj-section-eyebrow">Environmental // Sensor Research</p>
+                <h2 class="proj-section-title">Monitor Hardware</h2>
+                <p class="hw-intro">For the CO₂ and air-quality monitor project. Real sensors, real data, real numbers that surprised us more than once.</p>
+
+                <div class="hw-grid hw-grid--2col">
+                    <div class="hw-item">
+                        <div class="hw-img gallery-1"></div>
+                        <div class="hw-meta">
+                            <span class="hw-spec">// CO₂ Monitor · Sensor Array</span>
+                            <h3 class="hw-name">ESP32 Nano</h3>
+                            <p class="hw-desc">Drives the CO₂ and TVOC sensor array. Handles display output and SD card logging at 1-second intervals. The workhorse of the environmental monitor build.</p>
+                            <div class="pcb-badge"><span class="pcb-badge-ref">U1</span><span class="pcb-badge-specs">ESP32 · 240MHz · 4MB · WiFi+BT</span></div>
+                        </div>
+                    </div>
+                    <div class="hw-item">
+                        <div class="hw-img gallery-7"></div>
+                        <div class="hw-meta">
+                            <span class="hw-spec">// Legacy · WiFi only · 80MHz</span>
+                            <h3 class="hw-name">ESP8266</h3>
+                            <p class="hw-desc">Where a lot of this started. 64KB RAM, no Bluetooth, runs hot. Still kicking around the lab. Some of our earliest sensor experiments ran on this chip.</p>
+                            <div class="pcb-badge"><span class="pcb-badge-ref">U-LEG</span><span class="pcb-badge-specs">ESP8266 · 80MHz · 64KB RAM</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PCB trace divider -->
+        <div class="pcb-rule" aria-hidden="true">
+            <div class="pcb-rule-pads">
+                <div class="pcb-rule-pad"></div>
+                <div class="pcb-rule-pad"></div>
+                <div class="pcb-rule-pad"></div>
+            </div>
         </div>
-        <div class="photo-card">
-            <div class="gallery-3"></div>
-            <div class="photo-caption">Raspberry PI Pico</div>
-        </div>
-        <div class="photo-card">
-            <div class="gallery-4"></div>
-            <div class="photo-caption">Glasses</div>
-        </div>
-        <div class="photo-card">
-            <div class="gallery-5"></div>
-            <div class="photo-caption">M5 Stack ESP32</div>
-        </div>
-        <div class="photo-card">
-            <div class="gallery-6"></div>
-            <div class="photo-caption">ESP32 S2 MINI</div>
-        </div>
-        <div class="photo-card">
-            <div class="gallery-7"></div>
-            <div class="photo-caption">ESP8266</div>
-        </div>
-        <div class="photo-card">
-            <div class="gallery-8"></div>
-            <div class="photo-caption">Nano ESP32 Board</div>
-        </div>
-    </div>
-    <div class="gallery-caption center" style="padding:16px 0 32px;">
-        <p style="color:var(--color-text-secondary);">Explore our collection of innovative tech projects and hardware prototypes.</p>
-    </div>
-    <footer class="footer">
-        <div class="footer-inner">
-            <p class="footer-logo">Project Axis</p>
-            <p class="footer-tagline">Innovating assistive technology for the visually impaired.</p>
-            <nav class="footer-nav" aria-label="Footer navigation">
-                <a href="index.html">Home</a>
-                <a href="aboutus.html">Team</a>
-                <a href="project.html">Projects</a>
-                <a href="blog.html">Blog</a>
-                <a href="gallery.html">Gallery</a>
-                <a href="donate.html">Donors</a>
-                <a href="news.html">News</a>
-            </nav>
-            <p class="footer-copy">© 2026 Project Axis. All rights reserved.</p>
-        </div>
-    </footer>
+
+        <!-- ── Lab Inventory / General Purpose ── -->
+        <section class="hw-section">
+            <div class="hw-section-inner">
+                <p class="proj-section-eyebrow">Lab Inventory // General Purpose</p>
+                <h2 class="proj-section-title">The Workhorses</h2>
+                <p class="hw-intro">These live on the bench permanently. The boards you grab when you need something to just work while you figure out the harder problem.</p>
+
+                <div class="hw-grid hw-grid--2col">
+                    <div class="hw-item">
+                        <div class="hw-img gallery-2"></div>
+                        <div class="hw-meta">
+                            <span class="hw-spec">// First Board · ATmega328P · 16MHz</span>
+                            <h3 class="hw-name">Arduino UNO</h3>
+                            <p class="hw-desc">The one that started everything. ATmega328P running at 16MHz with 32KB of flash. The first board Caleb ever wired a circuit to. Still the fastest way to test if an idea is stupid.</p>
+                            <div class="pcb-badge pcb-badge--light"><span class="pcb-badge-ref">MCU-1</span><span class="pcb-badge-specs">ATmega328P · 16MHz · 32KB</span></div>
+                        </div>
+                    </div>
+                    <div class="hw-item">
+                        <div class="hw-img gallery-3"></div>
+                        <div class="hw-meta">
+                            <span class="hw-spec">// MicroPython · RP2040 · Dual-core</span>
+                            <h3 class="hw-name">Raspberry Pi Pico</h3>
+                            <p class="hw-desc">Dual-core RP2040 with PIO state machines for timing-critical sensor reads. Used when microseconds matter and the ESP32's FreeRTOS scheduling introduces too much jitter.</p>
+                            <div class="pcb-badge pcb-badge--light"><span class="pcb-badge-ref">MCU-2</span><span class="pcb-badge-specs">RP2040 · 133MHz · Dual-core</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <div class="footer-inner">
+                <p class="footer-logo">Project Axis</p>
+                <p class="footer-tagline">Innovating assistive technology for the visually impaired.</p>
+                <nav class="footer-nav" aria-label="Footer navigation">
+                    <a href="index.html">Home</a>
+                    <a href="aboutus.html">Team</a>
+                    <a href="project.html">Projects</a>
+                    <a href="blog.html">Blog</a>
+                    <a href="gallery.html">Gallery</a>
+                    <a href="donate.html">Donors</a>
+                    <a href="news.html">News</a>
+                </nav>
+                <p class="footer-copy">© 2026 Project Axis. All rights reserved.</p>
+            </div>
+        </footer>
     </main>
+
+    <script src="main.js"></script>
+    <script type="text/javascript"
+        src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({ pageLanguage: 'en' }, 'google_translate_element');
+        }
+    </script>
 </body>
-<script src="main.js"></script>
-<script type="text/javascript"
-    src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-<script type="text/javascript">
-    function googleTranslateElementInit() {
-        new google.translate.TranslateElement({ pageLanguage: 'en' }, 'google_translate_element');
-    }
-</script>
 
 </html>

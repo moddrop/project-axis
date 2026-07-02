@@ -731,7 +731,9 @@
     </footer>
     <script>
         // ── Config ──────────────────────────────────────────────────────────────
-        const API_BASE = "https://employee-auth.calebethan485.workers.dev";
+        // Replace with YOUR deployed Worker URL after `wrangler deploy`
+        // (Wrangler prints it, e.g. https://employee-auth.<your-subdomain>.workers.dev)
+        const API_BASE = "https://employee-auth.<your-subdomain>.workers.dev";
         // Local dev: const API_BASE = "http://localhost:8787";
 
         // ── On load: verify the session cookie with the Worker ──────────────────
@@ -754,15 +756,17 @@
                 document.getElementById("greetName").textContent = user.name.split(" ")[0];
                 document.getElementById("userRole").textContent = user.role;
                 document.getElementById("userAvatar").textContent = user.name.charAt(0).toUpperCase();
+                // Server verifies the session via an HttpOnly signed JWT cookie the
+                // browser can't read or forge — there's nothing meaningful to show
+                // here, so this just reflects the verified identity, not a secret.
                 document.getElementById("sessionKey").textContent =
-                    `${user.sub.toUpperCase()}-${Math.random().toString(36).slice(2, 10).toUpperCase()}`;
+                    `${user.sub.toUpperCase()} · JWT VERIFIED SERVER-SIDE`;
 
                 // Update clock
                 const tick = () => {
-                    document.getElementById("currentTime").textContent =
-                        new Date().toLocaleTimeString("en-US", { hour12: false });
+                    const el = document.getElementById("currentTime");
+                    if (el) el.textContent = new Date().toLocaleTimeString("en-US", { hour12: false });
                 };
-                tick(); setInterval(tick, 1000);
 
                 document.getElementById("sessionInfo").textContent =
                     `SESSION AUTHENTICATED · ${user.sub.toUpperCase()} · `;
@@ -770,6 +774,7 @@
                     Object.assign(document.createElement("span"), { id: "currentTime" })
                 );
                 tick();
+                setInterval(tick, 1000);
 
                 // Hide auth gate, reveal page
                 document.getElementById("authGate").classList.add("hidden");
