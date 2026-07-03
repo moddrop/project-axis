@@ -732,6 +732,8 @@
     function toggleBell(e) {
         e.stopPropagation();
         document.getElementById("bellDropdown").classList.toggle("open");
+        // Ask for push permission on first bell click (requires user gesture)
+        if (Notification.permission === "default") initPush();
     }
 
     document.addEventListener("click", () => {
@@ -944,6 +946,7 @@
             await loadProjects();
             loadActivity();
             loadUpcomingGoals();
+            initPush(); // silent re-subscribe if permission already granted
             activityPollTimer = setInterval(loadActivity, 1000);
             setInterval(loadUpcomingGoals, 30000);
             pollDMUnread();
@@ -960,6 +963,7 @@
     let dmMe = null;
     let dmTeam = [];
     let dmCurrentSub = null;
+    let dmLastMsgId = null;
     let dmConvoPollTimer = null;
     let dmUnreadPollTimer = null;
 
@@ -1023,6 +1027,7 @@
 
     async function openDMConvo(sub, name) {
         dmCurrentSub = sub;
+        dmLastMsgId = null; // reset so first load doesn't trigger tone
         document.getElementById("dmConvoName").textContent = name;
         document.getElementById("dmContacts").style.display = "none";
         document.getElementById("dmConvo").classList.add("active");
@@ -1042,7 +1047,15 @@
             const res = await fetch(`${API_BASE}/api/messages?with=${encodeURIComponent(dmCurrentSub)}`, { credentials: "include" });
             if (!res.ok) return;
             const { messages } = await res.json();
-            renderDMMessages(messages || []);
+            const msgs = messages || [];
+            if (msgs.length > 0) {
+                const latest = msgs[msgs.length - 1];
+                if (dmLastMsgId !== null && latest.id !== dmLastMsgId && latest.from_sub !== dmMe?.sub) {
+                    playTone();
+                }
+                dmLastMsgId = latest.id;
+            }
+            renderDMMessages(msgs);
         } catch {}
     }
 
@@ -1176,6 +1189,62 @@
             }
         }
     });
+
+    // ── Sound effect ─────────────────────────────────────────────────────────
+    function playTone() {
+        try {
+            const ctx  = new (window.AudioContext || window.webkitAudioContext)();
+            const osc  = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain); gain.connect(ctx.destination);
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(1047, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(523, ctx.currentTime + 0.08);
+            gain.gain.setValueAtTime(0.25, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + 0.4);
+        } catch {}
+    }
+
+    // ── Web Push setup ────────────────────────────────────────────────────────
+    function urlBase64ToUint8Array(b64u) {
+        const b = b64u.replace(/-/g, "+").replace(/_/g, "/");
+        const raw = atob(b + "==".slice(0, (4 - b.length % 4) % 4));
+        return Uint8Array.from([...raw], c => c.charCodeAt(0));
+    }
+
+    async function initPush() {
+        if (!("serviceWorker" in navigator) || !("PushManager" in window)) return;
+        if (Notification.permission === "denied") return;
+        try {
+            const keyRes = await fetch(`${API_BASE}/api/push/key`, { credentials: "include" });
+            if (!keyRes.ok) return;
+            const { publicKey } = await keyRes.json();
+            if (!publicKey) return;
+
+            let perm = Notification.permission;
+            if (perm === "default") perm = await Notification.requestPermission();
+            if (perm !== "granted") return;
+
+            const reg = await navigator.serviceWorker.register("/sw.js");
+            await navigator.serviceWorker.ready;
+
+            let sub = await reg.pushManager.getSubscription();
+            if (!sub) {
+                sub = await reg.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: urlBase64ToUint8Array(publicKey),
+                });
+            }
+
+            await fetch(`${API_BASE}/api/push/subscribe`, {
+                method: "POST", credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(sub.toJSON()),
+            });
+        } catch (e) { console.warn("Push setup:", e); }
+    }
 
     async function pollDMUnread() {
         try {
