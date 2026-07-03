@@ -5,13 +5,16 @@ self.addEventListener("push", event => {
   let data = {};
   try { data = event.data?.json() || {}; } catch {}
   event.waitUntil(
-    self.registration.showNotification(data.title || "Project Axis", {
-      body:      data.body || "New message",
-      icon:      "/logo.png",
-      badge:     "/logo.png",
-      tag:       data.tag  || "pa",
-      renotify:  true,
-      data:      { url: data.url || "/dashboard.html" },
+    clients.matchAll({ type: "window", includeUncontrolled: true }).then(list => {
+      if (list.some(c => c.visibilityState === "visible")) return;
+      return self.registration.showNotification(data.title || "Project Axis", {
+        body:      data.body || "New message",
+        icon:      "/logo.png",
+        badge:     "/logo.png",
+        tag:       data.tag  || "pa",
+        renotify:  true,
+        data:      { url: data.url || "/dashboard.html" },
+      });
     })
   );
 });
