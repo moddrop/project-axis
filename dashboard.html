@@ -677,35 +677,12 @@
                 <div class="panel">
                     <div class="panel-header">
                         <span class="panel-title">Recent Activity</span>
-                        <span class="panel-badge">Today</span>
+                        <span class="panel-badge" id="feedBadge">Loading</span>
                     </div>
-                    <div class="panel-body">
+                    <div class="panel-body" id="activityFeed">
                         <div class="feed-item">
-                            <div class="feed-icon">🚀</div>
                             <div class="feed-body">
-                                <div class="feed-title">v2.4.1 deployed to production</div>
-                                <div class="feed-time">2 min ago · alice</div>
-                            </div>
-                        </div>
-                        <div class="feed-item">
-                            <div class="feed-icon">🔧</div>
-                            <div class="feed-body">
-                                <div class="feed-title">CDN config updated</div>
-                                <div class="feed-time">18 min ago · system</div>
-                            </div>
-                        </div>
-                        <div class="feed-item">
-                            <div class="feed-icon">⚠️</div>
-                            <div class="feed-body">
-                                <div class="feed-title">Email service incident opened</div>
-                                <div class="feed-time">41 min ago · ops-bot</div>
-                            </div>
-                        </div>
-                        <div class="feed-item">
-                            <div class="feed-icon">✅</div>
-                            <div class="feed-body">
-                                <div class="feed-title">Security audit completed</div>
-                                <div class="feed-time">3 hrs ago · bob</div>
+                                <div class="feed-title" style="color:var(--muted)">Loading log entries…</div>
                             </div>
                         </div>
                     </div>
@@ -729,6 +706,53 @@
     </footer>
     <script>
         const API_BASE = "https://employee-auth.calebethan485.workers.dev";
+
+        const TYPE_ICONS = { log: "📝", update: "🔧", milestone: "🚀", issue: "⚠️" };
+        const PROJECT_NAMES = {
+            "soundview":   "SoundView",
+            "air-quality": "Air Quality",
+            "wind-energy": "Wind Energy",
+            "website":     "Website",
+        };
+
+        function esc(s) {
+            return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+        }
+
+        function timeAgo(ts) {
+            const s = Math.floor((Date.now() - ts) / 1000);
+            if (s < 60) return "just now";
+            const m = Math.floor(s / 60);
+            if (m < 60) return `${m}m ago`;
+            const h = Math.floor(m / 60);
+            if (h < 24) return `${h}h ago`;
+            return `${Math.floor(h / 24)}d ago`;
+        }
+
+        async function loadActivity() {
+            try {
+                const res = await fetch(`${API_BASE}/api/logs?limit=6`, { credentials: "include" });
+                if (!res.ok) return;
+                const { entries } = await res.json();
+                const feed = document.getElementById("activityFeed");
+                const badge = document.getElementById("feedBadge");
+                if (!entries || entries.length === 0) {
+                    feed.innerHTML = `<div class="feed-item"><div class="feed-body"><div class="feed-title" style="color:var(--muted)">No log entries yet.</div></div></div>`;
+                    badge.textContent = "Empty";
+                    return;
+                }
+                badge.textContent = "Live";
+                feed.innerHTML = entries.map(e => `
+                    <div class="feed-item">
+                        <div class="feed-icon">${TYPE_ICONS[e.type] || "📝"}</div>
+                        <div class="feed-body">
+                            <div class="feed-title">${esc(e.title)}</div>
+                            <div class="feed-time">${timeAgo(e.created_at)} · ${esc(e.author_name)} · ${esc(PROJECT_NAMES[e.project_id] || e.project_id)}</div>
+                        </div>
+                    </div>
+                `).join("");
+            } catch {}
+        }
 
         (async function init() {
             try {
@@ -765,6 +789,8 @@
 
                 document.getElementById("authGate").classList.add("hidden");
                 document.body.classList.add("visible");
+
+                loadActivity();
 
             } catch (err) {
                 console.error(err);

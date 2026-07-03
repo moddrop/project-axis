@@ -5,28 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projects — Project Axis</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800&family=Geist+Mono&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0a0a0f;
-            --surface: #111118;
-            --surface2: #16161f;
-            --border: #1e1e2e;
-            --border-lit: #2e2e4e;
-            --accent: #5b6af0;
-            --accent2: #8b9cff;
-            --green: #4af08e;
-            --yellow: #f0c44a;
-            --danger: #f05b6a;
-            --text: #e8e8f2;
-            --muted: #6b6b88;
+            --bg: #f6f4ef;
+            --surface: #ffffff;
+            --surface2: #f2efe9;
+            --border: rgba(28,27,25,0.07);
+            --border-lit: rgba(28,27,25,0.14);
+            --accent: #e55c0a;
+            --accent2: #f0a800;
+            --green: #2d8c4e;
+            --yellow: #c98a00;
+            --danger: #c0392b;
+            --text: #1c1b19;
+            --muted: #7a7469;
+            --ink-grid: rgba(28,27,25,.035);
         }
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: 'DM Mono', monospace;
+            font-family: 'Geist Mono', monospace;
             background: var(--bg);
+            background-image:
+                linear-gradient(var(--ink-grid) 1px, transparent 1px),
+                linear-gradient(90deg, var(--ink-grid) 1px, transparent 1px);
+            background-size: 28px 28px;
             color: var(--text);
             min-height: 100vh;
             opacity: 0;
@@ -39,7 +44,7 @@
             background: var(--bg);
             display: grid; place-items: center;
             z-index: 1000;
-            font-family: 'Syne', sans-serif;
+            font-family: 'Rubik', sans-serif;
             font-size: 13px; letter-spacing: .1em;
             color: var(--muted);
         }
@@ -48,42 +53,38 @@
         /* ── Top bar ── */
         .topbar {
             height: 56px;
-            background: var(--surface);
+            background: rgba(246,244,239,0.95);
             border-bottom: 1px solid var(--border-lit);
+            box-shadow: 0 3px 0 rgba(28,27,25,0.07);
             display: flex; align-items: center; justify-content: space-between;
             padding: 0 32px;
             position: sticky; top: 0; z-index: 100;
+            backdrop-filter: blur(8px);
         }
         .topbar-left { display: flex; align-items: center; gap: 16px; }
-        .logo-icon {
-            width: 28px; height: 28px;
-            background: var(--accent);
-            border-radius: 2px;
-            display: grid; place-items: center;
-            font-size: 13px;
-        }
-        .logo-text { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; }
-        .badge { font-size: 9px; letter-spacing: .14em; text-transform: uppercase; padding: 3px 8px; border-radius: 2px; background: rgba(91,106,240,.15); color: var(--accent2); border: 1px solid rgba(91,106,240,.3); }
+        .logo-icon { width: 28px; height: 28px; background: var(--accent); border-radius: 2px; display: grid; place-items: center; box-shadow: 2px 2px 0 rgba(28,27,25,0.2); }
+        .logo-text { font-family: 'Rubik', sans-serif; font-weight: 800; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--text); }
+        .badge { font-size: 9px; letter-spacing: .14em; text-transform: uppercase; padding: 3px 8px; border-radius: 2px; background: rgba(229,92,10,0.08); color: var(--accent); border: 1px solid rgba(229,92,10,0.22); font-family: 'Geist Mono', monospace; }
         .topbar-right { display: flex; align-items: center; gap: 20px; }
         .user-pill { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
-        .user-avatar { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: grid; place-items: center; font-size: 11px; font-weight: 700; color: #fff; font-family: 'Syne', sans-serif; }
-        .logout-btn { background: transparent; border: 1px solid var(--border-lit); color: var(--muted); font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: .08em; padding: 6px 14px; border-radius: 2px; cursor: pointer; transition: border-color .2s, color .2s; }
+        .user-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--accent); display: grid; place-items: center; font-size: 11px; font-weight: 700; color: #fff; font-family: 'Rubik', sans-serif; box-shadow: 2px 2px 0 rgba(28,27,25,0.15); }
+        .logout-btn { background: transparent; border: 1px solid var(--border-lit); color: var(--muted); font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: .08em; padding: 6px 14px; border-radius: 2px; cursor: pointer; transition: border-color .2s, color .2s; }
         .logout-btn:hover { border-color: var(--danger); color: var(--danger); }
 
         /* ── Layout ── */
         .layout { display: grid; grid-template-columns: 220px 1fr; min-height: calc(100vh - 56px); }
 
         /* ── Sidebar ── */
-        .sidebar { background: var(--surface); border-right: 1px solid var(--border); padding: 24px 0; }
+        .sidebar { background: var(--surface); border-right: 1px solid var(--border-lit); padding: 24px 0; }
         .nav-section { margin-bottom: 28px; padding: 0 20px; }
         .nav-label { font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; padding: 0 8px; }
         .nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 8px; border-radius: 2px; font-size: 12px; color: var(--muted); cursor: pointer; transition: background .15s, color .15s; letter-spacing: .02em; text-decoration: none; }
         .nav-item:hover { background: var(--surface2); color: var(--text); }
-        .nav-item.active { background: rgba(91,106,240,.12); color: var(--accent2); }
+        .nav-item.active { background: rgba(229,92,10,0.09); color: var(--accent); }
         .nav-item .icon { width: 16px; text-align: center; font-size: 14px; }
 
         /* ── Main ── */
-        main { padding: 40px; background: var(--bg); }
+        main { padding: 40px; background: transparent; }
 
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(16px); }
@@ -91,137 +92,296 @@
         }
 
         .page-header { margin-bottom: 36px; animation: fadeUp .5s .1s both; }
-        .page-header h2 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 28px; margin-bottom: 6px; }
+        .page-header h2 { font-family: 'Rubik', sans-serif; font-weight: 800; font-size: 28px; margin-bottom: 6px; color: var(--text); }
         .page-header p { font-size: 12px; color: var(--muted); letter-spacing: .06em; }
 
+        /* ── Stats bar ── */
+        .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; animation: fadeUp .5s .15s both; }
+        .stat-mini { background: var(--surface); border: 1px solid var(--border-lit); border-radius: 3px; padding: 16px 20px; display: flex; align-items: center; gap: 14px; box-shadow: 3px 3px 0 rgba(28,27,25,0.09); position: relative; overflow: hidden; }
+        .stat-mini::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+        .stat-mini.orange::before { background: var(--accent); }
+        .stat-mini.green::before  { background: var(--green); }
+        .stat-mini.amber::before  { background: var(--accent2); }
+        .stat-mini.red::before    { background: var(--danger); }
+        .stat-mini-val { font-family: 'Rubik', sans-serif; font-weight: 800; font-size: 22px; }
+        .stat-mini-val.orange { color: var(--accent); }
+        .stat-mini-val.green  { color: var(--green); }
+        .stat-mini-val.amber  { color: var(--yellow); }
+        .stat-mini-val.red    { color: var(--danger); }
+        .stat-mini-label { font-size: 10px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; margin-top: 2px; }
+
         /* ── Toolbar ── */
-        .toolbar {
-            display: flex; align-items: center; justify-content: space-between;
-            margin-bottom: 20px;
-            animation: fadeUp .5s .15s both;
-        }
+        .toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; animation: fadeUp .5s .2s both; }
         .toolbar-left { display: flex; gap: 8px; }
-        .filter-btn {
-            background: var(--surface); border: 1px solid var(--border-lit);
-            color: var(--muted); font-family: 'DM Mono', monospace; font-size: 11px;
-            letter-spacing: .06em; padding: 7px 14px; border-radius: 2px; cursor: pointer;
-            transition: all .15s;
-        }
-        .filter-btn:hover, .filter-btn.active { border-color: var(--accent); color: var(--accent2); background: rgba(91,106,240,.08); }
-        .new-btn {
-            background: var(--accent); border: none; color: #fff;
-            font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: .08em;
-            padding: 7px 18px; border-radius: 2px; cursor: pointer;
-            transition: opacity .15s;
-        }
-        .new-btn:hover { opacity: .85; }
+        .filter-btn { background: var(--surface); border: 1px solid var(--border-lit); color: var(--muted); font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: .06em; padding: 7px 14px; border-radius: 2px; cursor: pointer; transition: all .15s; box-shadow: 2px 2px 0 rgba(28,27,25,0.06); }
+        .filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+        .filter-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(229,92,10,0.07); box-shadow: 2px 2px 0 rgba(229,92,10,0.15); }
 
-        /* ── Projects grid ── */
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 16px;
-            animation: fadeUp .5s .2s both;
-        }
-
-        .project-card {
-            background: var(--surface);
-            border: 1px solid var(--border-lit);
-            border-radius: 3px;
-            padding: 24px;
-            position: relative;
-            overflow: hidden;
-            transition: border-color .2s, transform .2s;
-            cursor: pointer;
-        }
-        .project-card:hover { border-color: var(--accent); transform: translateY(-2px); }
-
-        .project-card::before {
-            content: '';
-            position: absolute; top: 0; left: 0; right: 0; height: 2px;
-        }
-        .project-card.green::before { background: var(--green); }
-        .project-card.blue::before  { background: var(--accent); }
-        .project-card.yellow::before { background: var(--yellow); }
-        .project-card.red::before   { background: var(--danger); }
-        .project-card.purple::before { background: #c084fc; }
-
-        .project-top {
-            display: flex; align-items: flex-start; justify-content: space-between;
-            margin-bottom: 14px;
-        }
-        .project-icon {
-            width: 38px; height: 38px; border-radius: 2px;
-            background: var(--surface2); border: 1px solid var(--border-lit);
-            display: grid; place-items: center; font-size: 17px;
-        }
-        .project-status {
-            font-size: 9px; letter-spacing: .14em; text-transform: uppercase;
-            padding: 3px 8px; border-radius: 20px;
-        }
-        .project-status.active   { background: rgba(74,240,142,.1); color: var(--green); border: 1px solid rgba(74,240,142,.25); }
-        .project-status.review   { background: rgba(240,196,74,.1); color: var(--yellow); border: 1px solid rgba(240,196,74,.25); }
-        .project-status.paused   { background: rgba(107,107,136,.1); color: var(--muted); border: 1px solid var(--border-lit); }
-        .project-status.critical { background: rgba(240,91,106,.1); color: var(--danger); border: 1px solid rgba(240,91,106,.25); }
-
-        .project-name {
-            font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; margin-bottom: 6px;
-        }
+        /* ── Project grid ── */
+        .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; animation: fadeUp .5s .25s both; }
+        .project-card { background: var(--surface); border: 1px solid var(--border-lit); border-radius: 3px; padding: 24px; position: relative; overflow: hidden; box-shadow: 3px 3px 0 rgba(28,27,25,0.09); transition: transform .15s, box-shadow .15s; cursor: pointer; }
+        .project-card:hover { transform: translate(-1px, -2px); box-shadow: 4px 5px 0 rgba(28,27,25,0.13); }
+        .project-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+        .project-card.orange::before { background: var(--accent); }
+        .project-card.green::before  { background: var(--green); }
+        .project-card.amber::before  { background: var(--accent2); }
+        .project-card.teal::before   { background: #1d7a6b; }
+        .project-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; }
+        .project-icon { width: 38px; height: 38px; border-radius: 2px; background: var(--surface2); border: 1px solid var(--border-lit); display: grid; place-items: center; font-size: 17px; box-shadow: 2px 2px 0 rgba(28,27,25,0.08); }
+        .project-status { font-size: 9px; letter-spacing: .14em; text-transform: uppercase; padding: 3px 8px; border-radius: 2px; font-family: 'Geist Mono', monospace; }
+        .project-status.active   { background: rgba(45,140,78,.08); color: var(--green); border: 1px solid rgba(45,140,78,.25); }
+        .project-status.review   { background: rgba(201,138,0,.08); color: var(--yellow); border: 1px solid rgba(201,138,0,.25); }
+        .project-status.complete { background: rgba(229,92,10,.08); color: var(--accent); border: 1px solid rgba(229,92,10,.25); }
+        .project-status.paused   { background: rgba(122,116,105,.08); color: var(--muted); border: 1px solid var(--border-lit); }
+        .project-name { font-family: 'Rubik', sans-serif; font-weight: 700; font-size: 15px; margin-bottom: 6px; color: var(--text); }
         .project-desc { font-size: 11px; color: var(--muted); line-height: 1.7; margin-bottom: 18px; }
-
-        .project-meta {
-            display: flex; gap: 16px; margin-bottom: 16px;
-        }
+        .project-meta { display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
         .meta-item { font-size: 10px; color: var(--muted); letter-spacing: .04em; }
         .meta-item span { color: var(--text); }
-
-        /* Progress bar */
         .progress-wrap { margin-bottom: 16px; }
-        .progress-label {
-            display: flex; justify-content: space-between;
-            font-size: 10px; color: var(--muted); margin-bottom: 6px;
-        }
-        .progress-bar {
-            height: 3px; background: var(--border); border-radius: 2px; overflow: hidden;
-        }
-        .progress-fill { height: 100%; border-radius: 2px; transition: width .6s ease; }
+        .progress-label { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); margin-bottom: 6px; }
+        .progress-bar { height: 3px; background: var(--surface2); border-radius: 2px; overflow: hidden; border: 1px solid var(--border); }
+        .progress-fill { height: 100%; transition: width .6s ease; }
+        .progress-fill.orange { background: var(--accent); }
         .progress-fill.green  { background: var(--green); }
-        .progress-fill.blue   { background: var(--accent); }
-        .progress-fill.yellow { background: var(--yellow); }
-        .progress-fill.red    { background: var(--danger); }
-        .progress-fill.purple { background: #c084fc; }
-
-        /* Avatars */
+        .progress-fill.amber  { background: var(--accent2); }
+        .progress-fill.teal   { background: #1d7a6b; }
         .project-footer { display: flex; align-items: center; justify-content: space-between; }
         .avatars { display: flex; }
-        .av {
-            width: 24px; height: 24px; border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent), var(--accent2));
-            border: 2px solid var(--surface);
-            display: grid; place-items: center;
-            font-size: 9px; font-weight: 700; font-family: 'Syne', sans-serif;
-            color: #fff; margin-right: -6px;
-        }
-        .av:nth-child(2) { background: linear-gradient(135deg, #4af08e, #22c55e); }
-        .av:nth-child(3) { background: linear-gradient(135deg, #f0c44a, #f97316); }
-        .av:nth-child(4) { background: linear-gradient(135deg, #c084fc, #8b5cf6); }
+        .av { width: 24px; height: 24px; border-radius: 50%; background: var(--accent); border: 2px solid var(--surface); display: grid; place-items: center; font-size: 9px; font-weight: 700; font-family: 'Rubik', sans-serif; color: #fff; margin-right: -6px; box-shadow: 1px 1px 0 rgba(28,27,25,0.1); }
+        .av:nth-child(2) { background: var(--green); }
+        .av:nth-child(3) { background: var(--yellow); }
+        .project-updated { font-size: 10px; color: var(--muted); letter-spacing: .02em; }
+        .project-tag { display: inline-block; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; padding: 2px 6px; border-radius: 2px; margin-bottom: 10px; font-family: 'Geist Mono', monospace; }
+        .project-tag.ai     { background: rgba(229,92,10,.1); color: var(--accent); border: 1px solid rgba(229,92,10,.2); }
+        .project-tag.env    { background: rgba(45,140,78,.08); color: var(--green); border: 1px solid rgba(45,140,78,.2); }
+        .project-tag.energy { background: rgba(240,168,0,.1); color: var(--yellow); border: 1px solid rgba(240,168,0,.2); }
+        .project-tag.web    { background: rgba(28,27,25,.05); color: var(--muted); border: 1px solid var(--border-lit); }
 
-        .project-updated { font-size: 10px; color: var(--muted); }
+        /* ── Log view ── */
+        #logView { display: none; }
 
-        /* ── Stats bar ── */
-        .stats-row {
-            display: grid; grid-template-columns: repeat(4, 1fr);
-            gap: 16px; margin-bottom: 28px;
-            animation: fadeUp .5s .1s both;
+        .log-topbar {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 28px; animation: fadeUp .4s both;
         }
-        .stat-mini {
+        .log-breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
+        .log-breadcrumb strong { color: var(--text); }
+
+        .back-btn {
+            display: flex; align-items: center; gap: 6px;
+            background: transparent; border: 1px solid var(--border-lit);
+            color: var(--muted); font-family: 'Geist Mono', monospace;
+            font-size: 11px; letter-spacing: .06em; padding: 7px 14px;
+            border-radius: 2px; cursor: pointer; transition: all .15s;
+        }
+        .back-btn:hover { border-color: var(--text); color: var(--text); }
+
+        .log-project-bar {
             background: var(--surface); border: 1px solid var(--border-lit);
             border-radius: 3px; padding: 16px 20px;
-            display: flex; align-items: center; gap: 14px;
+            display: flex; align-items: center; gap: 16px;
+            margin-bottom: 24px; box-shadow: 3px 3px 0 rgba(28,27,25,0.09);
+            animation: fadeUp .4s .05s both;
         }
-        .stat-mini-icon { font-size: 20px; }
-        .stat-mini-val { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; }
-        .stat-mini-label { font-size: 10px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; margin-top: 2px; }
+        .log-project-icon { width: 36px; height: 36px; background: var(--surface2); border: 1px solid var(--border-lit); border-radius: 2px; display: grid; place-items: center; font-size: 16px; flex-shrink: 0; }
+        .log-project-info { flex: 1; }
+        .log-project-name { font-family: 'Rubik', sans-serif; font-weight: 700; font-size: 14px; color: var(--text); margin-bottom: 4px; }
+        .log-project-sub  { font-size: 10px; color: var(--muted); letter-spacing: .06em; }
+        .log-project-progress { width: 120px; flex-shrink: 0; }
+        .log-project-progress .progress-label { margin-bottom: 4px; }
+
+        .log-toolbar {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 20px; animation: fadeUp .4s .1s both;
+        }
+        .log-toolbar-left { display: flex; gap: 8px; flex-wrap: wrap; }
+
+        .btn-new {
+            background: var(--accent); color: #fff; border: none;
+            padding: 8px 18px; border-radius: 2px;
+            font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: .08em;
+            cursor: pointer; box-shadow: 3px 3px 0 rgba(229,92,10,.25); transition: opacity .15s;
+            white-space: nowrap;
+        }
+        .btn-new:hover { opacity: .85; }
+
+        /* ── Entry cards ── */
+        #entriesList { animation: fadeUp .4s .15s both; }
+
+        .entry-card {
+            background: var(--surface); border: 1px solid var(--border-lit);
+            border-radius: 3px; padding: 24px; margin-bottom: 12px;
+            box-shadow: 3px 3px 0 rgba(28,27,25,0.09);
+            transition: box-shadow .15s;
+        }
+        .entry-card:hover { box-shadow: 4px 4px 0 rgba(28,27,25,0.12); }
+
+        .entry-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 12px; gap: 12px;
+        }
+        .entry-header-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+        .type-badge {
+            font-size: 9px; letter-spacing: .14em; text-transform: uppercase;
+            padding: 3px 8px; border-radius: 2px; font-family: 'Geist Mono', monospace;
+            flex-shrink: 0;
+        }
+        .type-log       { background: rgba(28,27,25,.05);   color: var(--muted);   border: 1px solid var(--border-lit); }
+        .type-update    { background: rgba(229,92,10,.08);  color: var(--accent);  border: 1px solid rgba(229,92,10,.22); }
+        .type-milestone { background: rgba(45,140,78,.08);  color: var(--green);   border: 1px solid rgba(45,140,78,.22); }
+        .type-issue     { background: rgba(192,57,43,.08);  color: var(--danger);  border: 1px solid rgba(192,57,43,.22); }
+
+        .entry-meta { font-size: 10px; color: var(--muted); letter-spacing: .03em; }
+
+        .entry-actions { display: flex; gap: 6px; opacity: 0; transition: opacity .15s; flex-shrink: 0; }
+        .entry-card:hover .entry-actions { opacity: 1; }
+
+        .action-btn {
+            background: transparent; border: 1px solid var(--border-lit);
+            color: var(--muted); font-family: 'Geist Mono', monospace;
+            font-size: 10px; padding: 4px 10px; border-radius: 2px;
+            cursor: pointer; transition: all .15s; letter-spacing: .04em;
+        }
+        .action-btn:hover            { border-color: var(--accent); color: var(--accent); }
+        .action-btn.danger:hover     { border-color: var(--danger); color: var(--danger); }
+
+        .entry-title {
+            font-family: 'Rubik', sans-serif; font-weight: 700;
+            font-size: 16px; color: var(--text); margin-bottom: 8px;
+        }
+        .entry-body {
+            font-size: 12px; color: var(--muted); line-height: 1.8;
+            margin-bottom: 16px; white-space: pre-wrap; word-break: break-word;
+        }
+
+        /* ── Entry footer + comments ── */
+        .entry-footer { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
+
+        .comment-toggle {
+            background: transparent; border: none;
+            color: var(--muted); font-family: 'Geist Mono', monospace;
+            font-size: 11px; cursor: pointer; padding: 4px 0;
+            letter-spacing: .04em; transition: color .15s;
+        }
+        .comment-toggle:hover { color: var(--text); }
+
+        .comments-section {
+            margin-top: 16px; border-top: 1px solid var(--border);
+            padding-top: 16px;
+        }
+        .comment-item { display: flex; gap: 10px; margin-bottom: 12px; }
+        .comment-av {
+            width: 24px; height: 24px; border-radius: 50%; background: var(--accent);
+            display: grid; place-items: center; font-size: 9px; font-weight: 700;
+            color: #fff; font-family: 'Rubik', sans-serif; flex-shrink: 0;
+        }
+        .comment-av.green { background: var(--green); }
+        .comment-body-wrap {
+            flex: 1; background: var(--surface2); border: 1px solid var(--border);
+            border-radius: 2px; padding: 8px 12px;
+        }
+        .comment-meta {
+            font-size: 10px; color: var(--muted); margin-bottom: 4px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .comment-del {
+            background: transparent; border: none; color: var(--muted);
+            font-size: 10px; cursor: pointer; padding: 0; letter-spacing: .04em;
+            transition: color .15s;
+        }
+        .comment-del:hover { color: var(--danger); }
+        .comment-text { font-size: 12px; color: var(--text); white-space: pre-wrap; word-break: break-word; }
+
+        .add-comment { display: flex; gap: 8px; margin-top: 12px; }
+        .add-comment input {
+            flex: 1; background: var(--surface); border: 1px solid var(--border-lit);
+            padding: 8px 12px; border-radius: 2px; font-family: 'Geist Mono', monospace;
+            font-size: 11px; color: var(--text); outline: none;
+        }
+        .add-comment input:focus { border-color: var(--accent); }
+        .add-comment button {
+            background: var(--text); color: var(--bg); border: none;
+            padding: 8px 16px; border-radius: 2px; font-family: 'Geist Mono', monospace;
+            font-size: 11px; cursor: pointer; letter-spacing: .06em; transition: opacity .15s;
+        }
+        .add-comment button:hover { opacity: .8; }
+
+        /* ── Empty state ── */
+        .empty-state {
+            text-align: center; padding: 60px 20px;
+            color: var(--muted); font-size: 12px; letter-spacing: .06em;
+        }
+        .empty-state .empty-icon { font-size: 32px; margin-bottom: 12px; }
+        .empty-state p { margin-bottom: 20px; }
+
+        /* ── Modal ── */
+        .modal-overlay {
+            position: fixed; inset: 0;
+            background: rgba(28,27,25,.5);
+            display: none; align-items: center; justify-content: center;
+            z-index: 200;
+        }
+        .modal-overlay.open { display: flex; }
+
+        .modal {
+            background: var(--surface); border: 1px solid var(--border-lit);
+            border-radius: 3px; padding: 32px; width: 560px;
+            max-width: calc(100vw - 32px);
+            box-shadow: 6px 6px 0 rgba(28,27,25,0.15);
+            max-height: calc(100vh - 48px); overflow-y: auto;
+        }
+        .modal-title {
+            font-family: 'Rubik', sans-serif; font-weight: 800;
+            font-size: 18px; margin-bottom: 24px; color: var(--text);
+        }
+        .form-field { margin-bottom: 16px; }
+        .form-label {
+            font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
+            color: var(--muted); display: block; margin-bottom: 6px;
+        }
+        .form-input, .form-select, .form-textarea {
+            width: 100%; background: var(--surface);
+            border: 1px solid var(--border-lit);
+            padding: 10px 12px; border-radius: 2px;
+            font-family: 'Geist Mono', monospace; font-size: 12px;
+            color: var(--text); outline: none;
+            box-shadow: inset 2px 2px 0 rgba(28,27,25,.04);
+        }
+        .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--accent); }
+        .form-textarea { resize: vertical; min-height: 120px; line-height: 1.7; }
+        .form-select { cursor: pointer; }
+
+        .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px; }
+        .btn-primary {
+            background: var(--accent); color: #fff; border: none;
+            padding: 10px 20px; border-radius: 2px; font-family: 'Geist Mono', monospace;
+            font-size: 11px; letter-spacing: .08em; cursor: pointer;
+            box-shadow: 3px 3px 0 rgba(229,92,10,.25); transition: opacity .15s;
+        }
+        .btn-primary:hover { opacity: .85; }
+        .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+        .btn-secondary {
+            background: transparent; border: 1px solid var(--border-lit);
+            color: var(--muted); padding: 10px 20px; border-radius: 2px;
+            font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: .08em;
+            cursor: pointer; transition: all .15s;
+        }
+        .btn-secondary:hover { border-color: var(--text); color: var(--text); }
+        .btn-danger {
+            background: var(--danger); color: #fff; border: none;
+            padding: 10px 20px; border-radius: 2px; font-family: 'Geist Mono', monospace;
+            font-size: 11px; letter-spacing: .08em; cursor: pointer;
+            box-shadow: 3px 3px 0 rgba(192,57,43,.25); transition: opacity .15s;
+        }
+        .btn-danger:hover { opacity: .85; }
+
+        .upload-status { font-size: 11px; color: var(--muted); margin-top: 8px; letter-spacing: .04em; }
+
+        a { text-decoration: none; }
+        .footer { background: var(--surface); border-top: 1px solid var(--border-lit); padding: 20px 32px; text-align: center; }
+        .footer-text { font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: .12em; color: var(--muted); font-weight: 400; text-transform: uppercase; }
     </style>
 </head>
 <body>
@@ -230,7 +390,7 @@
 
 <div class="topbar">
     <div class="topbar-left">
-        <div class="logo-icon">⬡</div>
+        <div class="logo-icon"><img height="22px" src="logo.png"></div>
         <div class="logo-text">Project Axis</div>
         <div class="badge">Internal</div>
     </div>
@@ -238,7 +398,7 @@
         <div class="user-pill">
             <div class="user-avatar" id="userAvatar">?</div>
             <span id="userName">Loading…</span>
-            <span style="color:var(--border-lit)">·</span>
+            <span style="color:rgba(28,27,25,0.25)">·</span>
             <span id="userRole" style="color:var(--accent2)">—</span>
         </div>
         <button class="logout-btn" onclick="handleLogout()">Logout</button>
@@ -249,7 +409,7 @@
     <nav class="sidebar">
         <div class="nav-section">
             <div class="nav-label">Main</div>
-            <a href="index.html" class="nav-item"><span class="icon">⊞</span> Dashboard</a>
+            <a href="dashboard.html" class="nav-item"><span class="icon">⊞</span> Dashboard</a>
             <a href="projects.html" class="nav-item active"><span class="icon">◈</span> Projects</a>
             <a href="#" class="nav-item"><span class="icon">◉</span> Analytics</a>
         </div>
@@ -266,186 +426,552 @@
     </nav>
 
     <main>
-        <div class="page-header">
-            <h2>Projects 🗂️</h2>
-            <p>ALL ACTIVE INITIATIVES · <span id="currentTime"></span></p>
-        </div>
+        <!-- ── Grid view ── -->
+        <div id="gridView">
+            <div class="page-header">
+                <h2>Projects</h2>
+                <p>ALL ACTIVE INITIATIVES · <span id="currentTime"></span></p>
+            </div>
 
-        <!-- Mini stats -->
-        <div class="stats-row">
-            <div class="stat-mini">
-                <div class="stat-mini-icon">◈</div>
-                <div>
-                    <div class="stat-mini-val" style="color:var(--accent2)">14</div>
+            <div class="stats-row">
+                <div class="stat-mini orange"><div>
+                    <div class="stat-mini-val orange">4</div>
                     <div class="stat-mini-label">Total Projects</div>
-                </div>
-            </div>
-            <div class="stat-mini">
-                <div class="stat-mini-icon">🟢</div>
-                <div>
-                    <div class="stat-mini-val" style="color:var(--green)">9</div>
+                </div></div>
+                <div class="stat-mini green"><div>
+                    <div class="stat-mini-val green">2</div>
                     <div class="stat-mini-label">Active</div>
-                </div>
-            </div>
-            <div class="stat-mini">
-                <div class="stat-mini-icon">🟡</div>
-                <div>
-                    <div class="stat-mini-val" style="color:var(--yellow)">3</div>
+                </div></div>
+                <div class="stat-mini amber"><div>
+                    <div class="stat-mini-val amber">1</div>
                     <div class="stat-mini-label">In Review</div>
+                </div></div>
+                <div class="stat-mini red"><div>
+                    <div class="stat-mini-val red">1</div>
+                    <div class="stat-mini-label">Complete</div>
+                </div></div>
+            </div>
+
+            <div class="toolbar">
+                <div class="toolbar-left">
+                    <button class="filter-btn active" onclick="setFilter(this,'all')">All</button>
+                    <button class="filter-btn" onclick="setFilter(this,'active')">Active</button>
+                    <button class="filter-btn" onclick="setFilter(this,'review')">Review</button>
+                    <button class="filter-btn" onclick="setFilter(this,'complete')">Complete</button>
                 </div>
             </div>
-            <div class="stat-mini">
-                <div class="stat-mini-icon">🔴</div>
-                <div>
-                    <div class="stat-mini-val" style="color:var(--danger)">2</div>
-                    <div class="stat-mini-label">Critical</div>
+
+            <div class="projects-grid" id="projectsGrid"></div>
+        </div>
+
+        <!-- ── Log view ── -->
+        <div id="logView">
+            <div class="log-topbar">
+                <div class="log-breadcrumb">
+                    <button class="back-btn" onclick="showGrid()">← Back</button>
+                    <span>◈ Projects</span>
+                    <span>/</span>
+                    <strong id="logProjectName">—</strong>
+                </div>
+                <button class="btn-new" onclick="openNewEntryModal()">+ New Entry</button>
+            </div>
+
+            <div class="log-project-bar" id="logProjectBar"></div>
+
+            <div class="log-toolbar">
+                <div class="log-toolbar-left" id="logFilterBtns">
+                    <button class="filter-btn active" onclick="setLogFilter(this,'all')">All</button>
+                    <button class="filter-btn" onclick="setLogFilter(this,'log')">Log</button>
+                    <button class="filter-btn" onclick="setLogFilter(this,'update')">Update</button>
+                    <button class="filter-btn" onclick="setLogFilter(this,'milestone')">Milestone</button>
+                    <button class="filter-btn" onclick="setLogFilter(this,'issue')">Issue</button>
                 </div>
             </div>
-        </div>
 
-        <!-- Toolbar -->
-        <div class="toolbar">
-            <div class="toolbar-left">
-                <button class="filter-btn active" onclick="setFilter(this,'all')">All</button>
-                <button class="filter-btn" onclick="setFilter(this,'active')">Active</button>
-                <button class="filter-btn" onclick="setFilter(this,'review')">Review</button>
-                <button class="filter-btn" onclick="setFilter(this,'paused')">Paused</button>
-                <button class="filter-btn" onclick="setFilter(this,'critical')">Critical</button>
-            </div>
-            <button class="new-btn">+ New Project</button>
+            <div id="entriesList"></div>
         </div>
-
-        <!-- Projects grid -->
-        <div class="projects-grid" id="projectsGrid"></div>
     </main>
 </div>
 
+<footer class="footer"><p class="footer-text">Project Axis &copy; 2026</p></footer>
+
+<!-- Entry modal -->
+<div class="modal-overlay" id="entryModal">
+    <div class="modal">
+        <div class="modal-title" id="entryModalTitle">New Entry</div>
+        <div class="form-field">
+            <label class="form-label">Type</label>
+            <select class="form-select" id="entryType">
+                <option value="log">Log — General update</option>
+                <option value="update">Update — Progress report</option>
+                <option value="milestone">Milestone — Major achievement</option>
+                <option value="issue">Issue — Problem encountered</option>
+            </select>
+        </div>
+        <div class="form-field">
+            <label class="form-label">Title</label>
+            <input class="form-input" id="entryTitle" type="text" placeholder="What happened?" autocomplete="off">
+        </div>
+        <div class="form-field">
+            <label class="form-label">Details (optional)</label>
+            <textarea class="form-textarea" id="entryBody" placeholder="Describe it in more detail…"></textarea>
+        </div>
+        <div class="modal-actions">
+            <button class="btn-secondary" onclick="closeEntryModal()">Cancel</button>
+            <button class="btn-primary" id="entrySubmitBtn" onclick="submitEntry()">Save Entry</button>
+        </div>
+    </div>
+</div>
+
+<!-- Delete confirm modal -->
+<div class="modal-overlay" id="deleteModal">
+    <div class="modal" style="width:400px">
+        <div class="modal-title">Delete Entry?</div>
+        <p style="font-size:12px;color:var(--muted);line-height:1.8;margin-bottom:24px">
+            This will permanently delete the entry, all its comments, and all attached images. This cannot be undone.
+        </p>
+        <div class="modal-actions">
+            <button class="btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+            <button class="btn-danger" onclick="confirmDelete()">Delete</button>
+        </div>
+    </div>
+</div>
+
 <script>
-    const API_BASE = "https://employee-auth.calebethan485.workers.dev";
+const API_BASE = "https://employee-auth.calebethan485.workers.dev";
 
-    const PROJECTS = [
-        {
-            color: "green", icon: "🚀", status: "active", name: "Axis Core v3",
-            desc: "Next-generation platform rewrite with improved latency and a new module architecture.",
-            lead: "alice", members: ["A","B","C"], updated: "2 min ago",
-            progress: 72, progressColor: "green", tasks: "48/66", due: "Jun 12"
-        },
-        {
-            color: "blue", icon: "🔌", status: "active", name: "API Gateway Overhaul",
-            desc: "Unified gateway layer replacing three legacy services. Rate limiting & circuit breakers included.",
-            lead: "bob", members: ["B","C","D"], updated: "18 min ago",
-            progress: 54, progressColor: "blue", tasks: "29/54", due: "Jul 3"
-        },
-        {
-            color: "yellow", icon: "📊", status: "review", name: "Analytics Pipeline",
-            desc: "Real-time event streaming from edge workers into warehouse with sub-5s latency target.",
-            lead: "carol", members: ["C","A"], updated: "1 hr ago",
-            progress: 88, progressColor: "yellow", tasks: "61/70", due: "May 30"
-        },
-        {
-            color: "purple", icon: "🤖", status: "active", name: "ML Inference Cluster",
-            desc: "GPU cluster provisioning for on-prem model inference. Cuts cloud spend by ~40%.",
-            lead: "dave", members: ["D","B","A","C"], updated: "3 hrs ago",
-            progress: 31, progressColor: "purple", tasks: "12/39", due: "Aug 20"
-        },
-        {
-            color: "red", icon: "⚠️", status: "critical", name: "Email Delivery Fix",
-            desc: "Critical incident: email service degraded. Investigating SMTP relay misconfiguration.",
-            lead: "ops-bot", members: ["A","B"], updated: "41 min ago",
-            progress: 15, progressColor: "red", tasks: "3/20", due: "TODAY"
-        },
-        {
-            color: "green", icon: "🔒", status: "active", name: "Zero-Trust Rollout",
-            desc: "Company-wide zero-trust network architecture. mTLS between all internal services.",
-            lead: "alice", members: ["A","C"], updated: "Yesterday",
-            progress: 60, progressColor: "green", tasks: "36/60", due: "Jun 28"
-        },
-        {
-            color: "yellow", icon: "📱", status: "review", name: "Mobile App v2",
-            desc: "Full redesign of the employee mobile app with offline support and biometric auth.",
-            lead: "eve", members: ["B","D"], updated: "2 days ago",
-            progress: 95, progressColor: "yellow", tasks: "57/60", due: "May 22"
-        },
-        {
-            color: "blue", icon: "🗄️", status: "paused", name: "DB Migration PG16",
-            desc: "Upgrade Postgres cluster from 14 to 16. Paused pending schema audit sign-off.",
-            lead: "frank", members: ["C"], updated: "5 days ago",
-            progress: 40, progressColor: "blue", tasks: "18/45", due: "TBD"
-        },
-        {
-            color: "red", icon: "🌐", status: "critical", name: "CDN Edge Nodes",
-            desc: "Expanding edge presence to APAC region. Current degradation in SEA nodes under investigation.",
-            lead: "sys", members: ["A","B","C","D"], updated: "12 min ago",
-            progress: 22, progressColor: "red", tasks: "8/36", due: "May 25"
-        },
-    ];
+let currentUser   = null;
+let currentProject = null;
+let allEntries    = [];
+let logFilter     = "all";
+let editingEntry  = null;
+let pendingDelete = null;
 
-    let currentFilter = "all";
+const PROJECTS = [
+    { id: "soundview",   color: "orange", icon: "👓", tag: "ai",     tagLabel: "AI / Vision",
+      status: "active",   name: "SoundView Smart Glasses",
+      desc: "Wearable camera + ESP32-S3 Sense that captures the world, sends frames to OpenAI Vision API over WiFi, and reads a description aloud through a 13MM speaker.",
+      lead: "Caleb", members: ["CE","BZ","RM"], updated: "Today", progress: 65, progressColor: "orange",
+      tasks: "3/4 phases", due: "2026", budget: "฿3,600" },
+    { id: "air-quality", color: "green",  icon: "🌫️", tag: "env",    tagLabel: "Environment",
+      status: "review",   name: "Comparing Air Quality",
+      desc: "Arduino Nano + MQ135 sensor detecting CO₂ and sulfur dioxide in real time with an I2C display and danger alerts.",
+      lead: "Binbin", members: ["BZ","CE"], updated: "2 days ago", progress: 90, progressColor: "green",
+      tasks: "Completed build", due: "Jun 2026", budget: "< ฿500" },
+    { id: "wind-energy", color: "amber",  icon: "⚡", tag: "energy", tagLabel: "Energy",
+      status: "complete", name: "Wind Energy vs Sun Energy",
+      desc: "Compared wind turbine and solar panel output by powering LEDs and measuring voltage, current, and efficiency under real conditions.",
+      lead: "Raver", members: ["RM","CE"], updated: "Last week", progress: 100, progressColor: "amber",
+      tasks: "Documented", due: "May 2026", budget: "< ฿500" },
+    { id: "website",     color: "teal",   icon: "🌐", tag: "web",    tagLabel: "Web",
+      status: "active",   name: "Project Axis Website",
+      desc: "Public-facing site documenting all three science fair projects — team bios, build logs, gallery, donor page, and internal dashboard.",
+      lead: "Binbin", members: ["BZ","CE","RM"], updated: "Today", progress: 80, progressColor: "teal",
+      tasks: "Ongoing", due: "Ongoing", budget: "฿0" },
+];
 
-    function setFilter(el, filter) {
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        el.classList.add('active');
-        currentFilter = filter;
-        renderProjects();
-    }
+const TYPE_CONFIG = {
+    log:       { label: "Log",       icon: "◌" },
+    update:    { label: "Update",    icon: "◉" },
+    milestone: { label: "Milestone", icon: "★" },
+    issue:     { label: "Issue",     icon: "⚠" },
+};
 
-    function renderProjects() {
-        const grid = document.getElementById('projectsGrid');
-        const filtered = currentFilter === 'all' ? PROJECTS : PROJECTS.filter(p => p.status === currentFilter);
-        grid.innerHTML = filtered.map(p => `
-            <div class="project-card ${p.color}">
-                <div class="project-top">
-                    <div class="project-icon">${p.icon}</div>
-                    <div class="project-status ${p.status}">${p.status.toUpperCase()}</div>
-                </div>
-                <div class="project-name">${p.name}</div>
-                <div class="project-desc">${p.desc}</div>
-                <div class="project-meta">
-                    <div class="meta-item">LEAD <span>${p.lead}</span></div>
-                    <div class="meta-item">TASKS <span>${p.tasks}</span></div>
-                    <div class="meta-item">DUE <span>${p.due}</span></div>
-                </div>
-                <div class="progress-wrap">
-                    <div class="progress-label">
-                        <span>Progress</span><span>${p.progress}%</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill ${p.progressColor}" style="width:${p.progress}%"></div>
-                    </div>
-                </div>
-                <div class="project-footer">
-                    <div class="avatars">
-                        ${p.members.map(m => `<div class="av">${m}</div>`).join('')}
-                    </div>
-                    <div class="project-updated">Updated ${p.updated}</div>
+// ── XSS guard ────────────────────────────────────────────────────────────────
+function esc(s) {
+    return String(s)
+        .replace(/&/g,"&amp;").replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+
+// ── Time helpers ─────────────────────────────────────────────────────────────
+function fmtDate(ts) {
+    return new Date(ts).toLocaleString("en-GB", {
+        day: "2-digit", month: "short", year: "numeric",
+        hour: "2-digit", minute: "2-digit", hour12: false
+    });
+}
+
+// ── Auth init ─────────────────────────────────────────────────────────────────
+(async function init() {
+    try {
+        const res = await fetch(`${API_BASE}/api/me`, { credentials: "include" });
+        if (!res.ok) { location.href = "login.html"; return; }
+        currentUser = await res.json();
+
+        document.getElementById("userName").textContent    = currentUser.name;
+        document.getElementById("userRole").textContent    = currentUser.role;
+        document.getElementById("userAvatar").textContent  = currentUser.name.charAt(0).toUpperCase();
+
+        const tick = () => {
+            const el = document.getElementById("currentTime");
+            if (el) el.textContent = new Date().toLocaleTimeString("en-US", { hour12: false });
+        };
+        tick(); setInterval(tick, 1000);
+
+        document.getElementById("authGate").classList.add("hidden");
+        document.body.classList.add("visible");
+        renderGrid();
+    } catch { location.href = "login.html"; }
+})();
+
+// ── Grid ─────────────────────────────────────────────────────────────────────
+let currentFilter = "all";
+
+function setFilter(el, filter) {
+    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+    el.classList.add("active");
+    currentFilter = filter;
+    renderGrid();
+}
+
+function renderGrid() {
+    const filtered = currentFilter === "all"
+        ? PROJECTS
+        : PROJECTS.filter(p => p.status === currentFilter);
+
+    document.getElementById("projectsGrid").innerHTML = filtered.map(p => `
+        <div class="project-card ${p.color}" onclick="showLog('${p.id}')">
+            <div class="project-top">
+                <div class="project-icon">${p.icon}</div>
+                <div class="project-status ${p.status}">${p.status.toUpperCase()}</div>
+            </div>
+            <div class="project-tag ${p.tag}">${p.tagLabel}</div>
+            <div class="project-name">${esc(p.name)}</div>
+            <div class="project-desc">${esc(p.desc)}</div>
+            <div class="project-meta">
+                <div class="meta-item">LEAD <span>${esc(p.lead)}</span></div>
+                <div class="meta-item">TASKS <span>${esc(p.tasks)}</span></div>
+                <div class="meta-item">DUE <span>${esc(p.due)}</span></div>
+                <div class="meta-item">BUDGET <span>${esc(p.budget)}</span></div>
+            </div>
+            <div class="progress-wrap">
+                <div class="progress-label"><span>Progress</span><span>${p.progress}%</span></div>
+                <div class="progress-bar">
+                    <div class="progress-fill ${p.progressColor}" style="width:${p.progress}%"></div>
                 </div>
             </div>
-        `).join('');
+            <div class="project-footer">
+                <div class="avatars">${p.members.map(m=>`<div class="av">${esc(m)}</div>`).join("")}</div>
+                <div class="project-updated">Updated ${esc(p.updated)}</div>
+            </div>
+        </div>
+    `).join("");
+}
+
+// ── Log view ──────────────────────────────────────────────────────────────────
+async function showLog(projectId) {
+    currentProject = PROJECTS.find(p => p.id === projectId);
+    logFilter = "all";
+
+    document.getElementById("gridView").style.display = "none";
+    document.getElementById("logView").style.display  = "block";
+    document.getElementById("logProjectName").textContent = currentProject.name;
+
+    // Reset filter buttons
+    document.querySelectorAll("#logFilterBtns .filter-btn").forEach((b,i) => {
+        b.classList.toggle("active", i === 0);
+    });
+
+    // Render project bar
+    document.getElementById("logProjectBar").innerHTML = `
+        <div class="log-project-icon">${currentProject.icon}</div>
+        <div class="log-project-info">
+            <div class="log-project-name">${esc(currentProject.name)}</div>
+            <div class="log-project-sub">${esc(currentProject.tagLabel)} · LEAD: ${esc(currentProject.lead)}</div>
+        </div>
+        <div class="log-project-progress">
+            <div class="progress-label"><span>Progress</span><span>${currentProject.progress}%</span></div>
+            <div class="progress-bar">
+                <div class="progress-fill ${currentProject.progressColor}" style="width:${currentProject.progress}%"></div>
+            </div>
+        </div>
+        <div class="project-status ${currentProject.status}" style="flex-shrink:0">${currentProject.status.toUpperCase()}</div>
+    `;
+
+    await refreshEntries();
+}
+
+function showGrid() {
+    currentProject = null;
+    document.getElementById("logView").style.display  = "none";
+    document.getElementById("gridView").style.display = "block";
+}
+
+function setLogFilter(el, filter) {
+    document.querySelectorAll("#logFilterBtns .filter-btn").forEach(b => b.classList.remove("active"));
+    el.classList.add("active");
+    logFilter = filter;
+    renderEntries();
+}
+
+// ── Fetch & render entries ────────────────────────────────────────────────────
+async function refreshEntries() {
+    document.getElementById("entriesList").innerHTML =
+        `<div class="empty-state"><div class="empty-icon">⟳</div><p>Loading…</p></div>`;
+
+    try {
+        const res = await fetch(
+            `${API_BASE}/api/logs?project=${encodeURIComponent(currentProject.id)}`,
+            { credentials: "include" }
+        );
+        const data = await res.json();
+        allEntries = data.entries || [];
+        renderEntries();
+    } catch {
+        document.getElementById("entriesList").innerHTML =
+            `<div class="empty-state"><div class="empty-icon">⚠</div><p>Failed to load entries.</p></div>`;
+    }
+}
+
+function renderEntries() {
+    const filtered = logFilter === "all"
+        ? allEntries
+        : allEntries.filter(e => e.type === logFilter);
+
+    if (filtered.length === 0) {
+        const msg = allEntries.length === 0
+            ? "No log entries yet. Create the first one!"
+            : `No entries of type "${logFilter}".`;
+        document.getElementById("entriesList").innerHTML =
+            `<div class="empty-state">
+                <div class="empty-icon">${allEntries.length === 0 ? "📋" : "🔍"}</div>
+                <p>${msg}</p>
+                ${allEntries.length === 0
+                    ? `<button class="btn-new" onclick="openNewEntryModal()">+ Create First Entry</button>`
+                    : ""}
+            </div>`;
+        return;
     }
 
-    (async function init() {
-        try {
-            const res = await fetch(`${API_BASE}/api/me`, { credentials: "include" });
-            if (!res.ok) { window.location.href = "login.html"; return; }
-            const user = await res.json();
-            document.getElementById("userName").textContent = user.name;
-            document.getElementById("userRole").textContent = user.role;
-            document.getElementById("userAvatar").textContent = user.name.charAt(0).toUpperCase();
-            const tick = () => { document.getElementById("currentTime").textContent = new Date().toLocaleTimeString("en-US", { hour12: false }); };
-            tick(); setInterval(tick, 1000);
-            document.getElementById("authGate").classList.add("hidden");
-            document.body.classList.add("visible");
-        } catch (err) {
-            window.location.href = "login.html";
+    document.getElementById("entriesList").innerHTML = filtered.map(renderEntry).join("");
+}
+
+function renderEntry(e) {
+    const tc = TYPE_CONFIG[e.type] || TYPE_CONFIG.log;
+    const count = e.comment_count || 0;
+
+    return `
+        <div class="entry-card" id="entry-${esc(e.id)}">
+            <div class="entry-header">
+                <div class="entry-header-left">
+                    <span class="type-badge type-${esc(e.type)}">${tc.icon} ${tc.label.toUpperCase()}</span>
+                    <span class="entry-meta">${fmtDate(e.created_at)} · ${esc(e.author_name)}</span>
+                </div>
+                <div class="entry-actions">
+                    <button class="action-btn" onclick="openEditModal('${esc(e.id)}')">Edit</button>
+                    <button class="action-btn danger" onclick="openDeleteModal('${esc(e.id)}')">Delete</button>
+                </div>
+            </div>
+            <div class="entry-title">${esc(e.title)}</div>
+            ${e.body ? `<div class="entry-body">${esc(e.body)}</div>` : ""}
+            <div class="entry-footer">
+                <button class="comment-toggle" onclick="toggleComments('${esc(e.id)}', this)">
+                    💬 ${count} comment${count !== 1 ? "s" : ""}
+                </button>
+            </div>
+            <div class="comments-section" id="comments-${esc(e.id)}" style="display:none">
+                <div id="comments-list-${esc(e.id)}"></div>
+                <div class="add-comment">
+                    <input type="text" id="comment-input-${esc(e.id)}"
+                           placeholder="Add a comment…"
+                           onkeydown="if(event.key==='Enter')addComment('${esc(e.id)}')">
+                    <button onclick="addComment('${esc(e.id)}')">Post</button>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// ── Comments ──────────────────────────────────────────────────────────────────
+async function toggleComments(entryId, btn) {
+    const section = document.getElementById(`comments-${entryId}`);
+    if (section.style.display !== "none") {
+        section.style.display = "none";
+        return;
+    }
+    section.style.display = "block";
+    const list = document.getElementById(`comments-list-${entryId}`);
+    list.innerHTML = `<div style="font-size:11px;color:var(--muted);padding:6px 0">Loading…</div>`;
+
+    try {
+        const res = await fetch(`${API_BASE}/api/logs/${entryId}`, { credentials: "include" });
+        const { entry } = await res.json();
+        renderComments(entryId, entry.comments || []);
+
+        // Update count on button
+        if (btn) btn.textContent = `💬 ${entry.comments.length} comment${entry.comments.length !== 1 ? "s" : ""}`;
+
+        // Update cached entry
+        const idx = allEntries.findIndex(e => e.id === entryId);
+        if (idx !== -1) allEntries[idx].comment_count = entry.comments.length;
+    } catch {
+        list.innerHTML = `<div style="font-size:11px;color:var(--danger);padding:6px 0">Failed to load comments.</div>`;
+    }
+}
+
+function renderComments(entryId, comments) {
+    const list = document.getElementById(`comments-list-${entryId}`);
+    if (comments.length === 0) {
+        list.innerHTML = `<div style="font-size:11px;color:var(--muted);padding:6px 0;letter-spacing:.04em">No comments yet.</div>`;
+        return;
+    }
+    list.innerHTML = comments.map(c => `
+        <div class="comment-item" id="comment-${esc(c.id)}">
+            <div class="comment-av ${c.author_sub === "bin" ? "green" : ""}">${esc(c.author_name.charAt(0))}</div>
+            <div class="comment-body-wrap">
+                <div class="comment-meta">
+                    <span>${esc(c.author_name)} · ${fmtDate(c.created_at)}</span>
+                    <button class="comment-del" onclick="deleteComment('${esc(c.id)}','${esc(entryId)}')">Delete</button>
+                </div>
+                <div class="comment-text">${esc(c.body)}</div>
+            </div>
+        </div>
+    `).join("");
+}
+
+async function addComment(entryId) {
+    const input = document.getElementById(`comment-input-${entryId}`);
+    const body  = input.value.trim();
+    if (!body) return;
+
+    input.disabled = true;
+    try {
+        const res = await fetch(`${API_BASE}/api/logs/${entryId}/comments`, {
+            method:      "POST",
+            credentials: "include",
+            headers:     { "Content-Type": "application/json" },
+            body:        JSON.stringify({ body }),
+        });
+        if (!res.ok) throw new Error();
+        input.value = "";
+        // Reload comments section
+        const list = document.getElementById(`comments-list-${entryId}`);
+        const existing = list.querySelectorAll(".comment-item");
+        const fakeBtn = { textContent: "" };
+        await toggleComments(entryId, null); // close
+        await toggleComments(entryId, fakeBtn); // reopen + reload
+    } catch {} finally {
+        input.disabled = false;
+        input.focus();
+    }
+}
+
+async function deleteComment(commentId, entryId) {
+    try {
+        await fetch(`${API_BASE}/api/comments/${commentId}`, {
+            method: "DELETE", credentials: "include"
+        });
+        const el = document.getElementById(`comment-${commentId}`);
+        if (el) el.remove();
+    } catch {}
+}
+
+// ── Entry modal ───────────────────────────────────────────────────────────────
+function openNewEntryModal() {
+    editingEntry = null;
+    document.getElementById("entryModalTitle").textContent = "New Entry";
+    document.getElementById("entryType").value  = "log";
+    document.getElementById("entryTitle").value = "";
+    document.getElementById("entryBody").value  = "";
+    document.getElementById("entrySubmitBtn").disabled   = false;
+    document.getElementById("entryModal").classList.add("open");
+    setTimeout(() => document.getElementById("entryTitle").focus(), 50);
+}
+
+async function openEditModal(entryId) {
+    const entry = allEntries.find(e => e.id === entryId);
+    if (!entry) return;
+    editingEntry = entry;
+    document.getElementById("entryModalTitle").textContent = "Edit Entry";
+    document.getElementById("entryType").value  = entry.type;
+    document.getElementById("entryTitle").value = entry.title;
+    document.getElementById("entryBody").value  = entry.body || "";
+    document.getElementById("entrySubmitBtn").disabled   = false;
+    document.getElementById("entryModal").classList.add("open");
+    setTimeout(() => document.getElementById("entryTitle").focus(), 50);
+}
+
+function closeEntryModal() {
+    document.getElementById("entryModal").classList.remove("open");
+    editingEntry = null;
+}
+
+async function submitEntry() {
+    const title = document.getElementById("entryTitle").value.trim();
+    const type  = document.getElementById("entryType").value;
+    const body  = document.getElementById("entryBody").value;
+    if (!title) { document.getElementById("entryTitle").focus(); return; }
+
+    const submitBtn = document.getElementById("entrySubmitBtn");
+    submitBtn.disabled = true;
+
+    try {
+        let entryId;
+
+        if (editingEntry) {
+            const res = await fetch(`${API_BASE}/api/logs/${editingEntry.id}`, {
+                method:      "PATCH",
+                credentials: "include",
+                headers:     { "Content-Type": "application/json" },
+                body:        JSON.stringify({ title, type, body }),
+            });
+            if (!res.ok) throw new Error("Save failed");
+            entryId = editingEntry.id;
+        } else {
+            const res = await fetch(`${API_BASE}/api/logs`, {
+                method:      "POST",
+                credentials: "include",
+                headers:     { "Content-Type": "application/json" },
+                body:        JSON.stringify({ project_id: currentProject.id, type, title, body }),
+            });
+            if (!res.ok) throw new Error("Create failed");
+            const data = await res.json();
+            entryId = data.entry.id;
         }
-    })();
 
-    async function handleLogout() {
-        await fetch(`${API_BASE}/api/logout`, { method: "POST", credentials: "include" });
-        window.location.href = "login.html";
+        closeEntryModal();
+        await refreshEntries();
+    } catch {
+        submitBtn.disabled = false;
     }
+}
 
-    renderProjects();
+// ── Delete entry ──────────────────────────────────────────────────────────────
+function openDeleteModal(entryId) {
+    pendingDelete = entryId;
+    document.getElementById("deleteModal").classList.add("open");
+}
+function closeDeleteModal() {
+    document.getElementById("deleteModal").classList.remove("open");
+    pendingDelete = null;
+}
+async function confirmDelete() {
+    if (!pendingDelete) return;
+    try {
+        await fetch(`${API_BASE}/api/logs/${pendingDelete}`, {
+            method: "DELETE", credentials: "include",
+        });
+        closeDeleteModal();
+        await refreshEntries();
+    } catch { closeDeleteModal(); }
+}
+
+// ── Keyboard shortcuts ────────────────────────────────────────────────────────
+document.addEventListener("keydown", e => {
+    if (e.key === "Escape") {
+        closeEntryModal();
+        closeDeleteModal();
+    }
+});
+
+// ── Logout ────────────────────────────────────────────────────────────────────
+async function handleLogout() {
+    await fetch(`${API_BASE}/api/logout`, { method: "POST", credentials: "include" });
+    location.href = "login.html";
+}
+
+renderGrid();
 </script>
 </body>
 </html>
