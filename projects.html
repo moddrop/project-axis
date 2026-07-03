@@ -146,6 +146,7 @@
         .progress-fill.green  { background: var(--green); }
         .progress-fill.amber  { background: var(--accent2); }
         .progress-fill.teal   { background: #1d7a6b; }
+        .progress-fill.danger { background: var(--danger); }
         .project-footer { display: flex; align-items: center; justify-content: space-between; }
         .avatars { display: flex; }
         .av { width: 24px; height: 24px; border-radius: 50%; background: var(--accent); border: 2px solid var(--surface); display: grid; place-items: center; font-size: 9px; font-weight: 700; font-family: 'Rubik', sans-serif; color: #fff; margin-right: -6px; box-shadow: 1px 1px 0 rgba(28,27,25,0.1); }
@@ -169,16 +170,20 @@
         .log-search:focus { border-color: var(--accent); }
         @media (max-width: 640px) { .log-search { width: 130px; } }
 
-        /* ── Project card delete button ── */
-        .card-delete-btn {
-            position: absolute; top: 10px; right: 10px;
+        /* ── Project card action buttons ── */
+        .card-delete-btn, .card-edit-btn {
+            position: absolute; top: 10px;
             background: transparent; border: 1px solid transparent;
             color: transparent; font-size: 11px; padding: 3px 7px;
             border-radius: 2px; cursor: pointer; z-index: 1;
             font-family: 'Geist Mono', monospace; transition: all .15s;
         }
-        .project-card:hover .card-delete-btn { color: var(--muted); border-color: var(--border-lit); }
+        .card-delete-btn { right: 10px; }
+        .card-edit-btn   { right: 46px; }
+        .project-card:hover .card-delete-btn,
+        .project-card:hover .card-edit-btn { color: var(--muted); border-color: var(--border-lit); }
         .card-delete-btn:hover { color: var(--danger) !important; border-color: var(--danger) !important; }
+        .card-edit-btn:hover   { color: var(--accent) !important; border-color: var(--accent) !important; }
 
         /* ── Log view ── */
         #logView { display: none; }
@@ -669,9 +674,15 @@
                 </select>
             </div>
         </div>
-        <div class="form-field">
-            <label class="form-label">Progress (0–100)</label>
-            <input class="form-input" id="newProjProgress" type="number" min="0" max="100" value="0">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div class="form-field">
+                <label class="form-label">Start Date</label>
+                <input class="form-input" id="newProjStart" type="date">
+            </div>
+            <div class="form-field">
+                <label class="form-label">Deadline</label>
+                <input class="form-input" id="newProjEnd" type="date">
+            </div>
         </div>
         <div class="modal-actions">
             <button class="btn-secondary" onclick="closeNewProjectModal()">Cancel</button>
@@ -690,6 +701,47 @@
             <button class="btn-secondary" onclick="closeDeleteProjectModal()">Cancel</button>
             <button class="btn-danger" onclick="confirmDeleteProject()">Delete Everything</button>
         </div>
+    </div>
+</div>
+
+<!-- Edit project modal -->
+<div class="modal-overlay" id="editProjectModal">
+    <div class="modal" style="width:440px">
+        <div class="modal-title">Edit Project</div>
+        <div class="form-field">
+            <label class="form-label">Project Name</label>
+            <input class="form-input" id="editProjName" type="text" autocomplete="off">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div class="form-field">
+                <label class="form-label">Start Date</label>
+                <input class="form-input" id="editProjStart" type="date">
+            </div>
+            <div class="form-field">
+                <label class="form-label">Deadline</label>
+                <input class="form-input" id="editProjEnd" type="date">
+            </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div class="form-field">
+                <label class="form-label">Status</label>
+                <select class="form-select" id="editProjStatus">
+                    <option value="active">Active</option>
+                    <option value="review">Review</option>
+                    <option value="complete">Complete</option>
+                    <option value="paused">Paused</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label class="form-label">Lead</label>
+                <input class="form-input" id="editProjLead" type="text">
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button class="btn-secondary" onclick="closeEditProjectModal()">Cancel</button>
+            <button class="btn-primary" id="editProjSubmitBtn" onclick="submitEditProject()">Save Changes</button>
+        </div>
+        <div id="editProjError" style="display:none;margin-top:12px;font-size:11px;color:var(--danger);letter-spacing:.04em;"></div>
     </div>
 </div>
 
@@ -744,6 +796,27 @@ const TYPE_CONFIG = {
     milestone: { label: "Milestone", icon: "★" },
     issue:     { label: "Issue",     icon: "⚠" },
 };
+
+// ── Progress label ────────────────────────────────────────────────────────────
+function progressLabel(p) {
+    if (p.start_date && p.end_date) {
+        const now = Date.now();
+        if (now < p.start_date) {
+            const d = Math.ceil((p.start_date - now) / 86400000);
+            return `Starts in ${d}d`;
+        }
+        const d = p.days_remaining ?? Math.ceil((p.end_date - now) / 86400000);
+        if (d < 0)  return `${Math.abs(d)}d overdue`;
+        if (d === 0) return "Due today";
+        return `${d}d remaining`;
+    }
+    const s = p._stats;
+    if (!s || (s.milestones === 0 && s.total_issues === 0)) return "Progress";
+    const parts = [];
+    if (s.milestones > 0)   parts.push(`${s.milestones} milestone${s.milestones !== 1 ? "s" : ""}`);
+    if (s.total_issues > 0) parts.push(`${s.resolved_issues}/${s.total_issues} issues fixed`);
+    return parts.join(" · ");
+}
 
 // ── XSS guard ────────────────────────────────────────────────────────────────
 function esc(s) {
@@ -842,8 +915,12 @@ function renderGrid() {
         return;
     }
 
-    document.getElementById("projectsGrid").innerHTML = filtered.map(p => `
+    document.getElementById("projectsGrid").innerHTML = filtered.map(p => {
+        const overdue   = p.days_remaining !== null && p.days_remaining !== undefined && p.days_remaining < 0;
+        const barColor  = overdue ? "danger" : esc(p.color);
+        return `
         <div class="project-card ${esc(p.color)}" onclick="showLog('${esc(p.id)}')">
+            <button class="card-edit-btn"   onclick="event.stopPropagation();openEditProjectModal('${esc(p.id)}')">✎</button>
             <button class="card-delete-btn" onclick="event.stopPropagation();openDeleteProjectModal('${esc(p.id)}','${esc(p.name)}')">✕</button>
             <div class="project-top">
                 <div class="project-icon">${esc(p.icon)}</div>
@@ -858,9 +935,9 @@ function renderGrid() {
                 <div class="meta-item">PROGRESS <span>${p.progress}%</span></div>
             </div>
             <div class="progress-wrap">
-                <div class="progress-label"><span>Progress</span><span>${p.progress}%</span></div>
+                <div class="progress-label"><span>${progressLabel(p)}</span><span>${p.progress}%</span></div>
                 <div class="progress-bar">
-                    <div class="progress-fill ${esc(p.color)}" style="width:${p.progress}%"></div>
+                    <div class="progress-fill ${barColor}" style="width:${p.progress}%"></div>
                 </div>
             </div>
             <div class="project-footer">
@@ -868,7 +945,8 @@ function renderGrid() {
                 <div class="project-updated">Added ${timeAgo(p.created_at)}</div>
             </div>
         </div>
-    `).join("");
+    `;
+    }).join("");
 }
 
 // ── Log view ──────────────────────────────────────────────────────────────────
@@ -893,7 +971,7 @@ async function showLog(projectId) {
             <div class="log-project-sub">${esc(currentProject.tag_label)} · LEAD: ${esc(currentProject.lead || "—")}</div>
         </div>
         <div class="log-project-progress">
-            <div class="progress-label"><span>Progress</span><span>${currentProject.progress}%</span></div>
+            <div class="progress-label"><span>${progressLabel(currentProject)}</span><span>${currentProject.progress}%</span></div>
             <div class="progress-bar">
                 <div class="progress-fill ${esc(currentProject.color)}" style="width:${currentProject.progress}%"></div>
             </div>
@@ -1201,7 +1279,7 @@ async function confirmDelete() {
 
 // ── New project modal ─────────────────────────────────────────────────────────
 function openNewProjectModal() {
-    ["newProjName","newProjDesc","newProjIcon","newProjLead"].forEach(id => document.getElementById(id).value = "");
+    ["newProjName","newProjDesc","newProjIcon","newProjLead","newProjStart","newProjEnd"].forEach(id => document.getElementById(id).value = "");
     document.getElementById("newProjColor").value    = "orange";
     document.getElementById("newProjStatus").value   = "active";
     document.getElementById("newProjTag").value      = "web";
@@ -1230,6 +1308,11 @@ async function submitNewProject() {
 
     if (!name) { document.getElementById("newProjName").focus(); return; }
 
+    const startStr = document.getElementById("newProjStart").value;
+    const endStr   = document.getElementById("newProjEnd").value;
+    const start_date = startStr ? new Date(startStr).getTime() : null;
+    const end_date   = endStr   ? new Date(endStr).getTime()   : null;
+
     const submitBtn = document.getElementById("newProjSubmitBtn");
     const errorEl   = document.getElementById("newProjError");
     submitBtn.disabled = true;
@@ -1239,7 +1322,7 @@ async function submitNewProject() {
         const res = await fetch(`${API_BASE}/api/projects`, {
             method: "POST", credentials: "include",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name, description: desc, icon, color, status, progress, tag, tag_label: tagLabel, lead }),
+            body: JSON.stringify({ name, description: desc, icon, color, status, progress, tag, tag_label: tagLabel, lead, start_date, end_date }),
         });
         if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || "Failed");
         closeNewProjectModal();
@@ -1275,6 +1358,61 @@ async function confirmDeleteProject() {
     } catch { closeDeleteProjectModal(); }
 }
 
+// ── Edit project modal ────────────────────────────────────────────────────────
+let editingProject = null;
+
+function openEditProjectModal(projectId) {
+    editingProject = projectId;
+    const p = PROJECTS.find(p => p.id === projectId);
+    if (!p) return;
+    document.getElementById("editProjName").value   = p.name;
+    document.getElementById("editProjStatus").value = p.status;
+    document.getElementById("editProjLead").value   = p.lead || "";
+    document.getElementById("editProjStart").value  = p.start_date ? new Date(p.start_date).toISOString().slice(0, 10) : "";
+    document.getElementById("editProjEnd").value    = p.end_date   ? new Date(p.end_date).toISOString().slice(0, 10)   : "";
+    document.getElementById("editProjError").style.display  = "none";
+    document.getElementById("editProjSubmitBtn").disabled   = false;
+    document.getElementById("editProjectModal").classList.add("open");
+    setTimeout(() => document.getElementById("editProjName").focus(), 50);
+}
+
+function closeEditProjectModal() {
+    document.getElementById("editProjectModal").classList.remove("open");
+    editingProject = null;
+}
+
+async function submitEditProject() {
+    const name      = document.getElementById("editProjName").value.trim();
+    const status    = document.getElementById("editProjStatus").value;
+    const lead      = document.getElementById("editProjLead").value.trim();
+    const startStr  = document.getElementById("editProjStart").value;
+    const endStr    = document.getElementById("editProjEnd").value;
+    if (!name) { document.getElementById("editProjName").focus(); return; }
+
+    const start_date = startStr ? new Date(startStr).getTime() : null;
+    const end_date   = endStr   ? new Date(endStr).getTime()   : null;
+
+    const submitBtn = document.getElementById("editProjSubmitBtn");
+    const errorEl   = document.getElementById("editProjError");
+    submitBtn.disabled = true;
+    errorEl.style.display = "none";
+
+    try {
+        const res = await fetch(`${API_BASE}/api/projects/${editingProject}`, {
+            method: "PATCH", credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, status, lead, start_date, end_date }),
+        });
+        if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || "Failed");
+        closeEditProjectModal();
+        await fetchProjects();
+    } catch (e) {
+        errorEl.textContent = e.message;
+        errorEl.style.display = "block";
+        submitBtn.disabled = false;
+    }
+}
+
 // ── Keyboard shortcuts ────────────────────────────────────────────────────────
 document.addEventListener("keydown", e => {
     if (e.key === "Escape") {
@@ -1282,6 +1420,7 @@ document.addEventListener("keydown", e => {
         closeDeleteModal();
         closeNewProjectModal();
         closeDeleteProjectModal();
+        closeEditProjectModal();
     }
 });
 
