@@ -157,6 +157,28 @@
         .project-tag.env    { background: rgba(45,140,78,.08); color: var(--green); border: 1px solid rgba(45,140,78,.2); }
         .project-tag.energy { background: rgba(240,168,0,.1); color: var(--yellow); border: 1px solid rgba(240,168,0,.2); }
         .project-tag.web    { background: rgba(28,27,25,.05); color: var(--muted); border: 1px solid var(--border-lit); }
+        .project-tag.other  { background: rgba(28,27,25,.05); color: var(--muted); border: 1px solid var(--border-lit); }
+
+        /* ── Search within log ── */
+        .log-search {
+            background: var(--surface); border: 1px solid var(--border-lit);
+            padding: 7px 12px; border-radius: 2px;
+            font-family: 'Geist Mono', monospace; font-size: 11px; color: var(--text);
+            outline: none; width: 180px; transition: border-color .15s;
+        }
+        .log-search:focus { border-color: var(--accent); }
+        @media (max-width: 640px) { .log-search { width: 130px; } }
+
+        /* ── Project card delete button ── */
+        .card-delete-btn {
+            position: absolute; top: 10px; right: 10px;
+            background: transparent; border: 1px solid transparent;
+            color: transparent; font-size: 11px; padding: 3px 7px;
+            border-radius: 2px; cursor: pointer; z-index: 1;
+            font-family: 'Geist Mono', monospace; transition: all .15s;
+        }
+        .project-card:hover .card-delete-btn { color: var(--muted); border-color: var(--border-lit); }
+        .card-delete-btn:hover { color: var(--danger) !important; border-color: var(--danger) !important; }
 
         /* ── Log view ── */
         #logView { display: none; }
@@ -434,8 +456,15 @@
         }
 
         @media (max-width: 480px) {
+            .topbar { padding: 0 10px; }
             .stats-row { grid-template-columns: 1fr 1fr; }
             .user-pill span:not(.user-avatar) { display: none; }
+            .logout-btn { padding: 5px 8px; font-size: 10px; }
+            .page-header h2 { font-size: 18px; }
+            main { padding: 14px 10px; }
+            .log-project-bar { flex-wrap: wrap; }
+            .log-project-progress { display: none; }
+            .entry-card { padding: 16px; }
         }
     </style>
 </head>
@@ -494,19 +523,19 @@
 
             <div class="stats-row">
                 <div class="stat-mini orange"><div>
-                    <div class="stat-mini-val orange">4</div>
+                    <div class="stat-mini-val orange" id="statTotal">—</div>
                     <div class="stat-mini-label">Total Projects</div>
                 </div></div>
                 <div class="stat-mini green"><div>
-                    <div class="stat-mini-val green">2</div>
+                    <div class="stat-mini-val green" id="statActive">—</div>
                     <div class="stat-mini-label">Active</div>
                 </div></div>
                 <div class="stat-mini amber"><div>
-                    <div class="stat-mini-val amber">1</div>
+                    <div class="stat-mini-val amber" id="statReview">—</div>
                     <div class="stat-mini-label">In Review</div>
                 </div></div>
                 <div class="stat-mini red"><div>
-                    <div class="stat-mini-val red">1</div>
+                    <div class="stat-mini-val red" id="statComplete">—</div>
                     <div class="stat-mini-label">Complete</div>
                 </div></div>
             </div>
@@ -518,6 +547,7 @@
                     <button class="filter-btn" onclick="setFilter(this,'review')">Review</button>
                     <button class="filter-btn" onclick="setFilter(this,'complete')">Complete</button>
                 </div>
+                <button class="btn-new" onclick="openNewProjectModal()">+ New Project</button>
             </div>
 
             <div class="projects-grid" id="projectsGrid"></div>
@@ -545,6 +575,7 @@
                     <button class="filter-btn" onclick="setLogFilter(this,'milestone')">Milestone</button>
                     <button class="filter-btn" onclick="setLogFilter(this,'issue')">Issue</button>
                 </div>
+                <input class="log-search" id="logSearch" type="text" placeholder="Search entries…" oninput="renderEntries()">
             </div>
 
             <div id="entriesList"></div>
@@ -580,6 +611,82 @@
             <button class="btn-primary" id="entrySubmitBtn" onclick="submitEntry()">Save Entry</button>
         </div>
         <div id="entryError" style="display:none;margin-top:12px;font-size:11px;color:var(--danger);letter-spacing:.04em;"></div>
+    </div>
+</div>
+
+<!-- New project modal -->
+<div class="modal-overlay" id="newProjectModal">
+    <div class="modal">
+        <div class="modal-title">New Project</div>
+        <div class="form-field">
+            <label class="form-label">Project Name</label>
+            <input class="form-input" id="newProjName" type="text" placeholder="e.g. SoundView Smart Glasses" autocomplete="off">
+        </div>
+        <div class="form-field">
+            <label class="form-label">Description</label>
+            <textarea class="form-textarea" id="newProjDesc" placeholder="What is this project about?" style="min-height:72px"></textarea>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div class="form-field">
+                <label class="form-label">Icon (emoji)</label>
+                <input class="form-input" id="newProjIcon" type="text" placeholder="📁" maxlength="4">
+            </div>
+            <div class="form-field">
+                <label class="form-label">Lead</label>
+                <input class="form-input" id="newProjLead" type="text" placeholder="Name">
+            </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+            <div class="form-field">
+                <label class="form-label">Color</label>
+                <select class="form-select" id="newProjColor">
+                    <option value="orange">Orange</option>
+                    <option value="green">Green</option>
+                    <option value="amber">Amber</option>
+                    <option value="teal">Teal</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label class="form-label">Status</label>
+                <select class="form-select" id="newProjStatus">
+                    <option value="active">Active</option>
+                    <option value="review">Review</option>
+                    <option value="complete">Complete</option>
+                    <option value="paused">Paused</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label class="form-label">Category</label>
+                <select class="form-select" id="newProjTag">
+                    <option value="ai">AI / Vision</option>
+                    <option value="env">Environment</option>
+                    <option value="energy">Energy</option>
+                    <option value="web">Web</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-field">
+            <label class="form-label">Progress (0–100)</label>
+            <input class="form-input" id="newProjProgress" type="number" min="0" max="100" value="0">
+        </div>
+        <div class="modal-actions">
+            <button class="btn-secondary" onclick="closeNewProjectModal()">Cancel</button>
+            <button class="btn-primary" id="newProjSubmitBtn" onclick="submitNewProject()">Create Project</button>
+        </div>
+        <div id="newProjError" style="display:none;margin-top:12px;font-size:11px;color:var(--danger);letter-spacing:.04em;"></div>
+    </div>
+</div>
+
+<!-- Delete project confirm modal -->
+<div class="modal-overlay" id="deleteProjectModal">
+    <div class="modal" style="width:400px">
+        <div class="modal-title">Delete Project?</div>
+        <p id="deleteProjectMsg" style="font-size:12px;color:var(--muted);line-height:1.8;margin-bottom:24px"></p>
+        <div class="modal-actions">
+            <button class="btn-secondary" onclick="closeDeleteProjectModal()">Cancel</button>
+            <button class="btn-danger" onclick="confirmDeleteProject()">Delete Everything</button>
+        </div>
     </div>
 </div>
 
@@ -619,35 +726,14 @@ const API_BASE = "https://auth.projectaxis.net";
     );
 })();
 
-let currentUser   = null;
-let currentProject = null;
-let allEntries    = [];
-let logFilter     = "all";
-let editingEntry  = null;
-let pendingDelete = null;
-
-const PROJECTS = [
-    { id: "soundview",   color: "orange", icon: "👓", tag: "ai",     tagLabel: "AI / Vision",
-      status: "active",   name: "SoundView Smart Glasses",
-      desc: "Wearable camera + ESP32-S3 Sense that captures the world, sends frames to OpenAI Vision API over WiFi, and reads a description aloud through a 13MM speaker.",
-      lead: "Caleb", members: ["CE","BZ","RM"], updated: "Today", progress: 65, progressColor: "orange",
-      tasks: "3/4 phases", due: "2026", budget: "฿3,600" },
-    { id: "air-quality", color: "green",  icon: "🌫️", tag: "env",    tagLabel: "Environment",
-      status: "review",   name: "Comparing Air Quality",
-      desc: "Arduino Nano + MQ135 sensor detecting CO₂ and sulfur dioxide in real time with an I2C display and danger alerts.",
-      lead: "Binbin", members: ["BZ","CE"], updated: "2 days ago", progress: 90, progressColor: "green",
-      tasks: "Completed build", due: "Jun 2026", budget: "< ฿500" },
-    { id: "wind-energy", color: "amber",  icon: "⚡", tag: "energy", tagLabel: "Energy",
-      status: "complete", name: "Wind Energy vs Sun Energy",
-      desc: "Compared wind turbine and solar panel output by powering LEDs and measuring voltage, current, and efficiency under real conditions.",
-      lead: "Raver", members: ["RM","CE"], updated: "Last week", progress: 100, progressColor: "amber",
-      tasks: "Documented", due: "May 2026", budget: "< ฿500" },
-    { id: "website",     color: "teal",   icon: "🌐", tag: "web",    tagLabel: "Web",
-      status: "active",   name: "Project Axis Website",
-      desc: "Public-facing site documenting all three science fair projects — team bios, build logs, gallery, donor page, and internal dashboard.",
-      lead: "Binbin", members: ["BZ","CE","RM"], updated: "Today", progress: 80, progressColor: "teal",
-      tasks: "Ongoing", due: "Ongoing", budget: "฿0" },
-];
+let currentUser        = null;
+let currentProject     = null;
+let allEntries         = [];
+let logFilter          = "all";
+let editingEntry       = null;
+let pendingDelete      = null;
+let pendingDeleteProject = null;
+let PROJECTS           = [];
 
 const TYPE_CONFIG = {
     log:       { label: "Log",       icon: "◌" },
@@ -671,6 +757,37 @@ function fmtDate(ts) {
     });
 }
 
+function timeAgo(ts) {
+    const s = Math.floor((Date.now() - ts) / 1000);
+    if (s < 60)  return "just now";
+    const m = Math.floor(s / 60);
+    if (m < 60)  return `${m}m ago`;
+    const h = Math.floor(m / 60);
+    if (h < 24)  return `${h}h ago`;
+    const d = Math.floor(h / 24);
+    if (d < 30)  return `${d}d ago`;
+    return new Date(ts).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+}
+
+// ── Projects (dynamic) ────────────────────────────────────────────────────────
+async function fetchProjects() {
+    try {
+        const res = await fetch(`${API_BASE}/api/projects`, { credentials: "include" });
+        if (!res.ok) return;
+        const { projects } = await res.json();
+        PROJECTS = projects || [];
+        updateProjectStats();
+        renderGrid();
+    } catch {}
+}
+
+function updateProjectStats() {
+    document.getElementById("statTotal").textContent    = PROJECTS.length;
+    document.getElementById("statActive").textContent   = PROJECTS.filter(p => p.status === "active").length;
+    document.getElementById("statReview").textContent   = PROJECTS.filter(p => p.status === "review").length;
+    document.getElementById("statComplete").textContent = PROJECTS.filter(p => p.status === "complete").length;
+}
+
 // ── Auth init ─────────────────────────────────────────────────────────────────
 (async function init() {
     try {
@@ -690,7 +807,7 @@ function fmtDate(ts) {
 
         document.getElementById("authGate").classList.add("hidden");
         document.body.classList.add("visible");
-        renderGrid();
+        await fetchProjects();
 
         const autoProject = new URLSearchParams(location.search).get("project");
         if (autoProject) await showLog(autoProject);
@@ -712,30 +829,40 @@ function renderGrid() {
         ? PROJECTS
         : PROJECTS.filter(p => p.status === currentFilter);
 
+    if (filtered.length === 0) {
+        document.getElementById("projectsGrid").innerHTML = `
+            <div class="empty-state" style="grid-column:1/-1">
+                <div class="empty-icon">📋</div>
+                <p>${PROJECTS.length === 0 ? "No projects yet." : `No ${currentFilter} projects.`}</p>
+                ${PROJECTS.length === 0 ? `<button class="btn-new" onclick="openNewProjectModal()">+ Create First Project</button>` : ""}
+            </div>`;
+        return;
+    }
+
     document.getElementById("projectsGrid").innerHTML = filtered.map(p => `
-        <div class="project-card ${p.color}" onclick="showLog('${p.id}')">
+        <div class="project-card ${esc(p.color)}" onclick="showLog('${esc(p.id)}')">
+            <button class="card-delete-btn" onclick="event.stopPropagation();openDeleteProjectModal('${esc(p.id)}','${esc(p.name)}')">✕</button>
             <div class="project-top">
-                <div class="project-icon">${p.icon}</div>
-                <div class="project-status ${p.status}">${p.status.toUpperCase()}</div>
+                <div class="project-icon">${esc(p.icon)}</div>
+                <div class="project-status ${esc(p.status)}">${p.status.toUpperCase()}</div>
             </div>
-            <div class="project-tag ${p.tag}">${p.tagLabel}</div>
+            <div class="project-tag ${esc(p.tag)}">${esc(p.tag_label)}</div>
             <div class="project-name">${esc(p.name)}</div>
-            <div class="project-desc">${esc(p.desc)}</div>
+            <div class="project-desc">${esc(p.description)}</div>
             <div class="project-meta">
-                <div class="meta-item">LEAD <span>${esc(p.lead)}</span></div>
-                <div class="meta-item">TASKS <span>${esc(p.tasks)}</span></div>
-                <div class="meta-item">DUE <span>${esc(p.due)}</span></div>
-                <div class="meta-item">BUDGET <span>${esc(p.budget)}</span></div>
+                <div class="meta-item">LEAD <span>${esc(p.lead || "—")}</span></div>
+                <div class="meta-item">STATUS <span>${esc(p.status)}</span></div>
+                <div class="meta-item">PROGRESS <span>${p.progress}%</span></div>
             </div>
             <div class="progress-wrap">
                 <div class="progress-label"><span>Progress</span><span>${p.progress}%</span></div>
                 <div class="progress-bar">
-                    <div class="progress-fill ${p.progressColor}" style="width:${p.progress}%"></div>
+                    <div class="progress-fill ${esc(p.color)}" style="width:${p.progress}%"></div>
                 </div>
             </div>
             <div class="project-footer">
-                <div class="avatars">${p.members.map(m=>`<div class="av">${esc(m)}</div>`).join("")}</div>
-                <div class="project-updated">Updated ${esc(p.updated)}</div>
+                <div class="avatars"><div class="av">${esc((p.lead || "?").charAt(0).toUpperCase())}</div></div>
+                <div class="project-updated">Added ${timeAgo(p.created_at)}</div>
             </div>
         </div>
     `).join("");
@@ -757,18 +884,18 @@ async function showLog(projectId) {
 
     // Render project bar
     document.getElementById("logProjectBar").innerHTML = `
-        <div class="log-project-icon">${currentProject.icon}</div>
+        <div class="log-project-icon">${esc(currentProject.icon)}</div>
         <div class="log-project-info">
             <div class="log-project-name">${esc(currentProject.name)}</div>
-            <div class="log-project-sub">${esc(currentProject.tagLabel)} · LEAD: ${esc(currentProject.lead)}</div>
+            <div class="log-project-sub">${esc(currentProject.tag_label)} · LEAD: ${esc(currentProject.lead || "—")}</div>
         </div>
         <div class="log-project-progress">
             <div class="progress-label"><span>Progress</span><span>${currentProject.progress}%</span></div>
             <div class="progress-bar">
-                <div class="progress-fill ${currentProject.progressColor}" style="width:${currentProject.progress}%"></div>
+                <div class="progress-fill ${esc(currentProject.color)}" style="width:${currentProject.progress}%"></div>
             </div>
         </div>
-        <div class="project-status ${currentProject.status}" style="flex-shrink:0">${currentProject.status.toUpperCase()}</div>
+        <div class="project-status ${esc(currentProject.status)}" style="flex-shrink:0">${currentProject.status.toUpperCase()}</div>
     `;
 
     await refreshEntries();
@@ -807,9 +934,11 @@ async function refreshEntries() {
 }
 
 function renderEntries() {
-    const filtered = logFilter === "all"
-        ? allEntries
-        : allEntries.filter(e => e.type === logFilter);
+    const search = (document.getElementById("logSearch")?.value || "").trim().toLowerCase();
+    let filtered = logFilter === "all" ? allEntries : allEntries.filter(e => e.type === logFilter);
+    if (search) filtered = filtered.filter(e =>
+        e.title.toLowerCase().includes(search) || (e.body || "").toLowerCase().includes(search)
+    );
 
     if (filtered.length === 0) {
         const msg = allEntries.length === 0
@@ -1051,11 +1180,89 @@ async function confirmDelete() {
     } catch { closeDeleteModal(); }
 }
 
+// ── New project modal ─────────────────────────────────────────────────────────
+function openNewProjectModal() {
+    ["newProjName","newProjDesc","newProjIcon","newProjLead"].forEach(id => document.getElementById(id).value = "");
+    document.getElementById("newProjColor").value    = "orange";
+    document.getElementById("newProjStatus").value   = "active";
+    document.getElementById("newProjTag").value      = "web";
+    document.getElementById("newProjProgress").value = "0";
+    document.getElementById("newProjError").style.display = "none";
+    document.getElementById("newProjSubmitBtn").disabled  = false;
+    document.getElementById("newProjectModal").classList.add("open");
+    setTimeout(() => document.getElementById("newProjName").focus(), 50);
+}
+
+function closeNewProjectModal() {
+    document.getElementById("newProjectModal").classList.remove("open");
+}
+
+async function submitNewProject() {
+    const name     = document.getElementById("newProjName").value.trim();
+    const desc     = document.getElementById("newProjDesc").value.trim();
+    const icon     = document.getElementById("newProjIcon").value.trim() || "📁";
+    const lead     = document.getElementById("newProjLead").value.trim();
+    const color    = document.getElementById("newProjColor").value;
+    const status   = document.getElementById("newProjStatus").value;
+    const tagEl    = document.getElementById("newProjTag");
+    const tag      = tagEl.value;
+    const tagLabel = tagEl.options[tagEl.selectedIndex].text;
+    const progress = Math.min(Math.max(parseInt(document.getElementById("newProjProgress").value) || 0, 0), 100);
+
+    if (!name) { document.getElementById("newProjName").focus(); return; }
+
+    const submitBtn = document.getElementById("newProjSubmitBtn");
+    const errorEl   = document.getElementById("newProjError");
+    submitBtn.disabled = true;
+    errorEl.style.display = "none";
+
+    try {
+        const res = await fetch(`${API_BASE}/api/projects`, {
+            method: "POST", credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, description: desc, icon, color, status, progress, tag, tag_label: tagLabel, lead }),
+        });
+        if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || "Failed");
+        closeNewProjectModal();
+        await fetchProjects();
+    } catch (e) {
+        errorEl.textContent = e.message;
+        errorEl.style.display = "block";
+        submitBtn.disabled = false;
+    }
+}
+
+// ── Delete project ────────────────────────────────────────────────────────────
+function openDeleteProjectModal(projectId, projectName) {
+    pendingDeleteProject = projectId;
+    document.getElementById("deleteProjectMsg").textContent =
+        `This will permanently delete "${projectName}" and all its log entries and comments. This cannot be undone.`;
+    document.getElementById("deleteProjectModal").classList.add("open");
+}
+
+function closeDeleteProjectModal() {
+    document.getElementById("deleteProjectModal").classList.remove("open");
+    pendingDeleteProject = null;
+}
+
+async function confirmDeleteProject() {
+    if (!pendingDeleteProject) return;
+    try {
+        await fetch(`${API_BASE}/api/projects/${pendingDeleteProject}`, {
+            method: "DELETE", credentials: "include"
+        });
+        closeDeleteProjectModal();
+        await fetchProjects();
+    } catch { closeDeleteProjectModal(); }
+}
+
 // ── Keyboard shortcuts ────────────────────────────────────────────────────────
 document.addEventListener("keydown", e => {
     if (e.key === "Escape") {
         closeEntryModal();
         closeDeleteModal();
+        closeNewProjectModal();
+        closeDeleteProjectModal();
     }
 });
 

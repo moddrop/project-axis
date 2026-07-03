@@ -183,7 +183,7 @@
             border-bottom: 1px solid var(--border-lit);
             background: var(--surface2);
         }
-        .df-btn { background: transparent; border: 1px solid var(--border-lit); color: var(--muted); font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: .06em; padding: 4px 10px; border-radius: 2px; cursor: pointer; transition: all .15s; }
+        .df-btn { background: transparent; border: 1px solid var(--border-lit); color: var(--muted); font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: .06em; padding: 7px 12px; border-radius: 2px; cursor: pointer; transition: all .15s; }
         .df-btn:hover { border-color: var(--accent); color: var(--accent); }
         .df-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(229,92,10,.07); }
 
@@ -287,6 +287,20 @@
             .page-header h2 { font-size: 20px; }
             .bell-dropdown { right: -40px; width: 270px; }
             .accordion { max-height: none; }
+        }
+
+        /* ── Small phone (≤480px) ── */
+        @media (max-width: 480px) {
+            .topbar { padding: 0 10px; gap: 6px; }
+            .user-avatar { width: 26px; height: 26px; font-size: 10px; }
+            .logout-btn { padding: 5px 8px; font-size: 10px; letter-spacing: 0; }
+            .bell-btn, .chat-btn { width: 30px; height: 30px; font-size: 13px; }
+            .stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+            .stat-value { font-size: 26px; }
+            .page-header h2 { font-size: 18px; }
+            .bell-dropdown { right: -60px; width: 260px; }
+            main { padding: 16px 10px; }
+            .secret-panel { padding: 20px; }
         }
 
         /* ── DM chat button ── */
@@ -616,12 +630,17 @@
     })();
 
     const TYPE_ICONS = { log: "◌", update: "◉", milestone: "★", issue: "⚠" };
-    const PROJECT_META = {
-        "soundview":   { name: "SoundView Smart Glasses", icon: "👓" },
-        "air-quality": { name: "Comparing Air Quality",   icon: "🌫️" },
-        "wind-energy": { name: "Wind Energy vs Sun",      icon: "⚡" },
-        "website":     { name: "Project Axis Website",    icon: "🌐" },
-    };
+    let PROJECT_META = {};
+
+    async function loadProjects() {
+        try {
+            const res = await fetch(`${API_BASE}/api/projects`, { credentials: "include" });
+            if (!res.ok) return;
+            const { projects } = await res.json();
+            PROJECT_META = {};
+            for (const p of (projects || [])) PROJECT_META[p.id] = { name: p.name, icon: p.icon };
+        } catch {}
+    }
 
     let allEntries = [];
     let activeDateFilter = "all";
@@ -663,6 +682,7 @@
         document.getElementById("bellDropdown").classList.remove("open");
         renderBell(allEntries, []);
         document.querySelectorAll(".acc-new-dot, .acc-new-badge").forEach(el => el.remove());
+        fetch(`${API_BASE}/api/notifications/seen`, { method: "POST", credentials: "include" }).catch(() => {});
     }
 
     // ── Bell ─────────────────────────────────────────────────────────────────
@@ -868,6 +888,7 @@
             document.getElementById("authGate").classList.add("hidden");
             document.body.classList.add("visible");
 
+            await loadProjects();
             loadActivity();
             activityPollTimer = setInterval(loadActivity, 1000);
             pollDMUnread();
@@ -1041,7 +1062,18 @@
         try {
             const res = await fetch(`${API_BASE}/api/messages/unread`, { credentials: "include" });
             if (!res.ok) return;
-            const { count, by_sender } = await res.json();
+            const { count, by_sender, last_seen } = await res.json();
+
+            // Cross-device sync: if server has a newer last_seen, apply it
+            if (last_seen && last_seen > getLastSeen()) {
+                localStorage.setItem("axis_last_seen", String(last_seen));
+                if (allEntries.length > 0) {
+                    const newEntries = allEntries.filter(e => e.created_at > last_seen);
+                    renderBell(allEntries, newEntries);
+                    renderAccordion(filterByDate(allEntries));
+                }
+            }
+
             const badge = document.getElementById("chatBadge");
             if (count > 0) {
                 badge.textContent = count > 9 ? "9+" : count;

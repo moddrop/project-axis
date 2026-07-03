@@ -249,6 +249,16 @@
             .sec-panel table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
             .session-item { flex-wrap: wrap; gap: 10px; }
         }
+
+        @media (max-width: 480px) {
+            .topbar { padding: 0 10px; }
+            .user-pill span:not(.user-avatar) { display: none; }
+            .logout-btn { padding: 5px 8px; font-size: 10px; }
+            main { padding: 14px 10px; }
+            .page-header h2 { font-size: 18px; }
+            .score-banner { padding: 16px; }
+            .score-num { font-size: 48px; }
+        }
     </style>
 </head>
 <body>
