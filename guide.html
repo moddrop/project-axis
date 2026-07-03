@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docs — Project Axis</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800&family=Geist+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f6f4ef;
+            --surface: #ffffff;
+            --surface2: #f2efe9;
+            --border: rgba(28,27,25,0.07);
+            --border-lit: rgba(28,27,25,0.14);
+            --accent: #e55c0a;
+            --accent2: #f0a800;
+            --green: #2d8c4e;
+            --yellow: #c98a00;
+            --danger: #c0392b;
+            --text: #1c1b19;
+            --muted: #7a7469;
+            --ink-grid: rgba(28,27,25,.035);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Geist Mono', monospace;
+            background: var(--bg);
+            background-image:
+                linear-gradient(var(--ink-grid) 1px, transparent 1px),
+                linear-gradient(90deg, var(--ink-grid) 1px, transparent 1px);
+            background-size: 28px 28px;
+            color: var(--text);
+            min-height: 100vh;
+            opacity: 0;
+            transition: opacity .4s;
+        }
+        body.visible { opacity: 1; }
+
+        #authGate {
+            position: fixed; inset: 0; background: var(--bg);
+            display: grid; place-items: center; z-index: 1000;
+            font-family: 'Rubik', sans-serif; font-size: 13px;
+            letter-spacing: .1em; color: var(--muted);
+        }
+        #authGate.hidden { display: none; }
+
+        /* ── Top bar ── */
+        .topbar {
+            height: 56px;
+            background: rgba(246,244,239,0.95);
+            border-bottom: 1px solid var(--border-lit);
+            box-shadow: 0 3px 0 rgba(28,27,25,0.07);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 32px;
+            position: sticky; top: 0; z-index: 100;
+            backdrop-filter: blur(8px);
+        }
+        .topbar-left { display: flex; align-items: center; gap: 16px; }
+        .logo-icon { width: 28px; height: 28px; border-radius: 2px; display: grid; place-items: center; }
+        .logo-text { font-family: 'Rubik', sans-serif; font-weight: 800; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--text); }
+        .badge { font-size: 9px; letter-spacing: .14em; text-transform: uppercase; padding: 3px 8px; border-radius: 2px; background: rgba(229,92,10,0.08); color: var(--accent); border: 1px solid rgba(229,92,10,0.22); font-family: 'Geist Mono', monospace; }
+        .topbar-right { display: flex; align-items: center; gap: 20px; }
+        .user-pill { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
+        .user-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--accent); display: grid; place-items: center; font-size: 11px; font-weight: 700; color: #fff; font-family: 'Rubik', sans-serif; box-shadow: 2px 2px 0 rgba(28,27,25,0.15); }
+        .logout-btn { background: transparent; border: 1px solid var(--border-lit); color: var(--muted); font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: .08em; padding: 6px 14px; border-radius: 2px; cursor: pointer; transition: border-color .2s, color .2s; }
+        .logout-btn:hover { border-color: var(--danger); color: var(--danger); }
+
+        /* ── Layout ── */
+        .layout { display: grid; grid-template-columns: 220px 1fr; min-height: calc(100vh - 56px); }
+
+        /* ── Sidebar ── */
+        .sidebar { background: var(--surface); border-right: 1px solid var(--border-lit); padding: 24px 0; }
+        .nav-section { margin-bottom: 28px; padding: 0 20px; }
+        .nav-label { font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; padding: 0 8px; }
+        .nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 8px; border-radius: 2px; font-size: 12px; color: var(--muted); cursor: pointer; transition: background .15s, color .15s; letter-spacing: .02em; text-decoration: none; }
+        .nav-item:hover { background: var(--surface2); color: var(--text); }
+        .nav-item.active { background: rgba(229,92,10,0.09); color: var(--accent); }
+        .nav-item .icon { width: 16px; text-align: center; font-size: 14px; }
+
+        /* ── Main ── */
+        main { padding: 40px; background: transparent; max-width: 860px; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-header { margin-bottom: 36px; animation: fadeUp .5s .1s both; }
+        .page-header h2 { font-family: 'Rubik', sans-serif; font-weight: 800; font-size: 28px; margin-bottom: 6px; color: var(--text); }
+        .page-header p { font-size: 12px; color: var(--muted); letter-spacing: .06em; }
+
+        /* ── Guide sections ── */
+        .guide-toc {
+            background: var(--surface); border: 1px solid var(--border-lit);
+            border-radius: 3px; padding: 20px 24px;
+            box-shadow: 3px 3px 0 rgba(28,27,25,0.09);
+            margin-bottom: 32px; animation: fadeUp .5s .15s both;
+        }
+        .guide-toc-title { font-family: 'Rubik', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+        .guide-toc ul { list-style: none; display: flex; flex-wrap: wrap; gap: 8px 20px; }
+        .guide-toc a { font-size: 12px; color: var(--accent); text-decoration: none; letter-spacing: .02em; }
+        .guide-toc a:hover { text-decoration: underline; }
+
+        .guide-section {
+            background: var(--surface); border: 1px solid var(--border-lit);
+            border-radius: 3px; margin-bottom: 20px;
+            box-shadow: 3px 3px 0 rgba(28,27,25,0.09);
+            animation: fadeUp .5s .2s both;
+            overflow: hidden;
+        }
+        .guide-section-header {
+            padding: 16px 24px; border-bottom: 1px solid var(--border-lit);
+            background: var(--surface2);
+            display: flex; align-items: center; gap: 12px;
+        }
+        .guide-section-icon { font-size: 16px; }
+        .guide-section-title {
+            font-family: 'Rubik', sans-serif; font-weight: 700; font-size: 14px; color: var(--text);
+        }
+        .guide-section-body { padding: 20px 24px; display: flex; flex-direction: column; gap: 14px; }
+
+        .guide-item { display: flex; gap: 14px; }
+        .guide-item-label {
+            font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
+            color: var(--accent); flex-shrink: 0; padding-top: 2px;
+            font-family: 'Geist Mono', monospace; min-width: 90px;
+        }
+        .guide-item-body { font-size: 12px; color: var(--text); line-height: 1.8; }
+        .guide-item-body strong { color: var(--text); font-weight: 700; }
+        .guide-item-body .muted { color: var(--muted); }
+
+        .guide-divider { border: none; border-top: 1px solid var(--border-lit); margin: 0; }
+
+        .guide-tip {
+            background: rgba(229,92,10,0.05); border: 1px solid rgba(229,92,10,0.2);
+            border-radius: 2px; padding: 10px 14px;
+            font-size: 11px; color: var(--muted); line-height: 1.7;
+        }
+        .guide-tip::before { content: "TIP · "; color: var(--accent); font-weight: 700; letter-spacing: .1em; }
+
+        kbd {
+            background: var(--surface2); border: 1px solid var(--border-lit);
+            border-radius: 2px; padding: 1px 6px; font-size: 10px;
+            font-family: 'Geist Mono', monospace; box-shadow: 1px 1px 0 rgba(28,27,25,.08);
+        }
+
+        a { text-decoration: none; }
+        .footer { background: var(--surface); border-top: 1px solid var(--border-lit); padding: 20px 32px; text-align: center; }
+        .footer-text { font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: .12em; color: var(--muted); font-weight: 400; text-transform: uppercase; }
+
+        /* ── Sidebar toggle ── */
+        .sidebar-toggle {
+            display: none; flex-direction: column; gap: 5px;
+            background: transparent; border: 1px solid var(--border-lit);
+            border-radius: 2px; padding: 7px 8px; cursor: pointer;
+            box-shadow: 2px 2px 0 rgba(28,27,25,0.06); flex-shrink: 0;
+        }
+        .sidebar-toggle span { display: block; width: 18px; height: 2px; background: var(--text); border-radius: 1px; transition: transform .2s, opacity .2s; }
+        .sidebar-backdrop { display: none; position: fixed; inset: 0; background: rgba(28,27,25,0.4); z-index: 149; }
+        .sidebar-backdrop.open { display: block; }
+
+        @media (max-width: 1024px) {
+            .sidebar-toggle { display: flex; }
+            .layout { grid-template-columns: 1fr; }
+            .sidebar { position: fixed; top: 56px; left: -260px; width: 240px; height: calc(100vh - 56px); z-index: 150; overflow-y: auto; transition: left .28s ease; }
+            .sidebar.open { left: 0; box-shadow: 4px 0 28px rgba(28,27,25,0.2); }
+            main { padding: 24px 20px; }
+        }
+
+        @media (max-width: 640px) {
+            .topbar { padding: 0 14px; }
+            .badge { display: none; }
+            main { padding: 18px 14px; }
+            .page-header h2 { font-size: 20px; }
+            .guide-section-body { padding: 16px; }
+            .guide-item { flex-direction: column; gap: 4px; }
+            .guide-item-label { min-width: auto; }
+        }
+
+        @media (max-width: 480px) {
+            .topbar { padding: 0 10px; }
+            .user-pill span:not(.user-avatar) { display: none; }
+            main { padding: 14px 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="authGate">VERIFYING SESSION…</div>
+
+<div class="topbar">
+    <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </button>
+        <div class="logo-icon"><img height="22px" src="logo.png"></div>
+        <div class="logo-text">Project Axis</div>
+        <div class="badge">Internal</div>
+    </div>
+    <div class="topbar-right">
+        <div class="user-pill">
+            <div class="user-avatar" id="userAvatar">?</div>
+            <span id="userName">Loading…</span>
+        </div>
+        <button class="logout-btn" onclick="handleLogout()">Logout</button>
+    </div>
+</div>
+
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+<div class="layout">
+    <nav class="sidebar">
+        <div class="nav-section">
+            <div class="nav-label">Main</div>
+            <a href="dashboard.html" class="nav-item"><span class="icon">⊞</span> Dashboard</a>
+            <a href="projects.html" class="nav-item"><span class="icon">◈</span> Projects</a>
+            <a href="#" class="nav-item"><span class="icon">◉</span> Analytics</a>
+        </div>
+        <div class="nav-section">
+            <div class="nav-label">Team</div>
+            <a href="#" class="nav-item"><span class="icon">◎</span> Directory</a>
+            <a href="#" class="nav-item"><span class="icon">⊕</span> Requests</a>
+        </div>
+        <div class="nav-section">
+            <div class="nav-label">System</div>
+            <a href="security.html" class="nav-item"><span class="icon">⊛</span> Settings</a>
+            <a href="guide.html" class="nav-item active"><span class="icon">◌</span> Docs</a>
+        </div>
+    </nav>
+
+    <main>
+        <div class="page-header">
+            <h2>Usage Guide</h2>
+            <p>HOW EVERYTHING WORKS · PROJECT AXIS INTERNAL</p>
+        </div>
+
+        <!-- TOC -->
+        <div class="guide-toc">
+            <div class="guide-toc-title">Contents</div>
+            <ul>
+                <li><a href="#dashboard">Dashboard</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#entries">Log Entries</a></li>
+                <li><a href="#issues">Issues</a></li>
+                <li><a href="#goals">Goals & Timeline</a></li>
+                <li><a href="#messages">Direct Messages</a></li>
+                <li><a href="#notifications">Notifications</a></li>
+                <li><a href="#account">Account & Security</a></li>
+            </ul>
+        </div>
+
+        <!-- Dashboard -->
+        <div class="guide-section" id="dashboard">
+            <div class="guide-section-header">
+                <span class="guide-section-icon">⊞</span>
+                <span class="guide-section-title">Dashboard</span>
+            </div>
+            <div class="guide-section-body">
+                <div class="guide-item">
+                    <span class="guide-item-label">Stats</span>
+                    <div class="guide-item-body">
+                        The four cards at the top count <strong>all log entries</strong>, entries from the past 7 days, total comments, and how many projects have entries. They update in real time every second.
+                    </div>
+                </div>
+                <hr class="guide-divider">
+                <div class="guide-item">
+                    <span class="guide-item-label">Issues panel</span>
+                    <div class="guide-item-body">
+                        Shows only <strong>Issue-type entries</strong> grouped by project. Use the date filter (All / Today / This Week / This Month) to narrow the view. Click any entry to jump to that project's log. Resolved issues show a <strong style="color:var(--green)">✓</strong> instead of ⚠.
+                    </div>
+                </div>
+                <hr class="guide-divider">
+                <div class="guide-item">
+                    <span class="guide-item-label">Upcoming Goals</span>
+                    <div class="guide-item-body">
+                        Lists all incomplete goals across every project, sorted by due date. Click the <strong>circle button</strong> to mark a goal complete — it fades out immediately and the count updates. The panel refreshes every 30 seconds.
+                    </div>
+                </div>
+                <div class="guide-tip">
+                    The dashboard auto-refreshes entries every second. You don't need to reload the page.
+                </div>
+            </div>
+        </div>
+
+        <!-- Projects -->
+        <div class="guide-section" id="projects">
+            <div class="guide-section-header">
+                <span class="guide-section-icon">◈</span>
+                <span class="guide-section-title">Projects</span>
+            </div>
+            <div class="guide-section-body">
+                <div class="guide-item">
+                    <span class="guide-item-label">Grid view</span>
+                    <div class="guide-item-body">
+                        Each card shows the project's progress bar, status, lead, and tag. The top colour strip matches the project colour. Use the <strong>All / Active / Review / Complete</strong> filter buttons to narrow the list.
+                    </div>
+                </div>
+                <hr class="guide-divider">
+                <div class="guide-item">
+                    <span class="guide-item-label">Progress bar</span>
+                    <div class="guide-item-body">
+                        Progress is calculated automatically — <strong>goals take priority</strong>: if a project has goals, the bar shows goals completed ÷ total goals. If no goals exist but the project has start and end dates, the bar shows time elapsed. Otherwise the stored percentage is used. The bar turns red if overdue with no goals.
+                    </div>
+                </div>
+                <hr class="guide-divider">
+                <div class="guide-item">
+                    <span class="guide-item-label">New project</span>
+                    <div class="guide-item-body">
+                        Click <strong>+ New Project</strong>. Fill in name, description, icon (any emoji), colour, status, category, lead name, and optional start / deadline dates. Progress starts at 0 and is driven by goals you add later.
+                    </div>
+                </div>
+                <hr class="guide-divider">
+                <div class="guide-item">
+                    <span class="guide-item-label">Edit / Delete</span>
+                    <div class="guide-item-body">
+                        Hover a project card — two buttons appear in the top-right corner: <strong>✎ Edit</strong> (update name, dates, status, lead) and <strong>✕ Delete</strong> (permanently removes the project and all its entries, comments, and goals).
+                    </div>
+                </div>
+                <hr class="guide-divider">
+                <div class="guide-item">
+                    <span class="guide-item-label">Log view</span>
+                    <div class="guide-item-body">
+                        Click a project card to open its log. You'll see the project bar with live progress, the Goals & Timeline panel, and the entry list. Use the type filter or search box to find specific entries.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Log entries -->
+        <div class="guide-section" id="entries">
+            <div class="guide-section-header">
+                <span class="guide-section-icon">◌</span>
+                <span class="guide-section-title">Log Entries</span>
+            </div>
+            <div class="guide-section-body">
+                <div class="guide-item">
+                    <span class="guide-item-label">Types</span>
+                    <div class="guide-item-body">
+                        <strong>Log</strong> — general note. <strong>Update</strong> — progress report. <strong>Milestone</strong> — major achievement. <strong>Issue</strong> — a problem that needs solving (appears in the dashboard Issues panel and can be resolved).
+                    </div>
+                </div>
+                <hr class="guide-divider">
+                <div class="guide-item">
+                    <span class="guide-item-label">Create</span>
+                    <div class="guide-item-body">
+                        Click <strong>+ New Entry</strong> while viewing a project log. Choose a type, write a title (required), and optionally add details. Press <kbd>Enter</kbd> or click Save.
+                    </div>
+                </div>
+                <hr class="guide-divider">
+                <div class="guide-item">
+                    <span class="guide-item-label">Edit / Delete</span>
+                    <div class="guide-item-body">
+                        Hover an entry card to reveal the <strong>Edit</strong> and <strong>Delete</strong> buttons. Deleting an entry also removes all its comments. Deletions take effect instantly in the UI.
+                    </div>
+                </div>
+                <hr class="guide-divider">
+                <div class="guide-item">
+                    <span class="guide-item-label">Comments</span>
+                    <div class="guide-item-body">
+                        Click the <strong>💬 N comments</strong> button on any entry to expand the comments section. Type a reply and press <kbd>Enter</kbd> or click Post. You can delete your own comments; you cannot delete other people's comments.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Issues -->
+        <div class="guide-section" id="issues">
+            <div class="guide-section-header">
+                <span class="guide-section-icon">⚠</span>
+                <span class="guide-section-title">Issues</span>
+            </div>
+            <div class="guide-section-body">
+                <div class="guide-item">
+                    <span class="guide-item-label">Reporting</span>
+                    <div class="guide-item-body">
+                        Create a log entry and set the type to <strong>Issue</strong>. It will immediately appear in the dashboard Issues panel and be flagged with ⚠.
+                    </div>
+                </div>
+                <hr class="guide-divider">
+                <div class="guide-item">
+                    <span class="guide-item-label">Resolving</span>
+                    <div class="guide-item-body">
+                        Hover an Issue entry and click <strong>Resolve</strong>. The badge changes to <strong style="color:var(--green)">✓ RESOLVED</strong> instantly. Click <strong>Unresolve</strong> to revert. Resolved issues are visible to all team members and persist across sessions.
+                    </div>
+                </div>
+                <div class="guide-tip">
+                    The dashboard only shows issues, not regular log entries. Use the Projects page to see all entry types.
+                </div>
+            </div>
+        </div>
+
+        <!-- Goals -->
+        <div class="guide-section" id="goals">
+            <div class="guide-section-header">
+                <span class="guide-section-icon">★</span>
+                <span class="guide-section-title">Goals & Timeline</span>
+            </div>
+            <div class="guide-section-body">
+                <div class="guide-item">
+                    <span class="guide-item-label">Adding</span>
+                    <div class="guide-item-body">
+                        Open a project log and click <strong>+ Add Goal</strong>. Enter a goal title and an optional due date, then click Add. Goals are shared — all team members see them.
+                    </div>
+                </div>
+                <hr class="guide-divider">
+                <div class="guide-item">
+                    <span class="guide-item-label">Completing</span>
+                    <div class="guide-item-body">
+                        Click the <strong>○</strong> circle next to a goal to mark it complete. It instantly shows <strong style="color:var(--green)">✓</strong> and the project's progress bar updates without a page reload. Click again to mark it incomplete.
+                    </div>
+                </div>
+                <hr class="guide-divider">
+                <div class="guide-item">
+                    <span class="guide-item-label">Due dates</span>
+                    <div class="guide-item-body">
+                        Goals due today or overdue are highlighted in <strong style="color:var(--danger)">red</strong>. Goals due within 7 days are shown in <strong style="color:var(--yellow)">amber</strong>. The progress bar on overdue projects with no goals turns red.
+                    </div>
+                </div>
+                <hr class="guide-divider">
+                <div class="guide-item">
+                    <span class="guide-item-label">Deleting</span>
+                    <div class="guide-item-body">
+                        Hover a goal row and click the <strong>✕</strong> that appears on the right. The goal disappears immediately and the progress bar recalculates.
+                    </div>
+                </div>
+                <div class="guide-tip">
+                    Goals drive the progress bar. If you want accurate progress tracking, add goals with due dates rather than editing the percentage manually.
+                </div>
+            </div>
+        </div>
+
+        <!-- DMs -->
+        <div class="guide-section" id="messages">
+            <div class="guide-section-header">
+                <span class="guide-section-icon">💬</span>
+                <span class="guide-section-title">Direct Messages</span>
+            </div>
+            <div class="guide-section-body">
+                <div class="guide-item">
+                    <span class="guide-item-label">Opening</span>
+                    <div class="guide-item-body">
+                        Click the <strong>💬</strong> button in the top-right corner of any page. A panel slides in from the right showing all team members. Click a name to open the conversation.
+                    </div>
+                </div>
+                <hr class="guide-divider">
+                <div class="guide-item">
+                    <span class="guide-item-label">Sending</span>
+                    <div class="guide-item-body">
+                        Type a message and press <kbd>Enter</kbd> or click <strong>Send</strong>. Messages appear instantly without waiting for a server response. The conversation refreshes every 2 seconds while open.
+                    </div>
+                </div>
+                <hr class="guide-divider">
+                <div class="guide-item">
+                    <span class="guide-item-label">Unread badge</span>
+                    <div class="guide-item-body">
+                        A red badge on the 💬 button shows how many unread messages you have across all conversations. Opening a conversation marks those messages as read. The count updates every 15 seconds.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notifications -->
+        <div class="guide-section" id="notifications">
+            <div class="guide-section-header">
+                <span class="guide-section-icon">🔔</span>
+                <span class="guide-section-title">Notifications</span>
+            </div>
+            <div class="guide-section-body">
+                <div class="guide-item">
+                    <span class="guide-item-label">Bell</span>
+                    <div class="guide-item-body">
+                        The 🔔 button in the top bar shows how many new log entries have appeared since you last checked. Click it to see the 6 most recent entries across all projects. New entries are marked with an orange dot.
+                    </div>
+                </div>
+                <hr class="guide-divider">
+                <div class="guide-item">
+                    <span class="guide-item-label">Mark all read</span>
+                    <div class="guide-item-body">
+                        Click <strong>Mark all read</strong> inside the bell dropdown. This syncs across your devices — if you mark read on your phone, it clears on your laptop within 15 seconds.
+                    </div>
+                </div>
+                <hr class="guide-divider">
+                <div class="guide-item">
+                    <span class="guide-item-label">Per-account</span>
+                    <div class="guide-item-body">
+                        Notification state is stored per account. Each employee has an independent notification counter — clearing yours doesn't affect your teammates.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Account -->
+        <div class="guide-section" id="account">
+            <div class="guide-section-header">
+                <span class="guide-section-icon">⊛</span>
+                <span class="guide-section-title">Account & Security</span>
+            </div>
+            <div class="guide-section-body">
+                <div class="guide-item">
+                    <span class="guide-item-label">Session</span>
+                    <div class="guide-item-body">
+                        Sessions last <strong>8 hours</strong> from login, stored in an HttpOnly cookie. After 8 hours you'll be redirected to the login page automatically.
+                    </div>
+                </div>
+                <hr class="guide-divider">
+                <div class="guide-item">
+                    <span class="guide-item-label">Logout</span>
+                    <div class="guide-item-body">
+                        Click <strong>Logout</strong> in the top-right corner. This immediately invalidates your session on the server — you can't reuse the same cookie even from another device.
+                    </div>
+                </div>
+                <hr class="guide-divider">
+                <div class="guide-item">
+                    <span class="guide-item-label">Passwords</span>
+                    <div class="guide-item-body">
+                        Passwords are hashed with PBKDF2-SHA256 and stored server-side. To change a password, ask an admin to regenerate the hash and redeploy the Worker.
+                    </div>
+                </div>
+                <hr class="guide-divider">
+                <div class="guide-item">
+                    <span class="guide-item-label">Rate limiting</span>
+                    <div class="guide-item-body">
+                        After <strong>5 failed login attempts</strong> from the same IP address, the account is locked for 5 minutes. This is per-IP, not per-account.
+                    </div>
+                </div>
+                <div class="guide-tip">
+                    The Settings page (⊛) shows your active sessions and lets you revoke them remotely.
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<footer class="footer"><p class="footer-text">Project Axis &copy; 2026</p></footer>
+
+<script>
+const API_BASE = "https://auth.projectaxis.net";
+
+(function() {
+    const btn      = document.getElementById("sidebarToggle");
+    const sidebar  = document.querySelector(".sidebar");
+    const backdrop = document.getElementById("sidebarBackdrop");
+    function closeSidebar() {
+        sidebar.classList.remove("open");
+        backdrop.classList.remove("open");
+    }
+    btn?.addEventListener("click", () => {
+        const open = sidebar.classList.toggle("open");
+        backdrop.classList.toggle("open", open);
+    });
+    backdrop?.addEventListener("click", closeSidebar);
+    document.querySelectorAll(".nav-item").forEach(el =>
+        el.addEventListener("click", closeSidebar)
+    );
+})();
+
+(async function init() {
+    try {
+        const res = await fetch(`${API_BASE}/api/me`, { credentials: "include" });
+        if (!res.ok) { location.href = "login.html"; return; }
+        const user = await res.json();
+        document.getElementById("userName").textContent   = user.name;
+        document.getElementById("userAvatar").textContent = user.name.charAt(0).toUpperCase();
+        document.getElementById("authGate").classList.add("hidden");
+        document.body.classList.add("visible");
+    } catch { location.href = "login.html"; }
+})();
+
+async function handleLogout() {
+    await fetch(`${API_BASE}/api/logout`, { method: "POST", credentials: "include" });
+    location.href = "login.html";
+}
+</script>
+</body>
+</html>

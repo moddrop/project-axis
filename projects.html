@@ -554,6 +554,9 @@
             .entry-header { flex-wrap: wrap; gap: 8px; }
             .entry-actions { flex-wrap: wrap; }
             .modal { width: calc(100vw - 32px); }
+            .goals-panel-header { flex-wrap: wrap; gap: 8px; }
+            .add-goal-row { flex-wrap: wrap; padding: 10px 14px; }
+            .add-goal-date { width: 100%; }
         }
 
         @media (max-width: 480px) {
@@ -566,6 +569,9 @@
             .log-project-bar { flex-wrap: wrap; }
             .log-project-progress { display: none; }
             .entry-card { padding: 16px; }
+            .goals-list { padding: 8px 14px; }
+            .goals-list.has-goals::before { left: 27px; }
+            .goal-item { padding: 6px 0; }
         }
     </style>
 </head>
@@ -610,7 +616,7 @@
         <div class="nav-section">
             <div class="nav-label">System</div>
             <a href="security.html" class="nav-item"><span class="icon">⊛</span> Settings</a>
-            <a href="#" class="nav-item"><span class="icon">◌</span> Docs</a>
+            <a href="guide.html" class="nav-item"><span class="icon">◌</span> Docs</a>
         </div>
     </nav>
 
@@ -1365,14 +1371,21 @@ async function submitEntry() {
 
 // ── Resolve / unresolve issue ─────────────────────────────────────────────────
 async function resolveEntry(entryId, resolve) {
+    const idx = allEntries.findIndex(e => e.id === entryId);
+    const prev = idx !== -1 ? allEntries[idx].resolved_at : undefined;
+    if (idx !== -1) {
+        allEntries[idx] = { ...allEntries[idx], resolved_at: resolve ? Date.now() : null };
+        renderEntries();
+    }
     try {
         await fetch(`${API_BASE}/api/logs/${entryId}`, {
             method: "PATCH", credentials: "include",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ resolve }),
         });
-        await refreshEntries();
-    } catch {}
+    } catch {
+        if (idx !== -1) { allEntries[idx] = { ...allEntries[idx], resolved_at: prev }; renderEntries(); }
+    }
 }
 
 // ── Delete entry ──────────────────────────────────────────────────────────────
@@ -1386,13 +1399,16 @@ function closeDeleteModal() {
 }
 async function confirmDelete() {
     if (!pendingDelete) return;
+    const id  = pendingDelete;
+    const idx = allEntries.findIndex(e => e.id === id);
+    const removed = idx !== -1 ? allEntries.splice(idx, 1)[0] : null;
+    closeDeleteModal();
+    renderEntries();
     try {
-        await fetch(`${API_BASE}/api/logs/${pendingDelete}`, {
-            method: "DELETE", credentials: "include",
-        });
-        closeDeleteModal();
-        await refreshEntries();
-    } catch { closeDeleteModal(); }
+        await fetch(`${API_BASE}/api/logs/${id}`, { method: "DELETE", credentials: "include" });
+    } catch {
+        if (removed !== null && idx !== -1) { allEntries.splice(idx, 0, removed); renderEntries(); }
+    }
 }
 
 // ── New project modal ─────────────────────────────────────────────────────────
@@ -1401,7 +1417,6 @@ function openNewProjectModal() {
     document.getElementById("newProjColor").value    = "orange";
     document.getElementById("newProjStatus").value   = "active";
     document.getElementById("newProjTag").value      = "web";
-    document.getElementById("newProjProgress").value = "0";
     document.getElementById("newProjError").style.display = "none";
     document.getElementById("newProjSubmitBtn").disabled  = false;
     document.getElementById("newProjectModal").classList.add("open");
@@ -1422,7 +1437,7 @@ async function submitNewProject() {
     const tagEl    = document.getElementById("newProjTag");
     const tag      = tagEl.value;
     const tagLabel = tagEl.options[tagEl.selectedIndex].text;
-    const progress = Math.min(Math.max(parseInt(document.getElementById("newProjProgress").value) || 0, 0), 100);
+    const progress = 0;
 
     if (!name) { document.getElementById("newProjName").focus(); return; }
 
@@ -1478,6 +1493,22 @@ async function confirmDeleteProject() {
 
 // ── Goals & Timeline ──────────────────────────────────────────────────────────
 let currentGoals = [];
+
+function updateLogProgressBar() {
+    const bar = document.getElementById("logProjectBar");
+    if (!bar || !currentProject) return;
+    const total = currentGoals.length;
+    const done  = currentGoals.filter(g => g.completed_at).length;
+    const pct   = total > 0 ? Math.round(done / total * 100) : currentProject.progress;
+    const label = total > 0 ? `${done}/${total} goals` : progressLabel(currentProject);
+    const spans = bar.querySelectorAll(".progress-label span");
+    const fill  = bar.querySelector(".progress-fill");
+    if (spans[0]) spans[0].textContent = label;
+    if (spans[1]) spans[1].textContent = `${pct}%`;
+    if (fill)     fill.style.width = `${pct}%`;
+    // Also sync currentProject so progressLabel stays fresh
+    if (total > 0) { currentProject._goals = { total, completed: done }; currentProject.progress = pct; }
+}
 
 async function loadGoals() {
     try {
@@ -1579,6 +1610,13 @@ async function submitAddGoal() {
 }
 
 async function toggleGoal(goalId, complete) {
+    const idx = currentGoals.findIndex(g => g.id === goalId);
+    const original = idx !== -1 ? { ...currentGoals[idx] } : null;
+    if (idx !== -1) {
+        currentGoals[idx] = { ...currentGoals[idx], completed_at: complete ? Date.now() : null };
+        renderGoals(currentGoals);
+        updateLogProgressBar();
+    }
     try {
         await fetch(`${API_BASE}/api/goals/${goalId}`, {
             method: "PATCH", credentials: "include",
@@ -1586,14 +1624,22 @@ async function toggleGoal(goalId, complete) {
             body: JSON.stringify({ complete }),
         });
         await Promise.all([loadGoals(), fetchProjects()]);
-    } catch {}
+    } catch {
+        if (idx !== -1 && original) { currentGoals[idx] = original; renderGoals(currentGoals); updateLogProgressBar(); }
+    }
 }
 
 async function deleteGoal(goalId) {
+    const idx = currentGoals.findIndex(g => g.id === goalId);
+    const removed = idx !== -1 ? currentGoals.splice(idx, 1)[0] : null;
+    renderGoals(currentGoals);
+    updateLogProgressBar();
     try {
         await fetch(`${API_BASE}/api/goals/${goalId}`, { method: "DELETE", credentials: "include" });
-        await Promise.all([loadGoals(), fetchProjects()]);
-    } catch {}
+        await fetchProjects();
+    } catch {
+        if (removed !== null && idx !== -1) { currentGoals.splice(idx, 0, removed); renderGoals(currentGoals); updateLogProgressBar(); }
+    }
 }
 
 // ── Edit project modal ────────────────────────────────────────────────────────

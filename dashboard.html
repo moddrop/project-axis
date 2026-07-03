@@ -333,6 +333,9 @@
             .bell-dropdown { right: -60px; width: 260px; }
             main { padding: 16px 10px; }
             .secret-panel { padding: 20px; }
+            .goal-row { padding: 8px 10px; gap: 6px; }
+            .goal-proj { width: 60px; }
+            .goal-row-date { min-width: 50px; font-size: 9px; }
         }
 
         /* ── DM chat button ── */
@@ -549,7 +552,7 @@
         <div class="nav-section">
             <div class="nav-label">System</div>
             <a href="security.html" class="nav-item"><span class="icon">⊛</span> Settings</a>
-            <a href="#" class="nav-item"><span class="icon">◌</span> Docs</a>
+            <a href="guide.html" class="nav-item"><span class="icon">◌</span> Docs</a>
         </div>
     </nav>
 
@@ -607,7 +610,7 @@
             <!-- Activity Log (accordion) -->
             <div class="panel">
                 <div class="panel-header">
-                    <span class="panel-title">Activity Log</span>
+                    <span class="panel-title">Issues</span>
                     <span class="panel-badge" id="feedBadge">Loading</span>
                 </div>
                 <!-- Date filter -->
@@ -811,8 +814,10 @@
         const lastSeen = getLastSeen();
         const el = document.getElementById("accordion");
 
+        entries = entries.filter(e => e.type === "issue");
+
         if (entries.length === 0) {
-            el.innerHTML = `<div class="acc-empty">No entries in this date range.</div>`;
+            el.innerHTML = `<div class="acc-empty">No issues in this date range.</div>`;
             return;
         }
 
@@ -901,8 +906,9 @@
             renderBell(allEntries, newEntries);
             renderAccordion(filterByDate(allEntries));
 
+            const issueCount = allEntries.filter(e => e.type === "issue").length;
             document.getElementById("feedBadge").textContent =
-                allEntries.length === 0 ? "Empty" : `${allEntries.length} entries`;
+                issueCount === 0 ? "None" : `${issueCount} issue${issueCount !== 1 ? "s" : ""}`;
         } catch {}
     }
 
@@ -1138,8 +1144,11 @@
     }
 
     async function tickGoal(goalId) {
-        const row = document.getElementById(`gr-${goalId}`);
+        const row   = document.getElementById(`gr-${goalId}`);
+        const badge = document.getElementById("goalsBadge");
+        const prevCount = parseInt(badge.textContent, 10);
         if (row) row.classList.add("ticking");
+        if (!isNaN(prevCount) && prevCount > 0) badge.textContent = prevCount - 1;
         try {
             await fetch(`${API_BASE}/api/goals/${goalId}`, {
                 method: "PATCH", credentials: "include",
@@ -1149,6 +1158,7 @@
             await loadUpcomingGoals();
         } catch {
             if (row) row.classList.remove("ticking");
+            if (!isNaN(prevCount)) badge.textContent = prevCount;
         }
     }
 
