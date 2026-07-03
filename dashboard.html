@@ -716,9 +716,12 @@
         list.innerHTML = recent.map(e => {
             const meta  = PROJECT_META[e.project_id] || { name: e.project_id, icon: "📁" };
             const isNew = newIds.has(e.id);
+            const resolvedIssue = e.type === "issue" && e.resolved_at;
+            const bellIcon = resolvedIssue ? "✓" : (TYPE_ICONS[e.type] || "📝");
+            const bellIconStyle = resolvedIssue ? ` style="color:var(--green)"` : "";
             return `
                 <div class="bell-notif" onclick="openProject('${esc(e.project_id)}')">
-                    <span class="bell-notif-icon">${TYPE_ICONS[e.type] || "📝"}</span>
+                    <span class="bell-notif-icon"${bellIconStyle}>${bellIcon}</span>
                     <div class="bell-notif-body">
                         <div class="bell-notif-title">${esc(e.title)}</div>
                         <div class="bell-notif-meta">${esc(meta.name)} · ${esc(e.author_name)} · ${timeAgo(e.created_at)}</div>
@@ -789,9 +792,13 @@
 
             const rows = projectEntries.map(e => {
                 const isNew = e.created_at > lastSeen;
+                const resolvedIssue = e.type === "issue" && e.resolved_at;
+                const typeIcon = resolvedIssue
+                    ? `<span style="color:var(--green)">✓</span>`
+                    : (TYPE_ICONS[e.type] || "◌");
                 return `
                     <div class="acc-entry" onclick="openProject('${esc(projectId)}')">
-                        <span class="acc-type">${TYPE_ICONS[e.type] || "◌"}</span>
+                        <span class="acc-type">${typeIcon}</span>
                         <div class="acc-entry-info">
                             <div class="acc-entry-title">${esc(e.title)}</div>
                             <div class="acc-entry-meta">${esc(e.author_name)} · ${fmtShort(e.created_at)} · 💬 ${e.comment_count || 0}</div>

@@ -254,6 +254,9 @@
         .type-update    { background: rgba(229,92,10,.08);  color: var(--accent);  border: 1px solid rgba(229,92,10,.22); }
         .type-milestone { background: rgba(45,140,78,.08);  color: var(--green);   border: 1px solid rgba(45,140,78,.22); }
         .type-issue     { background: rgba(192,57,43,.08);  color: var(--danger);  border: 1px solid rgba(192,57,43,.22); }
+        .type-resolved  { background: rgba(45,140,78,.08);  color: var(--green);   border: 1px solid rgba(45,140,78,.22); }
+        .action-btn.resolve { color: var(--green); border-color: rgba(45,140,78,.3); }
+        .action-btn.resolve:hover { border-color: var(--green); background: rgba(45,140,78,.06); color: var(--green); }
 
         .entry-meta { font-size: 10px; color: var(--muted); letter-spacing: .03em; }
 
@@ -961,15 +964,19 @@ function renderEntries() {
 function renderEntry(e) {
     const tc = TYPE_CONFIG[e.type] || TYPE_CONFIG.log;
     const count = e.comment_count || 0;
+    const isIssue = e.type === "issue";
+    const resolved = isIssue && Boolean(e.resolved_at);
 
     return `
         <div class="entry-card" id="entry-${esc(e.id)}">
             <div class="entry-header">
                 <div class="entry-header-left">
                     <span class="type-badge type-${esc(e.type)}">${tc.icon} ${tc.label.toUpperCase()}</span>
+                    ${resolved ? `<span class="type-badge type-resolved">✓ RESOLVED</span>` : ""}
                     <span class="entry-meta">${fmtDate(e.created_at)} · ${esc(e.author_name)}</span>
                 </div>
                 <div class="entry-actions">
+                    ${isIssue ? `<button class="action-btn${resolved ? "" : " resolve"}" onclick="resolveEntry('${esc(e.id)}',${!resolved})">${resolved ? "Unresolve" : "Resolve"}</button>` : ""}
                     <button class="action-btn" onclick="openEditModal('${esc(e.id)}')">Edit</button>
                     <button class="action-btn danger" onclick="openDeleteModal('${esc(e.id)}')">Delete</button>
                 </div>
@@ -1158,6 +1165,18 @@ async function submitEntry() {
         errorEl.style.display = "block";
         submitBtn.disabled = false;
     }
+}
+
+// ── Resolve / unresolve issue ─────────────────────────────────────────────────
+async function resolveEntry(entryId, resolve) {
+    try {
+        await fetch(`${API_BASE}/api/logs/${entryId}`, {
+            method: "PATCH", credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ resolve }),
+        });
+        await refreshEntries();
+    } catch {}
 }
 
 // ── Delete entry ──────────────────────────────────────────────────────────────
