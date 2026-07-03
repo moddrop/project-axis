@@ -118,7 +118,7 @@
         .filter-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(229,92,10,0.07); box-shadow: 2px 2px 0 rgba(229,92,10,0.15); }
 
         /* ── Project grid ── */
-        .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; animation: fadeUp .5s .25s both; }
+        .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr)); gap: 16px; animation: fadeUp .5s .25s both; }
         .project-card { background: var(--surface); border: 1px solid var(--border-lit); border-radius: 3px; padding: 24px; position: relative; overflow: hidden; box-shadow: 3px 3px 0 rgba(28,27,25,0.09); transition: transform .15s, box-shadow .15s; cursor: pointer; }
         .project-card:hover { transform: translate(-1px, -2px); box-shadow: 4px 5px 0 rgba(28,27,25,0.13); }
         .project-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
@@ -476,6 +476,8 @@
         .form-textarea { resize: vertical; min-height: 120px; line-height: 1.7; }
         .form-select { cursor: pointer; }
 
+        .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .form-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
         .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px; }
         .btn-primary {
             background: var(--accent); color: #fff; border: none;
@@ -549,8 +551,8 @@
             .page-header h2 { font-size: 20px; }
             .stats-row { grid-template-columns: repeat(2, 1fr); gap: 10px; }
             .log-topbar { flex-wrap: wrap; gap: 8px; padding: 14px; }
-            .log-toolbar { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-            .log-toolbar-left { display: flex; gap: 6px; padding-bottom: 2px; }
+            .log-toolbar-left { display: flex; gap: 6px; flex-wrap: wrap; }
+            .form-grid-2, .form-grid-3 { grid-template-columns: 1fr; }
             .entry-header { flex-wrap: wrap; gap: 8px; }
             .entry-actions { flex-wrap: wrap; }
             .modal { width: calc(100vw - 32px); }
@@ -754,7 +756,7 @@
             <label class="form-label">Description</label>
             <textarea class="form-textarea" id="newProjDesc" placeholder="What is this project about?" style="min-height:72px"></textarea>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="form-grid-2">
             <div class="form-field">
                 <label class="form-label">Icon (emoji)</label>
                 <input class="form-input" id="newProjIcon" type="text" placeholder="📁" maxlength="4">
@@ -764,7 +766,7 @@
                 <input class="form-input" id="newProjLead" type="text" placeholder="Name">
             </div>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+        <div class="form-grid-3">
             <div class="form-field">
                 <label class="form-label">Color</label>
                 <select class="form-select" id="newProjColor">
@@ -794,7 +796,7 @@
                 </select>
             </div>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="form-grid-2">
             <div class="form-field">
                 <label class="form-label">Start Date</label>
                 <input class="form-input" id="newProjStart" type="date">
@@ -832,7 +834,7 @@
             <label class="form-label">Project Name</label>
             <input class="form-input" id="editProjName" type="text" autocomplete="off">
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="form-grid-2">
             <div class="form-field">
                 <label class="form-label">Start Date</label>
                 <input class="form-input" id="editProjStart" type="date">
@@ -842,7 +844,7 @@
                 <input class="form-input" id="editProjEnd" type="date">
             </div>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="form-grid-2">
             <div class="form-field">
                 <label class="form-label">Status</label>
                 <select class="form-select" id="editProjStatus">
