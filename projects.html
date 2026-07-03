@@ -520,6 +520,7 @@
             <button class="btn-secondary" onclick="closeEntryModal()">Cancel</button>
             <button class="btn-primary" id="entrySubmitBtn" onclick="submitEntry()">Save Entry</button>
         </div>
+        <div id="entryError" style="display:none;margin-top:12px;font-size:11px;color:var(--danger);letter-spacing:.04em;"></div>
     </div>
 </div>
 
@@ -874,7 +875,8 @@ function openNewEntryModal() {
     document.getElementById("entryType").value  = "log";
     document.getElementById("entryTitle").value = "";
     document.getElementById("entryBody").value  = "";
-    document.getElementById("entrySubmitBtn").disabled   = false;
+    document.getElementById("entrySubmitBtn").disabled = false;
+    document.getElementById("entryError").style.display = "none";
     document.getElementById("entryModal").classList.add("open");
     setTimeout(() => document.getElementById("entryTitle").focus(), 50);
 }
@@ -903,8 +905,10 @@ async function submitEntry() {
     const body  = document.getElementById("entryBody").value;
     if (!title) { document.getElementById("entryTitle").focus(); return; }
 
-    const submitBtn = document.getElementById("entrySubmitBtn");
+    const submitBtn  = document.getElementById("entrySubmitBtn");
+    const errorEl    = document.getElementById("entryError");
     submitBtn.disabled = true;
+    errorEl.style.display = "none";
 
     try {
         let entryId;
@@ -916,7 +920,10 @@ async function submitEntry() {
                 headers:     { "Content-Type": "application/json" },
                 body:        JSON.stringify({ title, type, body }),
             });
-            if (!res.ok) throw new Error("Save failed");
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                throw new Error(`${res.status}: ${err.error || "Save failed"}`);
+            }
             entryId = editingEntry.id;
         } else {
             const res = await fetch(`${API_BASE}/api/logs`, {
@@ -925,14 +932,20 @@ async function submitEntry() {
                 headers:     { "Content-Type": "application/json" },
                 body:        JSON.stringify({ project_id: currentProject.id, type, title, body }),
             });
-            if (!res.ok) throw new Error("Create failed");
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                throw new Error(`${res.status}: ${err.error || "Create failed"}`);
+            }
             const data = await res.json();
             entryId = data.entry.id;
         }
 
         closeEntryModal();
         await refreshEntries();
-    } catch {
+    } catch (e) {
+        console.error("submitEntry:", e);
+        errorEl.textContent = e.message || "Something went wrong. Check the console.";
+        errorEl.style.display = "block";
         submitBtn.disabled = false;
     }
 }
