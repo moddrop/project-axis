@@ -539,7 +539,7 @@
 </div>
 
 <script>
-const API_BASE = "https://employee-auth.calebethan485.workers.dev";
+const API_BASE = "https://auth.projectaxis.net";
 
 let currentUser   = null;
 let currentProject = null;
@@ -613,6 +613,9 @@ function fmtDate(ts) {
         document.getElementById("authGate").classList.add("hidden");
         document.body.classList.add("visible");
         renderGrid();
+
+        const autoProject = new URLSearchParams(location.search).get("project");
+        if (autoProject) await showLog(autoProject);
     } catch { location.href = "login.html"; }
 })();
 
@@ -983,8 +986,6 @@ async function handleLogout() {
     await fetch(`${API_BASE}/api/logout`, { method: "POST", credentials: "include" });
     location.href = "login.html";
 }
-
-renderGrid();
 </script>
 </body>
 </html>

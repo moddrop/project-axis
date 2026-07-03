@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard — Project Axis</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800&family=Geist+Mono&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800&family=Geist+Mono&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #f6f4ef;
@@ -25,11 +23,7 @@
             --ink-grid: rgba(28,27,25,.035);
         }
 
-        *, *::before, *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: 'Geist Mono', monospace;
@@ -43,28 +37,15 @@
             opacity: 0;
             transition: opacity .4s;
         }
+        body.visible { opacity: 1; }
 
-        body.visible {
-            opacity: 1;
-        }
-
-        /* ── Auth gate overlay ── */
         #authGate {
-            position: fixed;
-            inset: 0;
-            background: var(--bg);
-            display: grid;
-            place-items: center;
-            z-index: 1000;
-            font-family: 'Rubik', sans-serif;
-            font-size: 13px;
-            letter-spacing: .1em;
-            color: var(--muted);
+            position: fixed; inset: 0; background: var(--bg);
+            display: grid; place-items: center; z-index: 1000;
+            font-family: 'Rubik', sans-serif; font-size: 13px;
+            letter-spacing: .1em; color: var(--muted);
         }
-
-        #authGate.hidden {
-            display: none;
-        }
+        #authGate.hidden { display: none; }
 
         /* ── Top bar ── */
         .topbar {
@@ -72,183 +53,88 @@
             background: rgba(246,244,239,0.95);
             border-bottom: 1px solid var(--border-lit);
             box-shadow: 0 3px 0 rgba(28,27,25,0.07);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            display: flex; align-items: center; justify-content: space-between;
             padding: 0 32px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            position: sticky; top: 0; z-index: 100;
             backdrop-filter: blur(8px);
         }
+        .topbar-left { display: flex; align-items: center; gap: 16px; }
+        .logo-icon { width: 28px; height: 28px; background: var(--accent); border-radius: 2px; display: grid; place-items: center; font-size: 13px; box-shadow: 2px 2px 0 rgba(28,27,25,0.2); }
+        .logo-text { font-family: 'Rubik', sans-serif; font-weight: 800; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--text); }
+        .badge { font-size: 9px; letter-spacing: .14em; text-transform: uppercase; padding: 3px 8px; border-radius: 2px; background: rgba(229,92,10,0.08); color: var(--accent); border: 1px solid rgba(229,92,10,0.22); font-family: 'Geist Mono', monospace; }
+        .topbar-right { display: flex; align-items: center; gap: 14px; }
+        .user-pill { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
+        .user-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--accent); display: grid; place-items: center; font-size: 11px; font-weight: 700; color: #fff; font-family: 'Rubik', sans-serif; box-shadow: 2px 2px 0 rgba(28,27,25,0.15); }
+        .logout-btn { background: transparent; border: 1px solid var(--border-lit); color: var(--muted); font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: .08em; padding: 6px 14px; border-radius: 2px; cursor: pointer; transition: border-color .2s, color .2s; }
+        .logout-btn:hover { border-color: var(--danger); color: var(--danger); }
 
-        .topbar-left {
-            display: flex;
-            align-items: center;
-            gap: 16px;
+        /* ── Bell ── */
+        .bell-wrap { position: relative; }
+        .bell-btn {
+            background: transparent; border: 1px solid var(--border-lit);
+            width: 34px; height: 34px; border-radius: 2px;
+            display: grid; place-items: center; font-size: 15px;
+            cursor: pointer; position: relative; transition: border-color .15s;
+            box-shadow: 2px 2px 0 rgba(28,27,25,0.06);
         }
-
-        .logo-icon {
-            width: 28px;
-            height: 28px;
-            background: var(--accent);
-            border-radius: 2px;
-            display: grid;
-            place-items: center;
-            font-size: 13px;
-            box-shadow: 2px 2px 0 rgba(28,27,25,0.2);
-        }
-
-        .logo-text {
+        .bell-btn:hover { border-color: var(--accent); }
+        .bell-badge {
+            position: absolute; top: -5px; right: -5px;
+            min-width: 16px; height: 16px; padding: 0 3px;
+            background: var(--danger); color: #fff; border-radius: 8px;
+            font-size: 9px; font-weight: 700;
+            display: none; align-items: center; justify-content: center;
             font-family: 'Rubik', sans-serif;
-            font-weight: 800;
-            font-size: 13px;
-            letter-spacing: .12em;
-            text-transform: uppercase;
-            color: var(--text);
+            border: 2px solid var(--bg);
         }
-
-        .badge {
-            font-size: 9px;
-            letter-spacing: .14em;
-            text-transform: uppercase;
-            padding: 3px 8px;
-            border-radius: 2px;
-            background: rgba(229,92,10,0.08);
-            color: var(--accent);
-            border: 1px solid rgba(229,92,10,0.22);
-            font-family: 'Geist Mono', monospace;
+        .bell-badge.show { display: flex; }
+        .bell-dropdown {
+            position: absolute; top: calc(100% + 8px); right: 0;
+            width: 300px; background: var(--surface);
+            border: 1px solid var(--border-lit); border-radius: 3px;
+            box-shadow: 4px 4px 0 rgba(28,27,25,0.12); z-index: 200;
+            display: none;
         }
-
-        .topbar-right {
-            display: flex;
-            align-items: center;
-            gap: 20px;
+        .bell-dropdown.open { display: block; }
+        .bell-drop-header {
+            padding: 12px 16px; border-bottom: 1px solid var(--border-lit);
+            display: flex; align-items: center; justify-content: space-between;
         }
-
-        .user-pill {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 12px;
-            color: var(--muted);
+        .bell-drop-title { font-family: 'Rubik', sans-serif; font-weight: 700; font-size: 12px; color: var(--text); }
+        .bell-mark-btn { background: transparent; border: none; color: var(--accent); font-family: 'Geist Mono', monospace; font-size: 10px; cursor: pointer; padding: 0; letter-spacing: .04em; transition: opacity .15s; }
+        .bell-mark-btn:hover { opacity: .7; }
+        .bell-notif {
+            display: flex; align-items: flex-start; gap: 10px;
+            padding: 11px 16px; border-bottom: 1px solid var(--border);
+            cursor: pointer; transition: background .15s;
         }
-
-        .user-avatar {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: var(--accent);
-            display: grid;
-            place-items: center;
-            font-size: 11px;
-            font-weight: 700;
-            color: #fff;
-            font-family: 'Rubik', sans-serif;
-            box-shadow: 2px 2px 0 rgba(28,27,25,0.15);
-        }
-
-        .logout-btn {
-            background: transparent;
-            border: 1px solid var(--border-lit);
-            color: var(--muted);
-            font-family: 'Geist Mono', monospace;
-            font-size: 11px;
-            letter-spacing: .08em;
-            padding: 6px 14px;
-            border-radius: 2px;
-            cursor: pointer;
-            transition: border-color .2s, color .2s, box-shadow .15s;
-        }
-
-        .logout-btn:hover {
-            border-color: var(--danger);
-            color: var(--danger);
-            box-shadow: 2px 2px 0 rgba(192,57,43,0.12);
-        }
+        .bell-notif:last-child { border-bottom: none; }
+        .bell-notif:hover { background: var(--surface2); }
+        .bell-notif-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+        .bell-notif-body { flex: 1; min-width: 0; }
+        .bell-notif-title { font-size: 11px; color: var(--text); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .bell-notif-meta { font-size: 10px; color: var(--muted); letter-spacing: .03em; }
+        .bell-new-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; margin-top: 4px; }
+        .bell-empty { padding: 20px; text-align: center; color: var(--muted); font-size: 11px; letter-spacing: .06em; }
 
         /* ── Layout ── */
-        .layout {
-            display: grid;
-            grid-template-columns: 220px 1fr;
-            min-height: calc(100vh - 56px);
-        }
+        .layout { display: grid; grid-template-columns: 220px 1fr; min-height: calc(100vh - 56px); }
 
         /* ── Sidebar ── */
-        .sidebar {
-            background: var(--surface);
-            border-right: 1px solid var(--border-lit);
-            padding: 24px 0;
-        }
+        .sidebar { background: var(--surface); border-right: 1px solid var(--border-lit); padding: 24px 0; }
+        .nav-section { margin-bottom: 28px; padding: 0 20px; }
+        .nav-label { font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; padding: 0 8px; }
+        .nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 8px; border-radius: 2px; font-size: 12px; color: var(--muted); cursor: pointer; transition: background .15s, color .15s; letter-spacing: .02em; text-decoration: none; }
+        .nav-item:hover { background: var(--surface2); color: var(--text); }
+        .nav-item.active { background: rgba(229,92,10,0.09); color: var(--accent); }
+        .nav-item .icon { width: 16px; text-align: center; font-size: 14px; }
 
-        .nav-section {
-            margin-bottom: 28px;
-            padding: 0 20px;
-        }
+        /* ── Main ── */
+        main { padding: 40px; background: transparent; }
 
-        .nav-label {
-            font-size: 9px;
-            letter-spacing: .18em;
-            text-transform: uppercase;
-            color: var(--muted);
-            margin-bottom: 8px;
-            padding: 0 8px;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 9px 8px;
-            border-radius: 2px;
-            font-size: 12px;
-            color: var(--muted);
-            cursor: pointer;
-            transition: background .15s, color .15s;
-            letter-spacing: .02em;
-            text-decoration: none;
-        }
-
-        .nav-item:hover {
-            background: var(--surface2);
-            color: var(--text);
-        }
-
-        .nav-item.active {
-            background: rgba(229,92,10,0.09);
-            color: var(--accent);
-        }
-
-        .nav-item .icon {
-            width: 16px;
-            text-align: center;
-            font-size: 14px;
-        }
-
-        /* ── Main content ── */
-        main {
-            padding: 40px;
-            background: transparent;
-        }
-
-        .page-header {
-            margin-bottom: 36px;
-            animation: fadeUp .5s .1s both;
-        }
-
-        .page-header h2 {
-            font-family: 'Rubik', sans-serif;
-            font-weight: 800;
-            font-size: 28px;
-            margin-bottom: 6px;
-            color: var(--text);
-        }
-
-        .page-header p {
-            font-size: 12px;
-            color: var(--muted);
-            letter-spacing: .06em;
-        }
+        .page-header { margin-bottom: 36px; animation: fadeUp .5s .1s both; }
+        .page-header h2 { font-family: 'Rubik', sans-serif; font-weight: 800; font-size: 28px; margin-bottom: 6px; color: var(--text); }
+        .page-header p { font-size: 12px; color: var(--muted); letter-spacing: .06em; }
 
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(16px); }
@@ -256,556 +142,495 @@
         }
 
         /* ── Stats grid ── */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 16px;
-            margin-bottom: 32px;
-            animation: fadeUp .5s .2s both;
-        }
-
-        .stat-card {
-            background: var(--surface);
-            border: 1px solid var(--border-lit);
-            border-radius: 3px;
-            padding: 20px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 3px 3px 0 rgba(28,27,25,0.09);
-            transition: transform .15s, box-shadow .15s;
-        }
-
-        .stat-card:hover {
-            transform: translate(-1px, -2px);
-            box-shadow: 4px 5px 0 rgba(28,27,25,0.13);
-        }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 3px;
-        }
-
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px; animation: fadeUp .5s .2s both; }
+        .stat-card { background: var(--surface); border: 1px solid var(--border-lit); border-radius: 3px; padding: 20px; position: relative; overflow: hidden; box-shadow: 3px 3px 0 rgba(28,27,25,0.09); transition: transform .15s, box-shadow .15s; }
+        .stat-card:hover { transform: translate(-1px, -2px); box-shadow: 4px 5px 0 rgba(28,27,25,0.13); }
+        .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
         .stat-card.green::before  { background: var(--green); }
         .stat-card.blue::before   { background: var(--accent); }
         .stat-card.yellow::before { background: var(--yellow); }
         .stat-card.red::before    { background: var(--danger); }
-
-        .stat-label {
-            font-size: 10px;
-            letter-spacing: .14em;
-            text-transform: uppercase;
-            color: var(--muted);
-            margin-bottom: 10px;
-        }
-
-        .stat-value {
-            font-family: 'Rubik', sans-serif;
-            font-size: 32px;
-            font-weight: 800;
-            color: var(--text);
-        }
-
+        .stat-label { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+        .stat-value { font-family: 'Rubik', sans-serif; font-size: 32px; font-weight: 800; color: var(--text); }
         .stat-value.green  { color: var(--green); }
         .stat-value.blue   { color: var(--accent); }
         .stat-value.yellow { color: var(--yellow); }
         .stat-value.red    { color: var(--danger); }
-
-        .stat-delta {
-            font-size: 11px;
-            color: var(--muted);
-            margin-top: 6px;
-        }
+        .stat-delta { font-size: 11px; color: var(--muted); margin-top: 6px; }
 
         /* ── Panels ── */
-        .panels {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            animation: fadeUp .5s .3s both;
-        }
+        .panels { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; animation: fadeUp .5s .3s both; }
+        .panel { background: var(--surface); border: 1px solid var(--border-lit); border-radius: 3px; overflow: hidden; box-shadow: 3px 3px 0 rgba(28,27,25,0.09); }
+        .panel-header { padding: 16px 20px; border-bottom: 1px solid var(--border-lit); display: flex; align-items: center; justify-content: space-between; }
+        .panel-title { font-family: 'Rubik', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: .04em; color: var(--text); }
+        .panel-badge { font-size: 10px; padding: 2px 8px; background: var(--surface2); border-radius: 20px; color: var(--muted); border: 1px solid var(--border-lit); font-family: 'Geist Mono', monospace; }
 
-        .panel {
-            background: var(--surface);
-            border: 1px solid var(--border-lit);
-            border-radius: 3px;
-            overflow: hidden;
-            box-shadow: 3px 3px 0 rgba(28,27,25,0.09);
-        }
-
-        .panel-header {
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--border-lit);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .panel-title {
-            font-family: 'Rubik', sans-serif;
-            font-weight: 700;
-            font-size: 13px;
-            letter-spacing: .04em;
-            color: var(--text);
-        }
-
-        .panel-badge {
-            font-size: 10px;
-            padding: 2px 8px;
-            background: var(--surface2);
-            border-radius: 20px;
-            color: var(--muted);
-            border: 1px solid var(--border-lit);
-            font-family: 'Geist Mono', monospace;
-        }
-
-        .panel-body {
-            padding: 0;
-        }
-
-        /* table */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th {
-            font-size: 9px;
-            letter-spacing: .16em;
-            text-transform: uppercase;
-            color: var(--muted);
-            padding: 10px 20px;
-            text-align: left;
-            border-bottom: 1px solid var(--border-lit);
-            background: var(--surface2);
-            font-family: 'Geist Mono', monospace;
-        }
-
-        td {
-            padding: 12px 20px;
-            font-size: 12px;
-            border-bottom: 1px solid var(--border);
-            vertical-align: middle;
-            color: var(--text);
-        }
-
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        tr:hover td {
-            background: var(--surface2);
-        }
-
-        .status-dot {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            flex-shrink: 0;
-        }
-
+        /* service table */
+        table { width: 100%; border-collapse: collapse; }
+        th { font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); padding: 10px 20px; text-align: left; border-bottom: 1px solid var(--border-lit); background: var(--surface2); font-family: 'Geist Mono', monospace; }
+        td { padding: 12px 20px; font-size: 12px; border-bottom: 1px solid var(--border); vertical-align: middle; color: var(--text); }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: var(--surface2); }
+        .status-dot { display: inline-flex; align-items: center; gap: 6px; }
+        .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
         .dot.green  { background: var(--green); }
         .dot.yellow { background: var(--yellow); }
         .dot.red    { background: var(--danger); }
 
-        /* activity feed */
-        .feed-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 14px 20px;
-            border-bottom: 1px solid var(--border);
-            font-size: 12px;
-        }
-
-        .feed-item:last-child {
-            border-bottom: none;
-        }
-
-        .feed-icon {
-            width: 28px;
-            height: 28px;
-            border-radius: 2px;
+        /* ── Date filter ── */
+        .date-filter {
+            display: flex; gap: 6px; padding: 10px 16px;
+            border-bottom: 1px solid var(--border-lit);
             background: var(--surface2);
-            border: 1px solid var(--border-lit);
-            display: grid;
-            place-items: center;
-            font-size: 12px;
-            flex-shrink: 0;
-            box-shadow: 2px 2px 0 rgba(28,27,25,0.06);
         }
+        .df-btn { background: transparent; border: 1px solid var(--border-lit); color: var(--muted); font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: .06em; padding: 4px 10px; border-radius: 2px; cursor: pointer; transition: all .15s; }
+        .df-btn:hover { border-color: var(--accent); color: var(--accent); }
+        .df-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(229,92,10,.07); }
 
-        .feed-body {
-            flex: 1;
+        /* ── Accordion ── */
+        .accordion { overflow-y: auto; max-height: 380px; }
+        .acc-item { border-bottom: 1px solid var(--border); }
+        .acc-item:last-child { border-bottom: none; }
+        .acc-header {
+            width: 100%; display: flex; align-items: center; gap: 8px;
+            padding: 11px 16px; background: transparent; border: none;
+            text-align: left; cursor: pointer; transition: background .15s;
+            font-family: 'Geist Mono', monospace;
         }
-
-        .feed-title {
-            margin-bottom: 2px;
-            color: var(--text);
+        .acc-header:hover { background: var(--surface2); }
+        .acc-chevron { font-size: 9px; color: var(--muted); width: 10px; flex-shrink: 0; }
+        .acc-proj-icon { font-size: 14px; flex-shrink: 0; }
+        .acc-proj-name { flex: 1; font-size: 12px; color: var(--text); letter-spacing: .02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+        .acc-header-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+        .acc-new-badge { font-size: 9px; letter-spacing: .1em; text-transform: uppercase; padding: 2px 6px; border-radius: 2px; background: rgba(229,92,10,.08); color: var(--accent); border: 1px solid rgba(229,92,10,.22); }
+        .acc-count { font-size: 10px; color: var(--muted); background: var(--surface2); border: 1px solid var(--border-lit); padding: 2px 7px; border-radius: 2px; }
+        .acc-body { border-top: 1px solid var(--border); }
+        .acc-entry {
+            display: flex; align-items: center; gap: 10px;
+            padding: 9px 16px 9px 34px;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer; transition: background .15s;
         }
-
-        .feed-time {
-            font-size: 10px;
-            color: var(--muted);
-            letter-spacing: .04em;
-        }
+        .acc-entry:last-child { border-bottom: none; }
+        .acc-entry:hover { background: rgba(229,92,10,.04); }
+        .acc-type { font-size: 11px; flex-shrink: 0; width: 14px; text-align: center; }
+        .acc-entry-info { flex: 1; min-width: 0; }
+        .acc-entry-title { font-size: 11px; color: var(--text); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .acc-entry-meta { font-size: 10px; color: var(--muted); letter-spacing: .03em; }
+        .acc-new-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+        .acc-empty { padding: 28px 16px; text-align: center; color: var(--muted); font-size: 11px; letter-spacing: .06em; }
 
         /* ── Secret section ── */
         .secret-panel {
-            margin-top: 24px;
-            background: rgba(240,168,0,0.05);
-            border: 1px solid rgba(240,168,0,0.28);
-            border-radius: 3px;
-            padding: 28px;
-            animation: fadeUp .5s .4s both;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 3px 3px 0 rgba(28,27,25,0.09);
+            margin-top: 24px; background: rgba(240,168,0,0.05);
+            border: 1px solid rgba(240,168,0,0.28); border-radius: 3px;
+            padding: 28px; animation: fadeUp .5s .4s both;
+            position: relative; overflow: hidden; box-shadow: 3px 3px 0 rgba(28,27,25,0.09);
         }
+        .secret-panel::before { content: '⬡ CLASSIFIED ⬡'; position: absolute; top: 12px; right: 20px; font-size: 9px; letter-spacing: .2em; color: rgba(240,168,0,0.5); font-family: 'Geist Mono', monospace; }
+        .secret-panel h3 { font-family: 'Rubik', sans-serif; font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 12px; letter-spacing: .06em; }
+        .secret-panel p { font-size: 12px; color: var(--muted); line-height: 1.8; }
+        .secret-key { display: inline-block; margin-top: 16px; background: var(--surface2); border: 1px solid var(--border-lit); padding: 10px 16px; border-radius: 2px; font-size: 13px; letter-spacing: .08em; color: var(--green); box-shadow: 2px 2px 0 rgba(28,27,25,0.08); }
 
-        .secret-panel::before {
-            content: '⬡ CLASSIFIED ⬡';
-            position: absolute;
-            top: 12px; right: 20px;
-            font-size: 9px;
-            letter-spacing: .2em;
-            color: rgba(240,168,0,0.5);
-            font-family: 'Geist Mono', monospace;
-        }
-
-        .secret-panel h3 {
-            font-family: 'Rubik', sans-serif;
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--text);
-            margin-bottom: 12px;
-            letter-spacing: .06em;
-        }
-
-        .secret-panel p {
-            font-size: 12px;
-            color: var(--muted);
-            line-height: 1.8;
-        }
-
-        .secret-panel .secret-key {
-            display: inline-block;
-            margin-top: 16px;
-            background: var(--surface2);
-            border: 1px solid var(--border-lit);
-            padding: 10px 16px;
-            border-radius: 2px;
-            font-size: 13px;
-            letter-spacing: .08em;
-            color: var(--green);
-            box-shadow: 2px 2px 0 rgba(28,27,25,0.08);
-        }
-
-        a {
-            text-decoration: none;
-        }
-
-        /* footer */
-        .footer {
-            background: var(--surface);
-            border-top: 1px solid var(--border-lit);
-            padding: 20px 32px;
-            text-align: center;
-        }
-
-        .footer-text {
-            font-family: 'Geist Mono', monospace;
-            font-size: 11px;
-            letter-spacing: .12em;
-            color: var(--muted);
-            font-weight: 400;
-            text-transform: uppercase;
-        }
+        a { text-decoration: none; }
+        .footer { background: var(--surface); border-top: 1px solid var(--border-lit); padding: 20px 32px; text-align: center; }
+        .footer-text { font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: .12em; color: var(--muted); font-weight: 400; text-transform: uppercase; }
     </style>
 </head>
-
 <body>
 
-    <!-- Auth gate while verifying cookie -->
-    <div id="authGate">VERIFYING SESSION…</div>
+<div id="authGate">VERIFYING SESSION…</div>
 
-    <!-- Top bar -->
-    <div class="topbar">
-        <div class="topbar-left">
-            <div class="logo-icon"><img height="25px" src="logo.png"></div>
-            <div class="logo-text">Project Axis</div>
-            <div class="badge">Internal</div>
-        </div>
-        <div class="topbar-right">
-            <div class="user-pill">
-                <div class="user-avatar" id="userAvatar">?</div>
-                <span id="userName">Loading…</span>
-                <span style="color:rgba(28,27,25,0.25)">·</span>
-                <span id="userRole" style="color:var(--accent2)">—</span>
-            </div>
-            <button class="logout-btn" onclick="handleLogout()">Logout</button>
-        </div>
+<div class="topbar">
+    <div class="topbar-left">
+        <div class="logo-icon"><img height="25px" src="logo.png"></div>
+        <div class="logo-text">Project Axis</div>
+        <div class="badge">Internal</div>
     </div>
-
-    <div class="layout">
-        <nav class="sidebar">
-            <div class="nav-section">
-                <div class="nav-label">Main</div>
-                <a href="dashboard.html" class="nav-item active"><span class="icon">⊞</span> Dashboard</a>
-                <a href="projects.html" class="nav-item"><span class="icon">◈</span> Projects</a>
-                <a href="#" class="nav-item"><span class="icon">◉</span> Analytics</a>
-            </div>
-            <div class="nav-section">
-                <div class="nav-label">Team</div>
-                <a href="#" class="nav-item"><span class="icon">◎</span> Directory</a>
-                <a href="#" class="nav-item"><span class="icon">⊕</span> Requests</a>
-            </div>
-            <div class="nav-section">
-                <div class="nav-label">System</div>
-                <a href="security.html" class="nav-item"><span class="icon">⊛</span> Settings</a>
-                <a href="#" class="nav-item"><span class="icon">◌</span> Docs</a>
-            </div>
-        </nav>
-
-        <!-- Main -->
-        <main>
-            <div class="page-header">
-                <h2>Welcome back, <span id="greetName">Employee</span> 👋</h2>
-                <p id="sessionInfo">SESSION AUTHENTICATED · <span id="currentTime"></span></p>
-            </div>
-
-            <!-- Stats -->
-            <div class="stats-grid">
-                <div class="stat-card green">
-                    <div class="stat-label">Systems Online</div>
-                    <div class="stat-value green">12/12</div>
-                    <div class="stat-delta">↑ All healthy</div>
+    <div class="topbar-right">
+        <!-- Notification bell -->
+        <div class="bell-wrap">
+            <button class="bell-btn" onclick="toggleBell(event)" title="Notifications">
+                🔔
+                <span class="bell-badge" id="bellBadge">0</span>
+            </button>
+            <div class="bell-dropdown" id="bellDropdown">
+                <div class="bell-drop-header">
+                    <span class="bell-drop-title">Notifications</span>
+                    <button class="bell-mark-btn" onclick="markAllRead()">Mark all read</button>
                 </div>
-                <div class="stat-card blue">
-                    <div class="stat-label">Active Sessions</div>
-                    <div class="stat-value blue">47</div>
-                    <div class="stat-delta">↑ +3 from yesterday</div>
-                </div>
-                <div class="stat-card yellow">
-                    <div class="stat-label">Pending Reviews</div>
-                    <div class="stat-value yellow">9</div>
-                    <div class="stat-delta">→ 2 urgent</div>
-                </div>
-                <div class="stat-card red">
-                    <div class="stat-label">Open Incidents</div>
-                    <div class="stat-value red">1</div>
-                    <div class="stat-delta">↓ Down from 3</div>
-                </div>
+                <div id="bellList"><div class="bell-empty">Loading…</div></div>
             </div>
+        </div>
 
-            <!-- Panels -->
-            <div class="panels">
-                <!-- Services table -->
-                <div class="panel">
-                    <div class="panel-header">
-                        <span class="panel-title">Service Status</span>
-                        <span class="panel-badge">Live</span>
-                    </div>
-                    <div class="panel-body">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Service</th>
-                                    <th>Status</th>
-                                    <th>Uptime</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Auth API</td>
-                                    <td>
-                                        <div class="status-dot">
-                                            <div class="dot green"></div>Online
-                                        </div>
-                                    </td>
-                                    <td>99.98%</td>
-                                </tr>
-                                <tr>
-                                    <td>Worker Edge</td>
-                                    <td>
-                                        <div class="status-dot">
-                                            <div class="dot green"></div>Online
-                                        </div>
-                                    </td>
-                                    <td>100%</td>
-                                </tr>
-                                <tr>
-                                    <td>Database</td>
-                                    <td>
-                                        <div class="status-dot">
-                                            <div class="dot green"></div>Online
-                                        </div>
-                                    </td>
-                                    <td>99.95%</td>
-                                </tr>
-                                <tr>
-                                    <td>CDN</td>
-                                    <td>
-                                        <div class="status-dot">
-                                            <div class="dot yellow"></div>Degraded
-                                        </div>
-                                    </td>
-                                    <td>98.2%</td>
-                                </tr>
-                                <tr>
-                                    <td>Email Service</td>
-                                    <td>
-                                        <div class="status-dot">
-                                            <div class="dot red"></div>Incident
-                                        </div>
-                                    </td>
-                                    <td>94.1%</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Activity feed -->
-                <div class="panel">
-                    <div class="panel-header">
-                        <span class="panel-title">Recent Activity</span>
-                        <span class="panel-badge" id="feedBadge">Loading</span>
-                    </div>
-                    <div class="panel-body" id="activityFeed">
-                        <div class="feed-item">
-                            <div class="feed-body">
-                                <div class="feed-title" style="color:var(--muted)">Loading log entries…</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Secret section -->
-            <div class="secret-panel">
-                <h3>🔒 Restricted Access Area</h3>
-                <p>
-                    You have successfully authenticated and have been granted access to internal systems.
-                    This page is only accessible to verified employees — unauthorized access attempts are logged
-                    and monitored. Session cookies are HttpOnly and expire after 8 hours.
-                </p>
-                <div class="secret-key">SESSION_KEY: <span id="sessionKey">—</span></div>
-            </div>
-        </main>
+        <div class="user-pill">
+            <div class="user-avatar" id="userAvatar">?</div>
+            <span id="userName">Loading…</span>
+            <span style="color:rgba(28,27,25,0.25)">·</span>
+            <span id="userRole" style="color:var(--accent2)">—</span>
+        </div>
+        <button class="logout-btn" onclick="handleLogout()">Logout</button>
     </div>
-    <footer class="footer">
-        <h3 class="footer-text">Project Axis &copy; 2026</h3>
-    </footer>
-    <script>
-        const API_BASE = "https://employee-auth.calebethan485.workers.dev";
+</div>
 
-        const TYPE_ICONS = { log: "📝", update: "🔧", milestone: "🚀", issue: "⚠️" };
-        const PROJECT_NAMES = {
-            "soundview":   "SoundView",
-            "air-quality": "Air Quality",
-            "wind-energy": "Wind Energy",
-            "website":     "Website",
-        };
+<div class="layout">
+    <nav class="sidebar">
+        <div class="nav-section">
+            <div class="nav-label">Main</div>
+            <a href="dashboard.html" class="nav-item active"><span class="icon">⊞</span> Dashboard</a>
+            <a href="projects.html" class="nav-item"><span class="icon">◈</span> Projects</a>
+            <a href="#" class="nav-item"><span class="icon">◉</span> Analytics</a>
+        </div>
+        <div class="nav-section">
+            <div class="nav-label">Team</div>
+            <a href="#" class="nav-item"><span class="icon">◎</span> Directory</a>
+            <a href="#" class="nav-item"><span class="icon">⊕</span> Requests</a>
+        </div>
+        <div class="nav-section">
+            <div class="nav-label">System</div>
+            <a href="security.html" class="nav-item"><span class="icon">⊛</span> Settings</a>
+            <a href="#" class="nav-item"><span class="icon">◌</span> Docs</a>
+        </div>
+    </nav>
 
-        function esc(s) {
-            return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+    <main>
+        <div class="page-header">
+            <h2>Welcome back, <span id="greetName">Employee</span> 👋</h2>
+            <p id="sessionInfo">SESSION AUTHENTICATED · <span id="currentTime"></span></p>
+        </div>
+
+        <!-- Stats (real data from log API) -->
+        <div class="stats-grid">
+            <div class="stat-card green">
+                <div class="stat-label">Log Entries</div>
+                <div class="stat-value green" id="statEntries">—</div>
+                <div class="stat-delta" id="statEntriesSub">loading…</div>
+            </div>
+            <div class="stat-card blue">
+                <div class="stat-label">This Week</div>
+                <div class="stat-value blue" id="statWeek">—</div>
+                <div class="stat-delta">new entries</div>
+            </div>
+            <div class="stat-card yellow">
+                <div class="stat-label">Comments</div>
+                <div class="stat-value yellow" id="statComments">—</div>
+                <div class="stat-delta">total comments</div>
+            </div>
+            <div class="stat-card red">
+                <div class="stat-label">Projects</div>
+                <div class="stat-value red" id="statProjects">—</div>
+                <div class="stat-delta">with log entries</div>
+            </div>
+        </div>
+
+        <!-- Panels -->
+        <div class="panels">
+            <!-- Service Status -->
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title">Service Status</span>
+                    <span class="panel-badge">Live</span>
+                </div>
+                <div class="panel-body">
+                    <table>
+                        <thead><tr><th>Service</th><th>Status</th><th>Uptime</th></tr></thead>
+                        <tbody>
+                            <tr><td>Auth Worker</td><td><div class="status-dot"><div class="dot green"></div>Online</div></td><td>99.98%</td></tr>
+                            <tr><td>D1 Database</td><td><div class="status-dot"><div class="dot green"></div>Online</div></td><td>99.95%</td></tr>
+                            <tr><td>KV Sessions</td><td><div class="status-dot"><div class="dot green"></div>Online</div></td><td>100%</td></tr>
+                            <tr><td>Pages CDN</td><td><div class="status-dot"><div class="dot green"></div>Online</div></td><td>99.9%</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Activity Log (accordion) -->
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title">Activity Log</span>
+                    <span class="panel-badge" id="feedBadge">Loading</span>
+                </div>
+                <!-- Date filter -->
+                <div class="date-filter">
+                    <button class="df-btn active" onclick="setDateFilter(this,'all')">All</button>
+                    <button class="df-btn" onclick="setDateFilter(this,'today')">Today</button>
+                    <button class="df-btn" onclick="setDateFilter(this,'week')">This Week</button>
+                    <button class="df-btn" onclick="setDateFilter(this,'month')">This Month</button>
+                </div>
+                <!-- Accordion -->
+                <div class="accordion" id="accordion">
+                    <div class="acc-empty">Loading entries…</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Session info -->
+        <div class="secret-panel">
+            <h3>🔒 Restricted Access Area</h3>
+            <p>
+                You have successfully authenticated and have been granted access to internal systems.
+                This page is only accessible to verified employees — unauthorized access attempts are logged
+                and monitored. Session cookies are HttpOnly and expire after 8 hours.
+            </p>
+            <div class="secret-key">SESSION_KEY: <span id="sessionKey">—</span></div>
+        </div>
+    </main>
+</div>
+
+<footer class="footer"><h3 class="footer-text">Project Axis &copy; 2026</h3></footer>
+
+<script>
+    const API_BASE = "https://auth.projectaxis.net";
+
+    const TYPE_ICONS = { log: "◌", update: "◉", milestone: "★", issue: "⚠" };
+    const PROJECT_META = {
+        "soundview":   { name: "SoundView Smart Glasses", icon: "👓" },
+        "air-quality": { name: "Comparing Air Quality",   icon: "🌫️" },
+        "wind-energy": { name: "Wind Energy vs Sun",      icon: "⚡" },
+        "website":     { name: "Project Axis Website",    icon: "🌐" },
+    };
+
+    let allEntries = [];
+    let activeDateFilter = "all";
+
+    function esc(s) {
+        return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+    }
+
+    function timeAgo(ts) {
+        const s = Math.floor((Date.now() - ts) / 1000);
+        if (s < 60) return "just now";
+        const m = Math.floor(s / 60);
+        if (m < 60) return `${m}m ago`;
+        const h = Math.floor(m / 60);
+        if (h < 24) return `${h}h ago`;
+        return `${Math.floor(h / 24)}d ago`;
+    }
+
+    function fmtShort(ts) {
+        const d = new Date(ts);
+        const now = new Date();
+        if (d.toDateString() === now.toDateString())
+            return d.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false });
+        if (d.getFullYear() === now.getFullYear())
+            return d.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+        return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+    }
+
+    // ── localStorage last-seen ────────────────────────────────────────────────
+    function getLastSeen() {
+        return parseInt(localStorage.getItem("axis_last_seen") || "0", 10);
+    }
+
+    function markAllRead() {
+        localStorage.setItem("axis_last_seen", Date.now().toString());
+        document.getElementById("bellBadge").classList.remove("show");
+        document.getElementById("bellDropdown").classList.remove("open");
+        renderBell([]);
+        // Remove new dots from accordion
+        document.querySelectorAll(".acc-new-dot, .acc-new-badge").forEach(el => el.remove());
+    }
+
+    // ── Bell ─────────────────────────────────────────────────────────────────
+    function toggleBell(e) {
+        e.stopPropagation();
+        document.getElementById("bellDropdown").classList.toggle("open");
+    }
+
+    document.addEventListener("click", () => {
+        document.getElementById("bellDropdown").classList.remove("open");
+    });
+
+    function renderBell(newEntries) {
+        const badge = document.getElementById("bellBadge");
+        const list  = document.getElementById("bellList");
+
+        if (newEntries.length > 0) {
+            badge.textContent = newEntries.length > 9 ? "9+" : newEntries.length;
+            badge.classList.add("show");
+        } else {
+            badge.classList.remove("show");
         }
 
-        function timeAgo(ts) {
-            const s = Math.floor((Date.now() - ts) / 1000);
-            if (s < 60) return "just now";
-            const m = Math.floor(s / 60);
-            if (m < 60) return `${m}m ago`;
-            const h = Math.floor(m / 60);
-            if (h < 24) return `${h}h ago`;
-            return `${Math.floor(h / 24)}d ago`;
+        if (newEntries.length === 0) {
+            list.innerHTML = `<div class="bell-empty">You're all caught up ✓</div>`;
+            return;
         }
 
-        async function loadActivity() {
-            try {
-                const res = await fetch(`${API_BASE}/api/logs?limit=6`, { credentials: "include" });
-                if (!res.ok) return;
-                const { entries } = await res.json();
-                const feed = document.getElementById("activityFeed");
-                const badge = document.getElementById("feedBadge");
-                if (!entries || entries.length === 0) {
-                    feed.innerHTML = `<div class="feed-item"><div class="feed-body"><div class="feed-title" style="color:var(--muted)">No log entries yet.</div></div></div>`;
-                    badge.textContent = "Empty";
-                    return;
-                }
-                badge.textContent = "Live";
-                feed.innerHTML = entries.map(e => `
-                    <div class="feed-item">
-                        <div class="feed-icon">${TYPE_ICONS[e.type] || "📝"}</div>
-                        <div class="feed-body">
-                            <div class="feed-title">${esc(e.title)}</div>
-                            <div class="feed-time">${timeAgo(e.created_at)} · ${esc(e.author_name)} · ${esc(PROJECT_NAMES[e.project_id] || e.project_id)}</div>
-                        </div>
+        list.innerHTML = newEntries.slice(0, 6).map(e => {
+            const meta = PROJECT_META[e.project_id] || { name: e.project_id, icon: "📁" };
+            return `
+                <div class="bell-notif" onclick="openProject('${esc(e.project_id)}')">
+                    <span class="bell-notif-icon">${TYPE_ICONS[e.type] || "📝"}</span>
+                    <div class="bell-notif-body">
+                        <div class="bell-notif-title">${esc(e.title)}</div>
+                        <div class="bell-notif-meta">${esc(meta.name)} · ${esc(e.author_name)} · ${timeAgo(e.created_at)}</div>
                     </div>
-                `).join("");
-            } catch {}
+                    <div class="bell-new-dot"></div>
+                </div>
+            `;
+        }).join("");
+    }
+
+    // ── Stats ─────────────────────────────────────────────────────────────────
+    function updateStats(entries) {
+        const weekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+        const total   = entries.length;
+        const week    = entries.filter(e => e.created_at > weekAgo).length;
+        const comments = entries.reduce((s, e) => s + (e.comment_count || 0), 0);
+        const projects = new Set(entries.map(e => e.project_id)).size;
+
+        document.getElementById("statEntries").textContent  = total;
+        document.getElementById("statEntriesSub").textContent = total === 1 ? "1 entry total" : `${total} entries total`;
+        document.getElementById("statWeek").textContent     = week;
+        document.getElementById("statComments").textContent = comments;
+        document.getElementById("statProjects").textContent = projects;
+    }
+
+    // ── Date filter ───────────────────────────────────────────────────────────
+    function setDateFilter(btn, filter) {
+        document.querySelectorAll(".df-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        activeDateFilter = filter;
+        renderAccordion(filterByDate(allEntries));
+    }
+
+    function filterByDate(entries) {
+        const now = new Date(); now.setHours(0, 0, 0, 0);
+        const todayTs = now.getTime();
+        switch (activeDateFilter) {
+            case "today": return entries.filter(e => e.created_at >= todayTs);
+            case "week":  return entries.filter(e => e.created_at >= todayTs - 6 * 86400000);
+            case "month": return entries.filter(e => e.created_at >= todayTs - 29 * 86400000);
+            default:      return entries;
+        }
+    }
+
+    // ── Accordion ─────────────────────────────────────────────────────────────
+    function renderAccordion(entries) {
+        const lastSeen = getLastSeen();
+        const el = document.getElementById("accordion");
+
+        if (entries.length === 0) {
+            el.innerHTML = `<div class="acc-empty">No entries in this date range.</div>`;
+            return;
         }
 
-        (async function init() {
-            try {
-                const res = await fetch(`${API_BASE}/api/me`, {
-                    credentials: "include"
-                });
-
-                if (!res.ok) {
-                    window.location.href = "login.html";
-                    return;
-                }
-
-                const user = await res.json();
-
-                document.getElementById("userName").textContent = user.name;
-                document.getElementById("greetName").textContent = user.name.split(" ")[0];
-                document.getElementById("userRole").textContent = user.role;
-                document.getElementById("userAvatar").textContent = user.name.charAt(0).toUpperCase();
-                document.getElementById("sessionKey").textContent =
-                    `${user.sub.toUpperCase()} · JWT VERIFIED SERVER-SIDE`;
-
-                const tick = () => {
-                    const el = document.getElementById("currentTime");
-                    if (el) el.textContent = new Date().toLocaleTimeString("en-US", { hour12: false });
-                };
-
-                document.getElementById("sessionInfo").textContent =
-                    `SESSION AUTHENTICATED · ${user.sub.toUpperCase()} · `;
-                document.getElementById("sessionInfo").appendChild(
-                    Object.assign(document.createElement("span"), { id: "currentTime" })
-                );
-                tick();
-                setInterval(tick, 1000);
-
-                document.getElementById("authGate").classList.add("hidden");
-                document.body.classList.add("visible");
-
-                loadActivity();
-
-            } catch (err) {
-                console.error(err);
-                window.location.href = "login.html";
-            }
-        })();
-
-        async function handleLogout() {
-            await fetch(`${API_BASE}/api/logout`, {
-                method: "POST",
-                credentials: "include"
-            });
-            window.location.href = "login.html";
+        // Group by project, keep project order by most recent entry
+        const groups = {};
+        const order  = [];
+        for (const e of entries) {
+            if (!groups[e.project_id]) { groups[e.project_id] = []; order.push(e.project_id); }
+            groups[e.project_id].push(e);
         }
-    </script>
+
+        el.innerHTML = order.map((projectId, idx) => {
+            const projectEntries = groups[projectId];
+            const meta     = PROJECT_META[projectId] || { name: projectId, icon: "📁" };
+            const newCount = projectEntries.filter(e => e.created_at > lastSeen).length;
+            const isOpen   = idx === 0;
+
+            const rows = projectEntries.map(e => {
+                const isNew = e.created_at > lastSeen;
+                return `
+                    <div class="acc-entry" onclick="openProject('${esc(projectId)}')">
+                        <span class="acc-type">${TYPE_ICONS[e.type] || "◌"}</span>
+                        <div class="acc-entry-info">
+                            <div class="acc-entry-title">${esc(e.title)}</div>
+                            <div class="acc-entry-meta">${esc(e.author_name)} · ${fmtShort(e.created_at)} · 💬 ${e.comment_count || 0}</div>
+                        </div>
+                        ${isNew ? `<div class="acc-new-dot" title="New"></div>` : ""}
+                    </div>
+                `;
+            }).join("");
+
+            return `
+                <div class="acc-item">
+                    <button class="acc-header" onclick="toggleAcc(this)">
+                        <span class="acc-chevron">${isOpen ? "▼" : "▶"}</span>
+                        <span class="acc-proj-icon">${meta.icon}</span>
+                        <span class="acc-proj-name">${esc(meta.name)}</span>
+                        <div class="acc-header-right">
+                            ${newCount > 0 ? `<span class="acc-new-badge">${newCount} new</span>` : ""}
+                            <span class="acc-count">${projectEntries.length}</span>
+                        </div>
+                    </button>
+                    <div class="acc-body" style="${isOpen ? "" : "display:none"}">
+                        ${rows}
+                    </div>
+                </div>
+            `;
+        }).join("");
+    }
+
+    function toggleAcc(btn) {
+        const body    = btn.nextElementSibling;
+        const chevron = btn.querySelector(".acc-chevron");
+        const isOpen  = body.style.display !== "none";
+        body.style.display  = isOpen ? "none" : "block";
+        chevron.textContent = isOpen ? "▶" : "▼";
+    }
+
+    // ── Navigate to project log ───────────────────────────────────────────────
+    function openProject(projectId) {
+        location.href = `projects.html?project=${encodeURIComponent(projectId)}`;
+    }
+
+    // ── Load activity ─────────────────────────────────────────────────────────
+    async function loadActivity() {
+        try {
+            const res = await fetch(`${API_BASE}/api/logs?limit=100`, { credentials: "include" });
+            if (!res.ok) return;
+            const { entries } = await res.json();
+            allEntries = entries || [];
+
+            const lastSeen  = getLastSeen();
+            const newEntries = allEntries.filter(e => e.created_at > lastSeen);
+
+            updateStats(allEntries);
+            renderBell(newEntries);
+            renderAccordion(filterByDate(allEntries));
+
+            document.getElementById("feedBadge").textContent =
+                allEntries.length === 0 ? "Empty" : `${allEntries.length} entries`;
+        } catch {}
+    }
+
+    // ── Auth init ─────────────────────────────────────────────────────────────
+    (async function init() {
+        try {
+            const res = await fetch(`${API_BASE}/api/me`, { credentials: "include" });
+            if (!res.ok) { location.href = "login.html"; return; }
+
+            const user = await res.json();
+
+            document.getElementById("userName").textContent   = user.name;
+            document.getElementById("greetName").textContent  = user.name.split(" ")[0];
+            document.getElementById("userRole").textContent   = user.role;
+            document.getElementById("userAvatar").textContent = user.name.charAt(0).toUpperCase();
+            document.getElementById("sessionKey").textContent = `${user.sub.toUpperCase()} · JWT VERIFIED SERVER-SIDE`;
+
+            const tick = () => {
+                const el = document.getElementById("currentTime");
+                if (el) el.textContent = new Date().toLocaleTimeString("en-US", { hour12: false });
+            };
+            document.getElementById("sessionInfo").textContent = `SESSION AUTHENTICATED · ${user.sub.toUpperCase()} · `;
+            document.getElementById("sessionInfo").appendChild(
+                Object.assign(document.createElement("span"), { id: "currentTime" })
+            );
+            tick(); setInterval(tick, 1000);
+
+            document.getElementById("authGate").classList.add("hidden");
+            document.body.classList.add("visible");
+
+            loadActivity();
+        } catch { location.href = "login.html"; }
+    })();
+
+    async function handleLogout() {
+        await fetch(`${API_BASE}/api/logout`, { method: "POST", credentials: "include" });
+        location.href = "login.html";
+    }
+</script>
 </body>
-
 </html>
