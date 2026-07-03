@@ -2384,6 +2384,97 @@ button:focus-visible {
     color: rgba(246, 244, 239, 0.75);
 }
 
+/* ══════════════════════════════════════════════════════════════
+   RESPONSIVE — Tablet & Mobile
+   Desktop styles above are unchanged.
+   Breakpoints: 1024px = tablet, 768px = large phone, 600px = phone, 480px = small phone
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Fluid cards (login / download) ── */
+@media (max-width: 640px) {
+    .login-card,
+    .download-card {
+        width: min(400px, calc(100% - 32px));
+    }
+    .download-area {
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
+
+/* ── Fluid art banner ── */
+@media (max-width: 960px) {
+    .art {
+        width: 100%;
+        background-position: center;
+        background-size: contain;
+        height: 200px;
+    }
+}
+
+/* ── Map iframe height on small screens ── */
+@media (max-width: 480px) {
+    .map-container iframe {
+        height: 260px;
+    }
+}
+
+/* ── Person cards stack on mobile ── */
+@media (max-width: 600px) {
+    .person-card,
+    .person-card-1 {
+        width: min(300px, calc(100% - 32px));
+    }
+}
+
+/* ── News cards: 2 columns on tablet ── */
+@media (min-width: 601px) and (max-width: 900px) {
+    .cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ── Blog panel: tables scroll horizontally on mobile ── */
+@media (max-width: 640px) {
+    .blog-panel table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    .blog-panel {
+        padding: 20px 16px 12px;
+    }
+    .blog-update iframe {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 16/9;
+    }
+}
+
+/* ── Proposal: scale down giant stat numbers on mobile ── */
+@media (max-width: 640px) {
+    .prop-stat-num {
+        font-size: clamp(2rem, 12vw, 4rem) !important;
+    }
+}
+
+/* ── Page content padding on mobile ── */
+@media (max-width: 640px) {
+    .page-content {
+        padding: 0 16px 60px;
+    }
+    .page-hero {
+        padding: 32px 16px 24px;
+    }
+}
+
+/* ── Navbar: tighter padding on small tablets ── */
+@media (max-width: 900px) {
+    .navbar {
+        padding: 0 20px;
+    }
+}
+
 /* ── FAQ section ── */
 .faq-section {
     padding: 72px 24px 56px;

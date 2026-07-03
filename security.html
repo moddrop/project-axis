@@ -204,6 +204,51 @@
         .session-name { font-size: 12px; margin-bottom: 2px; }
         .session-meta { font-size: 10px; color: var(--muted); }
         .current-tag { font-size: 9px; letter-spacing: .12em; text-transform: uppercase; padding: 2px 8px; border-radius: 2px; background: rgba(91,106,240,.15); color: var(--accent2); border: 1px solid rgba(91,106,240,.3); margin-left: 8px; }
+
+        /* ── Sidebar toggle button ── */
+        .sidebar-toggle {
+            display: none; flex-direction: column; gap: 5px;
+            background: transparent; border: 1px solid var(--border-lit);
+            border-radius: 2px; padding: 7px 8px; cursor: pointer;
+            flex-shrink: 0;
+        }
+        .sidebar-toggle span {
+            display: block; width: 18px; height: 2px;
+            background: var(--text); border-radius: 1px;
+            transition: transform .2s, opacity .2s;
+        }
+        .sidebar-backdrop {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.55); z-index: 149;
+        }
+        .sidebar-backdrop.open { display: block; }
+
+        @media (max-width: 1024px) {
+            .sidebar-toggle { display: flex; }
+            .layout { grid-template-columns: 1fr; }
+            .sidebar {
+                position: fixed; top: 56px; left: -260px;
+                width: 240px; height: calc(100vh - 56px);
+                z-index: 150; overflow-y: auto;
+                transition: left .28s ease;
+            }
+            .sidebar.open {
+                left: 0;
+                box-shadow: 4px 0 28px rgba(0,0,0,0.4);
+            }
+            main { padding: 24px 20px; }
+            .sec-grid { grid-template-columns: 1fr; }
+            .score-banner { flex-direction: column; gap: 16px; }
+        }
+
+        @media (max-width: 640px) {
+            .topbar { padding: 0 14px; }
+            .badge { display: none; }
+            main { padding: 18px 14px; }
+            .page-header h2 { font-size: 20px; }
+            .sec-panel table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+            .session-item { flex-wrap: wrap; gap: 10px; }
+        }
     </style>
 </head>
 <body>
@@ -212,6 +257,9 @@
 
 <div class="topbar">
     <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </button>
         <div class="logo-icon">⬡</div>
         <div class="logo-text">Project Axis</div>
         <div class="badge">Internal</div>
@@ -227,6 +275,7 @@
     </div>
 </div>
 
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
 <div class="layout">
     <nav class="sidebar">
         <div class="nav-section">
@@ -577,6 +626,25 @@
 
 <script>
     const API_BASE = "https://auth.projectaxis.net";
+
+    // ── Sidebar toggle ────────────────────────────────────────────────────────
+    (function() {
+        const btn      = document.getElementById("sidebarToggle");
+        const sidebar  = document.querySelector(".sidebar");
+        const backdrop = document.getElementById("sidebarBackdrop");
+        function closeSidebar() {
+            sidebar.classList.remove("open");
+            backdrop.classList.remove("open");
+        }
+        btn?.addEventListener("click", () => {
+            const open = sidebar.classList.toggle("open");
+            backdrop.classList.toggle("open", open);
+        });
+        backdrop?.addEventListener("click", closeSidebar);
+        document.querySelectorAll(".nav-item").forEach(el =>
+            el.addEventListener("click", closeSidebar)
+        );
+    })();
 
     function showToast(msg) {
         const t = document.getElementById('toast');
