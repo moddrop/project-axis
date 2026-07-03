@@ -4,38 +4,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Dashboard — Acme Corp</title>
+    <title>Dashboard — Project Axis</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800&family=Geist+Mono&display=swap"
         rel="stylesheet">
     <style>
         :root {
-            --bg: #0a0a0f;
-            --surface: #111118;
-            --surface2: #16161f;
-            --border: #1e1e2e;
-            --border-lit: #2e2e4e;
-            --accent: #5b6af0;
-            --accent2: #8b9cff;
-            --green: #4af08e;
-            --yellow: #f0c44a;
-            --danger: #f05b6a;
-            --text: #e8e8f2;
-            --muted: #6b6b88;
-            --glow: rgba(91, 106, 240, .15);
+            --bg: #f6f4ef;
+            --surface: #ffffff;
+            --surface2: #f2efe9;
+            --border: rgba(28,27,25,0.07);
+            --border-lit: rgba(28,27,25,0.14);
+            --accent: #e55c0a;
+            --accent2: #f0a800;
+            --green: #2d8c4e;
+            --yellow: #c98a00;
+            --danger: #c0392b;
+            --text: #1c1b19;
+            --muted: #7a7469;
+            --ink-grid: rgba(28,27,25,.035);
         }
 
-        *,
-        *::before,
-        *::after {
+        *, *::before, *::after {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
         body {
-            font-family: 'DM Mono', monospace;
+            font-family: 'Geist Mono', monospace;
             background: var(--bg);
+            background-image:
+                linear-gradient(var(--ink-grid) 1px, transparent 1px),
+                linear-gradient(90deg, var(--ink-grid) 1px, transparent 1px);
+            background-size: 28px 28px;
             color: var(--text);
             min-height: 100vh;
             opacity: 0;
@@ -54,7 +56,7 @@
             display: grid;
             place-items: center;
             z-index: 1000;
-            font-family: 'Syne', sans-serif;
+            font-family: 'Rubik', sans-serif;
             font-size: 13px;
             letter-spacing: .1em;
             color: var(--muted);
@@ -67,8 +69,9 @@
         /* ── Top bar ── */
         .topbar {
             height: 56px;
-            background: var(--surface);
+            background: rgba(246,244,239,0.95);
             border-bottom: 1px solid var(--border-lit);
+            box-shadow: 0 3px 0 rgba(28,27,25,0.07);
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -76,6 +79,7 @@
             position: sticky;
             top: 0;
             z-index: 100;
+            backdrop-filter: blur(8px);
         }
 
         .topbar-left {
@@ -92,14 +96,16 @@
             display: grid;
             place-items: center;
             font-size: 13px;
+            box-shadow: 2px 2px 0 rgba(28,27,25,0.2);
         }
 
         .logo-text {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Rubik', sans-serif;
             font-weight: 800;
             font-size: 13px;
             letter-spacing: .12em;
             text-transform: uppercase;
+            color: var(--text);
         }
 
         .badge {
@@ -108,9 +114,10 @@
             text-transform: uppercase;
             padding: 3px 8px;
             border-radius: 2px;
-            background: rgba(91, 106, 240, .15);
-            color: var(--accent2);
-            border: 1px solid rgba(91, 106, 240, .3);
+            background: rgba(229,92,10,0.08);
+            color: var(--accent);
+            border: 1px solid rgba(229,92,10,0.22);
+            font-family: 'Geist Mono', monospace;
         }
 
         .topbar-right {
@@ -131,31 +138,33 @@
             width: 28px;
             height: 28px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            background: var(--accent);
             display: grid;
             place-items: center;
             font-size: 11px;
             font-weight: 700;
             color: #fff;
-            font-family: 'Syne', sans-serif;
+            font-family: 'Rubik', sans-serif;
+            box-shadow: 2px 2px 0 rgba(28,27,25,0.15);
         }
 
         .logout-btn {
             background: transparent;
             border: 1px solid var(--border-lit);
             color: var(--muted);
-            font-family: 'DM Mono', monospace;
+            font-family: 'Geist Mono', monospace;
             font-size: 11px;
             letter-spacing: .08em;
             padding: 6px 14px;
             border-radius: 2px;
             cursor: pointer;
-            transition: border-color .2s, color .2s;
+            transition: border-color .2s, color .2s, box-shadow .15s;
         }
 
         .logout-btn:hover {
             border-color: var(--danger);
             color: var(--danger);
+            box-shadow: 2px 2px 0 rgba(192,57,43,0.12);
         }
 
         /* ── Layout ── */
@@ -168,7 +177,7 @@
         /* ── Sidebar ── */
         .sidebar {
             background: var(--surface);
-            border-right: 1px solid var(--border);
+            border-right: 1px solid var(--border-lit);
             padding: 24px 0;
         }
 
@@ -197,6 +206,7 @@
             cursor: pointer;
             transition: background .15s, color .15s;
             letter-spacing: .02em;
+            text-decoration: none;
         }
 
         .nav-item:hover {
@@ -205,8 +215,8 @@
         }
 
         .nav-item.active {
-            background: rgba(91, 106, 240, .12);
-            color: var(--accent2);
+            background: rgba(229,92,10,0.09);
+            color: var(--accent);
         }
 
         .nav-item .icon {
@@ -218,7 +228,7 @@
         /* ── Main content ── */
         main {
             padding: 40px;
-            background: var(--bg);
+            background: transparent;
         }
 
         .page-header {
@@ -227,10 +237,11 @@
         }
 
         .page-header h2 {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Rubik', sans-serif;
             font-weight: 800;
             font-size: 28px;
             margin-bottom: 6px;
+            color: var(--text);
         }
 
         .page-header p {
@@ -240,15 +251,8 @@
         }
 
         @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(16px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
         /* ── Stats grid ── */
@@ -267,37 +271,26 @@
             padding: 20px;
             position: relative;
             overflow: hidden;
-            transition: border-color .2s;
+            box-shadow: 3px 3px 0 rgba(28,27,25,0.09);
+            transition: transform .15s, box-shadow .15s;
         }
 
         .stat-card:hover {
-            border-color: var(--accent);
+            transform: translate(-1px, -2px);
+            box-shadow: 4px 5px 0 rgba(28,27,25,0.13);
         }
 
         .stat-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
+            top: 0; left: 0; right: 0;
+            height: 3px;
         }
 
-        .stat-card.green::before {
-            background: var(--green);
-        }
-
-        .stat-card.blue::before {
-            background: var(--accent);
-        }
-
-        .stat-card.yellow::before {
-            background: var(--yellow);
-        }
-
-        .stat-card.red::before {
-            background: var(--danger);
-        }
+        .stat-card.green::before  { background: var(--green); }
+        .stat-card.blue::before   { background: var(--accent); }
+        .stat-card.yellow::before { background: var(--yellow); }
+        .stat-card.red::before    { background: var(--danger); }
 
         .stat-label {
             font-size: 10px;
@@ -308,26 +301,16 @@
         }
 
         .stat-value {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Rubik', sans-serif;
             font-size: 32px;
             font-weight: 800;
+            color: var(--text);
         }
 
-        .stat-value.green {
-            color: var(--green);
-        }
-
-        .stat-value.blue {
-            color: var(--accent2);
-        }
-
-        .stat-value.yellow {
-            color: var(--yellow);
-        }
-
-        .stat-value.red {
-            color: var(--danger);
-        }
+        .stat-value.green  { color: var(--green); }
+        .stat-value.blue   { color: var(--accent); }
+        .stat-value.yellow { color: var(--yellow); }
+        .stat-value.red    { color: var(--danger); }
 
         .stat-delta {
             font-size: 11px;
@@ -348,21 +331,23 @@
             border: 1px solid var(--border-lit);
             border-radius: 3px;
             overflow: hidden;
+            box-shadow: 3px 3px 0 rgba(28,27,25,0.09);
         }
 
         .panel-header {
             padding: 16px 20px;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid var(--border-lit);
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
         .panel-title {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Rubik', sans-serif;
             font-weight: 700;
             font-size: 13px;
             letter-spacing: .04em;
+            color: var(--text);
         }
 
         .panel-badge {
@@ -372,6 +357,7 @@
             border-radius: 20px;
             color: var(--muted);
             border: 1px solid var(--border-lit);
+            font-family: 'Geist Mono', monospace;
         }
 
         .panel-body {
@@ -391,8 +377,9 @@
             color: var(--muted);
             padding: 10px 20px;
             text-align: left;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid var(--border-lit);
             background: var(--surface2);
+            font-family: 'Geist Mono', monospace;
         }
 
         td {
@@ -400,6 +387,7 @@
             font-size: 12px;
             border-bottom: 1px solid var(--border);
             vertical-align: middle;
+            color: var(--text);
         }
 
         tr:last-child td {
@@ -423,20 +411,9 @@
             flex-shrink: 0;
         }
 
-        .dot.green {
-            background: var(--green);
-            box-shadow: 0 0 6px var(--green);
-        }
-
-        .dot.yellow {
-            background: var(--yellow);
-            box-shadow: 0 0 6px var(--yellow);
-        }
-
-        .dot.red {
-            background: var(--danger);
-            box-shadow: 0 0 6px var(--danger);
-        }
+        .dot.green  { background: var(--green); }
+        .dot.yellow { background: var(--yellow); }
+        .dot.red    { background: var(--danger); }
 
         /* activity feed */
         .feed-item {
@@ -462,6 +439,7 @@
             place-items: center;
             font-size: 12px;
             flex-shrink: 0;
+            box-shadow: 2px 2px 0 rgba(28,27,25,0.06);
         }
 
         .feed-body {
@@ -470,6 +448,7 @@
 
         .feed-title {
             margin-bottom: 2px;
+            color: var(--text);
         }
 
         .feed-time {
@@ -481,30 +460,31 @@
         /* ── Secret section ── */
         .secret-panel {
             margin-top: 24px;
-            background: linear-gradient(135deg, rgba(91, 106, 240, .08), rgba(139, 156, 255, .05));
-            border: 1px solid rgba(91, 106, 240, .3);
+            background: rgba(240,168,0,0.05);
+            border: 1px solid rgba(240,168,0,0.28);
             border-radius: 3px;
             padding: 28px;
             animation: fadeUp .5s .4s both;
             position: relative;
             overflow: hidden;
+            box-shadow: 3px 3px 0 rgba(28,27,25,0.09);
         }
 
         .secret-panel::before {
             content: '⬡ CLASSIFIED ⬡';
             position: absolute;
-            top: 12px;
-            right: 20px;
+            top: 12px; right: 20px;
             font-size: 9px;
             letter-spacing: .2em;
-            color: rgba(91, 106, 240, .4);
+            color: rgba(240,168,0,0.5);
+            font-family: 'Geist Mono', monospace;
         }
 
         .secret-panel h3 {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Rubik', sans-serif;
             font-size: 14px;
             font-weight: 700;
-            color: var(--accent2);
+            color: var(--text);
             margin-bottom: 12px;
             letter-spacing: .06em;
         }
@@ -518,17 +498,35 @@
         .secret-panel .secret-key {
             display: inline-block;
             margin-top: 16px;
-            background: var(--bg);
+            background: var(--surface2);
             border: 1px solid var(--border-lit);
             padding: 10px 16px;
             border-radius: 2px;
             font-size: 13px;
             letter-spacing: .08em;
             color: var(--green);
+            box-shadow: 2px 2px 0 rgba(28,27,25,0.08);
         }
 
         a {
             text-decoration: none;
+        }
+
+        /* footer */
+        .footer {
+            background: var(--surface);
+            border-top: 1px solid var(--border-lit);
+            padding: 20px 32px;
+            text-align: center;
+        }
+
+        .footer-text {
+            font-family: 'Geist Mono', monospace;
+            font-size: 11px;
+            letter-spacing: .12em;
+            color: var(--muted);
+            font-weight: 400;
+            text-transform: uppercase;
         }
     </style>
 </head>
@@ -549,7 +547,7 @@
             <div class="user-pill">
                 <div class="user-avatar" id="userAvatar">?</div>
                 <span id="userName">Loading…</span>
-                <span style="color:var(--border-lit)">·</span>
+                <span style="color:rgba(28,27,25,0.25)">·</span>
                 <span id="userRole" style="color:var(--accent2)">—</span>
             </div>
             <button class="logout-btn" onclick="handleLogout()">Logout</button>
@@ -727,42 +725,31 @@
         </main>
     </div>
     <footer class="footer">
-        <h3 class="footer-text">Project Axis @2026</h3>
+        <h3 class="footer-text">Project Axis &copy; 2026</h3>
     </footer>
     <script>
-        // ── Config ──────────────────────────────────────────────────────────────
-        // Replace with YOUR deployed Worker URL after `wrangler deploy`
-        // (Wrangler prints it, e.g. https://employee-auth.<your-subdomain>.workers.dev)
         const API_BASE = "https://employee-auth.calebethan485.workers.dev";
-        // Local dev: const API_BASE = "http://localhost:8787";
 
-        // ── On load: verify the session cookie with the Worker ──────────────────
         (async function init() {
             try {
                 const res = await fetch(`${API_BASE}/api/me`, {
-                    credentials: "include"   // ← send the session cookie
+                    credentials: "include"
                 });
 
                 if (!res.ok) {
-                    // Not authenticated → kick back to login
                     window.location.href = "login.html";
                     return;
                 }
 
                 const user = await res.json();
 
-                // Populate UI
                 document.getElementById("userName").textContent = user.name;
                 document.getElementById("greetName").textContent = user.name.split(" ")[0];
                 document.getElementById("userRole").textContent = user.role;
                 document.getElementById("userAvatar").textContent = user.name.charAt(0).toUpperCase();
-                // Server verifies the session via an HttpOnly signed JWT cookie the
-                // browser can't read or forge — there's nothing meaningful to show
-                // here, so this just reflects the verified identity, not a secret.
                 document.getElementById("sessionKey").textContent =
                     `${user.sub.toUpperCase()} · JWT VERIFIED SERVER-SIDE`;
 
-                // Update clock
                 const tick = () => {
                     const el = document.getElementById("currentTime");
                     if (el) el.textContent = new Date().toLocaleTimeString("en-US", { hour12: false });
@@ -776,7 +763,6 @@
                 tick();
                 setInterval(tick, 1000);
 
-                // Hide auth gate, reveal page
                 document.getElementById("authGate").classList.add("hidden");
                 document.body.classList.add("visible");
 

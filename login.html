@@ -4,216 +4,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login — Acme Corp</title>
+    <title>Employee Login — Project Axis</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&display=swap"
-        rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="stylesheet" href="ok.css?v=4">
+    <link rel="icon" type="image/x-icon" href="logo.png">
     <style>
-        :root {
-            --bg: #0a0a0f;
-            --surface: #111118;
-            --surface2: #16161f;
-            --border: #1e1e2e;
-            --border-lit: #2e2e4e;
-            --accent: #5b6af0;
-            --accent2: #8b9cff;
-            --green: #4af08e;
-            --yellow: #f0c44a;
-            --danger: #f05b6a;
-            --text: #e8e8f2;
-            --muted: #6b6b88;
-        }
-
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'DM Mono', monospace;
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            display: grid;
-            place-items: center;
-        }
-
-        .login-card {
-            width: 360px;
-            background: var(--surface);
-            border: 1px solid var(--border-lit);
-            border-radius: 3px;
-            padding: 32px;
-        }
-
-        .login-header {
+        .login-main {
+            min-height: calc(100vh - 80px);
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-
-        .logo-icon {
-            width: 28px;
-            height: 28px;
-            background: var(--accent);
-            border-radius: 2px;
-        }
-
-        .logo-text {
-            font-family: 'Syne', sans-serif;
-            font-weight: 800;
-            font-size: 13px;
-            letter-spacing: .12em;
-            text-transform: uppercase;
-        }
-
-        h1 {
-            font-family: 'Syne', sans-serif;
-            font-weight: 800;
-            font-size: 20px;
-            margin-bottom: 6px;
-        }
-
-        .subtitle {
-            font-size: 12px;
-            color: var(--muted);
-            letter-spacing: .04em;
-            margin-bottom: 24px;
-        }
-
-        label {
-            display: block;
-            font-size: 10px;
-            letter-spacing: .12em;
-            text-transform: uppercase;
-            color: var(--muted);
-            margin-bottom: 6px;
-        }
-
-        .field {
-            margin-bottom: 16px;
-        }
-
-        input {
-            width: 100%;
-            background: var(--surface2);
-            border: 1px solid var(--border-lit);
-            color: var(--text);
-            font-family: 'DM Mono', monospace;
-            font-size: 13px;
-            padding: 10px 12px;
-            border-radius: 2px;
-            outline: none;
-            transition: border-color .15s;
-        }
-
-        input:focus {
-            border-color: var(--accent);
-        }
-
-        button {
-            width: 100%;
-            background: var(--accent);
-            border: none;
-            color: #fff;
-            font-family: 'DM Mono', monospace;
-            font-size: 12px;
-            letter-spacing: .08em;
-            text-transform: uppercase;
-            padding: 12px;
-            border-radius: 2px;
-            cursor: pointer;
-            margin-top: 8px;
-            transition: background .15s;
-        }
-
-        button:hover:not(:disabled) {
-            background: var(--accent2);
-        }
-
-        button:disabled {
-            opacity: .5;
-            cursor: not-allowed;
-        }
-
-        .error {
-            display: none;
-            font-size: 11px;
-            color: var(--danger);
-            background: rgba(240, 91, 106, .1);
-            border: 1px solid rgba(240, 91, 106, .3);
-            border-radius: 2px;
-            padding: 10px 12px;
-            margin-bottom: 16px;
-        }
-
-        .error.visible {
-            display: block;
+            justify-content: center;
+            padding: 48px 24px;
+            background: #1c1b19;
+            background-image: radial-gradient(circle, rgba(240,168,0,0.07) 1.5px, transparent 1.5px);
+            background-size: 24px 24px;
         }
     </style>
 </head>
 
 <body>
-    <div class="login-card">
-        <div class="login-header">
-            <div class="logo-icon"></div>
-            <div class="logo-text">Project Axis</div>
+    <div class="navbar">
+        <a href="index.html" aria-label="Project Axis Home"><img height="50px" width="50px" src="logo.png" alt="Project Axis logo"></a>
+        <div class="navbar-wrapper">
+            <a href="index.html" class="hover">HOME</a>
+            <a href="aboutus.html" class="hover">INFO</a>
+            <a href="blog.html" class="hover">HISTORY</a>
+            <a href="project.html" class="hover">OVERVIEW</a>
+            <a href="donate.html" class="hover">DONORS</a>
+            <a href="gallery.html" class="hover">GALLERY</a>
+            <a href="login.html" class="hover">LOGIN</a>
+            <a href="proposal.html" class="hover">PROPOSAL</a>
+            <a href="news.html" class="hover">NEWS</a>
         </div>
-        <h1>Sign in</h1>
-        <p class="subtitle">Internal employee access only.</p>
-
-        <div class="error" id="errorMsg"></div>
-
-        <form id="loginForm">
-            <div class="field">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" autocomplete="username" required>
-            </div>
-            <div class="field">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" autocomplete="current-password" required>
-            </div>
-            <button type="submit" id="submitBtn">Sign in</button>
-        </form>
+        <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </button>
     </div>
 
-    <script>
-        // Replace with YOUR deployed Worker URL after `wrangler deploy`
-        const API_BASE = "https://employee-auth.calebethan485.workers.dev";
-        // Local dev: const API_BASE = "http://localhost:8787";
+    <nav class="mobile-menu" id="mobileMenu">
+        <a href="index.html">HOME</a>
+        <a href="aboutus.html">INFO</a>
+        <a href="blog.html">HISTORY</a>
+        <a href="project.html">OVERVIEW</a>
+        <a href="donate.html">DONORS</a>
+        <a href="gallery.html">GALLERY</a>
+        <a href="login.html">LOGIN</a>
+        <a href="proposal.html">PROPOSAL</a>
+        <a href="news.html">NEWS</a>
+    </nav>
 
-        const form = document.getElementById("loginForm");
-        const errorMsg = document.getElementById("errorMsg");
+    <main class="login-main">
+        <div class="login-card">
+            <div class="login-card-mark">
+                <img src="logo.png" alt="Project Axis" height="28" width="28">
+                <span>PROJECT AXIS</span>
+            </div>
+
+            <p class="login-eyebrow">// Authorized Personnel Only</p>
+            <h2 class="login-title">Sign in</h2>
+
+            <div class="error-box" id="errorMsg" role="alert" aria-live="polite"></div>
+
+            <form id="loginForm" novalidate>
+                <div class="field">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" autocomplete="username" required autofocus>
+                </div>
+                <div class="field">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" autocomplete="current-password" required>
+                </div>
+                <button type="submit" id="submitBtn" class="btn">
+                    <span class="btn-label">Sign in</span>
+                    <div class="spinner" aria-hidden="true"></div>
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <script src="main.js"></script>
+    <script>
+        const API_BASE = "https://employee-auth.calebethan485.workers.dev";
+
+        const form      = document.getElementById("loginForm");
+        const errorMsg  = document.getElementById("errorMsg");
         const submitBtn = document.getElementById("submitBtn");
+        const btnLabel  = submitBtn.querySelector(".btn-label");
 
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
             errorMsg.classList.remove("visible");
+            errorMsg.textContent = "";
             submitBtn.disabled = true;
-            submitBtn.textContent = "Signing in…";
+            submitBtn.classList.add("loading");
+            btnLabel.textContent = "Signing in…";
 
             const username = document.getElementById("username").value.trim();
             const password = document.getElementById("password").value;
 
             try {
-                const res = await fetch(`${API_BASE}/api/login`, {
+                const res  = await fetch(`${API_BASE}/api/login`, {
                     method: "POST",
-                    credentials: "include",   // ← required to receive the session cookie
+                    credentials: "include",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ username, password })
                 });
-
                 const data = await res.json();
 
                 if (!res.ok) {
                     errorMsg.textContent = data.error || "Login failed.";
                     errorMsg.classList.add("visible");
                     submitBtn.disabled = false;
-                    submitBtn.textContent = "Sign in";
+                    submitBtn.classList.remove("loading");
+                    btnLabel.textContent = "Sign in";
                     return;
                 }
 
@@ -223,7 +129,8 @@
                 errorMsg.textContent = "Could not reach the server. Try again.";
                 errorMsg.classList.add("visible");
                 submitBtn.disabled = false;
-                submitBtn.textContent = "Sign in";
+                submitBtn.classList.remove("loading");
+                btnLabel.textContent = "Sign in";
             }
         });
     </script>

@@ -1,16 +1,22 @@
 async function loadCountdown() {
-    const target = 1778976000000; // your fixed time
-    startTimer(target);
+    try {
+        const res = await fetch("https://countdown-api.calebethan485.workers.dev/countdown");
+        const target = await res.json();
+        startTimer(Number(target));
+    } catch (e) {
+        startTimer(1814572800000);
+    }
 }
 
 function startTimer(target) {
-    const interval = setInterval(() => {
+    const el = document.getElementById("timer");
+    if (!el) return;
 
+    function tick() {
         const diff = target - Date.now();
 
         if (diff <= 0) {
-            document.getElementById("timer").textContent = "LAUNCHED";
-            clearInterval(interval);
+            el.textContent = "LAUNCHED";
             return;
         }
 
@@ -19,12 +25,11 @@ function startTimer(target) {
         const m = Math.floor(diff % 3600000 / 60000);
         const s = Math.floor(diff % 60000 / 1000);
 
-        document.getElementById("timer").textContent =
-            "Project Coming Soon: " +
-            `${d}d ${h}h ${m}m ${s}s`;
+        el.textContent = `Project Coming Soon: ${d}d ${h}h ${m}m ${s}s`;
+        setTimeout(tick, 1000);
+    }
 
-    }, 1000);
+    tick();
 }
 
-// start it
-window.onload = loadCountdown;
+window.addEventListener("load", loadCountdown);

@@ -32,18 +32,16 @@ body {
 }
 
 .navbar {
-    background: rgba(246, 244, 239, 0.92);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: #f6f4ef;
     color: var(--color-text-primary);
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    gap: 6px;
     width: 100%;
-    padding: 15px 24px;
-    flex-direction: row;
-    border-bottom: 1px solid var(--color-border);
+    padding: 0 32px;
+    height: 64px;
+    border-bottom: 1px solid rgba(28, 27, 25, 0.14);
+    box-shadow: 0 3px 0 rgba(28, 27, 25, 0.05);
     animation: navslide 0.6s ease forwards;
     position: sticky;
     top: 0;
@@ -94,18 +92,29 @@ a {
     font-size: 15px;
 }
 
+.navbar-wrapper {
+    display: flex;
+    align-items: center;
+}
+
 .hover {
-    transition: color .2s;
-    padding: 8px 12px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-primary);
+    padding: 8px 10px;
     display: inline-block;
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    color: var(--color-text-secondary);
+    transition: color 0.15s;
 }
 
 .hover:hover {
-    color: var(--color-text-primary);
+    color: var(--primary);
+}
+
+.hover[aria-current="page"] {
+    color: var(--primary);
 }
 
 h3 {
@@ -686,7 +695,7 @@ tr:nth-child(even) {
     display: none;
     flex-direction: column;
     position: fixed;
-    top: 80px;
+    top: 64px;
     left: 0;
     right: 0;
     background: rgba(246, 244, 239, 0.98);
@@ -1186,6 +1195,19 @@ tr:nth-child(even) {
     .carosel-item-wrapper {
         padding: 0 24px 40px;
     }
+
+    /* Keep nav buttons in the upper image zone, above the text overlay */
+    .carosel-btn-container {
+        height: 70%;
+        align-items: center;
+    }
+
+    .carosel-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+        margin: 0 8px;
+    }
 }
 
 /* Person card improvements */
@@ -1281,7 +1303,7 @@ tr:nth-child(even) {
 /* ── Inner page hero header ── */
 .page-hero {
     text-align: center;
-    padding: 72px 24px 48px;
+    padding: 48px 24px 32px;
 }
 
 .page-hero-eyebrow {
@@ -1294,7 +1316,7 @@ tr:nth-child(even) {
 }
 
 .page-hero h1 {
-    font-size: clamp(3rem, 8vw, 6rem);
+    font-size: clamp(2rem, 5vw, 3.8rem);
     font-weight: 900;
     color: var(--color-text-primary);
     letter-spacing: -0.04em;
@@ -1378,7 +1400,7 @@ tr:nth-child(even) {
 }
 
 .projects-eyebrow::before {
-    content: "// ";
+    content: "| PROJECT AXIS | ";
     color: var(--color-text-tertiary);
 }
 
@@ -1621,7 +1643,7 @@ button:focus-visible {
 /* Signature waveform mark */
 .waveform {
     display: inline-flex;
-    align-items: flex-end;
+    align-items: center;
     gap: 3px;
     height: 14px;
     flex-shrink: 0;
@@ -1632,7 +1654,7 @@ button:focus-visible {
     height: 100%;
     border-radius: 2px;
     background: currentColor;
-    transform-origin: bottom;
+    transform-origin: center;
     animation: wave 1.15s ease-in-out infinite;
 }
 
@@ -1688,7 +1710,7 @@ button:focus-visible {
 #timer {
     display: block;
     width: fit-content;
-    margin: -22px auto 0;
+    margin: 24px auto 0;
     position: relative;
     background: #ffffff;
     border: 1px solid var(--color-border);
@@ -1951,18 +1973,30 @@ button:focus-visible {
     box-shadow: var(--shadow-md) !important;
 }
 
-/* ── Donate CTA bold ── */
+/* ── Donate CTA ── */
 .donate-cta {
     background: #f2efe9;
-    border: 1.5px solid var(--color-border);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-md);
+    border: 1.5px solid rgba(28, 27, 25, 0.12);
+    border-radius: 2px;
+    box-shadow: 4px 4px 0 rgba(28, 27, 25, 0.1);
+    padding: 36px 40px 40px;
+    margin-top: 48px;
+}
+
+.donate-cta .projects-eyebrow {
+    text-align: left;
+    padding-top: 0;
+    margin-bottom: 14px;
 }
 
 .donate-cta h2 {
     font-size: 28px;
     font-weight: 900;
     letter-spacing: -0.03em;
+}
+
+.donate-cta p:not(.projects-eyebrow) {
+    max-width: 580px;
 }
 
 /* ── About values card bold ── */
@@ -2011,7 +2045,7 @@ button:focus-visible {
 }
 
 .page-hero-eyebrow::before {
-    content: "// ";
+    content: "| PROJECT AXIS | ";
     color: var(--color-text-tertiary);
 }
 
@@ -2137,10 +2171,11 @@ button:focus-visible {
     padding: 9px 22px;
     border-radius: 100px;
     text-align: center;
-    margin: -18px auto 0;
-    display: block;
-    width: fit-content;
+    display: table;
+    margin: 12px 0 12px;
     position: relative;
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 5;
 }
 
@@ -2829,35 +2864,60 @@ main > .newsletter {
    LOGIN / STAFF PORTAL
    ════════════════════════════════════════════════════ */
 
-/* Override the old soft-shadow white card */
 .login-card {
-    background: var(--color-bg);
-    border: 1.5px solid var(--color-border);
-    border-radius: var(--radius-md);
-    box-shadow: 4px 4px 0 rgba(28, 27, 25, 0.15);
+    background: #f6f4ef;
+    border: 1.5px solid rgba(28, 27, 25, 0.18);
+    border-top: 3px solid var(--primary);
+    border-radius: 2px;
+    box-shadow: 5px 5px 0 rgba(28, 27, 25, 0.35);
     width: 100%;
-    max-width: 440px;
+    max-width: 420px;
     margin: 0 auto;
-    padding: 36px 32px 32px;
+    padding: 32px 32px 28px;
     text-align: left;
 }
 
-.login-card .project-title {
-    font-family: 'Rubik', sans-serif;
-    font-size: 17px;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    margin-bottom: 4px;
+/* Logo lockup at top of card */
+.login-card-mark {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(28, 27, 25, 0.1);
 }
 
-.login-card .project-description {
+.login-card-mark img {
+    display: block;
+}
+
+.login-card-mark span {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-text-primary);
+}
+
+.login-eyebrow {
     font-family: var(--font-mono);
     font-size: 10px;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--primary);
+    margin-bottom: 6px;
+}
+
+.login-title {
+    font-family: 'Rubik', sans-serif;
+    font-size: 26px;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    color: var(--color-text-primary);
     margin-bottom: 24px;
+    line-height: 1;
 }
 
 /* Form field wrapper */
@@ -3085,6 +3145,15 @@ main > .newsletter {
 
 .donor-avatar-orange { background: var(--primary); }
 
+.donor-avatar-hero {
+    width: 100%;
+    height: 220px;
+    border-radius: 0;
+    font-size: 96px;
+    font-weight: 900;
+    flex-shrink: unset;
+}
+
 /* ════════════════════════════════════════════════════
    ABOUT VALUES SECTION
    ════════════════════════════════════════════════════ */
@@ -3105,7 +3174,7 @@ main > .newsletter {
 }
 
 .about-values-eyebrow::before {
-    content: "// ";
+    content: "| PROJECT AXIS | ";
     color: var(--accent-orange);
     opacity: 0.5;
 }
@@ -3496,4 +3565,97 @@ main > .newsletter {
 }
 .pcb-rule--dark .pcb-rule-pad::after {
     background: rgba(240,168,0,0.25);
+}
+
+/* ════════════════════════════════════════════════════
+   NEWS PAGE — Breadboard Zine style
+   ════════════════════════════════════════════════════ */
+
+/* Cards: sharp corners + hard offset shadow */
+.card {
+    border-radius: 2px;
+    border: 1.5px solid rgba(28, 27, 25, 0.1);
+    box-shadow: 3px 3px 0 rgba(28, 27, 25, 0.09);
+    background: #ffffff;
+    transition: transform 0.15s ease-out, box-shadow 0.15s ease-out, border-color 0.15s;
+}
+.card:hover {
+    transform: translate(-2px, -3px);
+    box-shadow: 5px 6px 0 rgba(28, 27, 25, 0.12);
+    border-color: rgba(28, 27, 25, 0.16);
+}
+.card-info h3 {
+    font-family: 'Rubik', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    text-align: left;
+    letter-spacing: -0.01em;
+    color: var(--color-text-primary);
+}
+.card-info p {
+    text-align: left;
+}
+.card-thumb {
+    border-bottom: 1px solid rgba(28, 27, 25, 0.08);
+}
+.card-thumb.purple { background: rgba(229, 92, 10, 0.07); }
+.card-thumb.teal   { background: rgba(45, 140, 78, 0.07); }
+.card-thumb.amber  { background: rgba(240, 168, 0, 0.08); }
+.card-thumb svg { opacity: 0.4; }
+.read-link:hover { color: var(--primary); }
+
+/* Featured post */
+.featured {
+    border: 1.5px solid rgba(28, 27, 25, 0.1);
+    box-shadow: 4px 4px 0 rgba(28, 27, 25, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+}
+.featured-img {
+    background: #1c1b19;
+    background-image: radial-gradient(circle, rgba(240,168,0,0.07) 1.5px, transparent 1.5px);
+    background-size: 24px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.featured-pcb-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(240, 168, 0, 0.7);
+    border: 1px solid rgba(240, 168, 0, 0.25);
+    padding: 8px 16px;
+}
+.featured-body {
+    background: #ffffff;
+    border-radius: 0;
+}
+.featured-body h2 {
+    font-family: 'Rubik', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+}
+.featured-title { color: var(--color-text-primary); }
+
+/* Section label */
+.section-label {
+    font-family: var(--font-mono);
+    color: var(--color-text-secondary);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    border-bottom: 1.5px solid rgba(28, 27, 25, 0.1);
+    box-shadow: 0 1.5px 0 rgba(28, 27, 25, 0.06);
+}
+.section-label::before {
+    content: "| PROJECT AXIS | ";
+    color: var(--primary);
 }
