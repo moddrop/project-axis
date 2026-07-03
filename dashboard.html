@@ -288,6 +288,131 @@
             .bell-dropdown { right: -40px; width: 270px; }
             .accordion { max-height: none; }
         }
+
+        /* ── DM chat button ── */
+        .chat-wrap { position: relative; }
+        .chat-btn {
+            background: transparent; border: 1px solid var(--border-lit);
+            width: 34px; height: 34px; border-radius: 2px;
+            display: grid; place-items: center; font-size: 15px;
+            cursor: pointer; position: relative; transition: border-color .15s;
+            box-shadow: 2px 2px 0 rgba(28,27,25,0.06);
+        }
+        .chat-btn:hover { border-color: var(--accent); }
+        .chat-badge {
+            position: absolute; top: -5px; right: -5px;
+            min-width: 16px; height: 16px; padding: 0 3px;
+            background: var(--danger); color: #fff; border-radius: 8px;
+            font-size: 9px; font-weight: 700;
+            display: none; align-items: center; justify-content: center;
+            font-family: 'Rubik', sans-serif; border: 2px solid var(--bg);
+        }
+        .chat-badge.show { display: flex; }
+
+        /* ── DM panel ── */
+        .dm-panel {
+            position: fixed; top: 56px; right: -360px; width: 340px;
+            height: calc(100vh - 56px); background: var(--surface);
+            border-left: 1px solid var(--border-lit);
+            box-shadow: -4px 0 24px rgba(28,27,25,0.12);
+            z-index: 200; display: flex; flex-direction: column;
+            transition: right .28s ease;
+        }
+        .dm-panel.open { right: 0; }
+        .dm-panel-header {
+            padding: 14px 16px; border-bottom: 1px solid var(--border-lit);
+            display: flex; align-items: center; justify-content: space-between;
+            background: var(--surface2); flex-shrink: 0;
+        }
+        .dm-panel-title { font-family: 'Rubik', sans-serif; font-weight: 700; font-size: 13px; color: var(--text); }
+        .dm-close-btn {
+            background: transparent; border: none; cursor: pointer;
+            font-size: 15px; color: var(--muted); padding: 2px 6px; transition: color .15s;
+        }
+        .dm-close-btn:hover { color: var(--text); }
+        .dm-contacts { overflow-y: auto; }
+        .dm-contact {
+            display: flex; align-items: center; gap: 10px;
+            padding: 12px 16px; cursor: pointer; border-bottom: 1px solid var(--border);
+            transition: background .15s;
+        }
+        .dm-contact:hover { background: var(--surface2); }
+        .dm-contact-avatar {
+            width: 32px; height: 32px; border-radius: 50%;
+            background: var(--accent); color: #fff; font-family: 'Rubik', sans-serif;
+            font-weight: 700; font-size: 13px; display: grid; place-items: center;
+            flex-shrink: 0; box-shadow: 2px 2px 0 rgba(28,27,25,0.12);
+        }
+        .dm-contact-info { flex: 1; min-width: 0; }
+        .dm-contact-name { font-size: 12px; color: var(--text); font-weight: 500; }
+        .dm-contact-role { font-size: 10px; color: var(--muted); letter-spacing: .04em; }
+        .dm-unread-badge {
+            min-width: 18px; height: 18px; padding: 0 4px;
+            background: var(--danger); color: #fff; border-radius: 9px;
+            font-size: 9px; font-weight: 700; display: none;
+            align-items: center; justify-content: center; font-family: 'Rubik', sans-serif;
+        }
+        .dm-unread-badge.show { display: flex; }
+        .dm-convo { display: none; flex-direction: column; flex: 1; overflow: hidden; }
+        .dm-convo.active { display: flex; }
+        .dm-convo-header {
+            padding: 10px 16px; border-bottom: 1px solid var(--border-lit);
+            display: flex; align-items: center; gap: 8px;
+            background: var(--surface2); flex-shrink: 0;
+        }
+        .dm-back-btn {
+            background: transparent; border: none; cursor: pointer;
+            font-size: 18px; color: var(--muted); line-height: 1;
+            transition: color .15s; padding: 0;
+        }
+        .dm-back-btn:hover { color: var(--text); }
+        .dm-convo-name { font-family: 'Rubik', sans-serif; font-weight: 700; font-size: 13px; color: var(--text); flex: 1; }
+        .dm-messages { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+        .dm-msg {
+            max-width: 82%; padding: 8px 12px; border-radius: 3px;
+            font-size: 12px; line-height: 1.55; word-break: break-word;
+        }
+        .dm-msg.sent {
+            align-self: flex-end; background: var(--accent); color: #fff;
+            border-bottom-right-radius: 0; box-shadow: 2px 2px 0 rgba(229,92,10,0.28);
+        }
+        .dm-msg.received {
+            align-self: flex-start; background: var(--surface2); color: var(--text);
+            border: 1px solid var(--border-lit); border-bottom-left-radius: 0;
+            box-shadow: 2px 2px 0 rgba(28,27,25,0.06);
+        }
+        .dm-msg-time { font-size: 9px; opacity: .65; margin-top: 4px; letter-spacing: .03em; }
+        .dm-input-row {
+            padding: 12px; border-top: 1px solid var(--border-lit);
+            display: flex; gap: 8px; flex-shrink: 0;
+        }
+        .dm-input {
+            flex: 1; background: var(--surface2); border: 1px solid var(--border-lit);
+            border-radius: 2px; padding: 8px 10px;
+            font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--text);
+            outline: none; resize: none; line-height: 1.4; max-height: 80px;
+            transition: border-color .15s;
+        }
+        .dm-input:focus { border-color: var(--accent); }
+        .dm-send-btn {
+            background: var(--accent); border: none; color: #fff;
+            padding: 0 14px; border-radius: 2px; cursor: pointer;
+            font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: .06em;
+            transition: opacity .15s; box-shadow: 2px 2px 0 rgba(229,92,10,0.28);
+            flex-shrink: 0; align-self: flex-end;
+        }
+        .dm-send-btn:hover { opacity: .85; }
+        .dm-send-btn:disabled { opacity: .4; cursor: default; }
+        .dm-backdrop {
+            display: none; position: fixed; inset: 0;
+            background: rgba(28,27,25,0.2); z-index: 199;
+        }
+        .dm-backdrop.open { display: block; }
+        .dm-empty { padding: 28px 16px; text-align: center; color: var(--muted); font-size: 11px; letter-spacing: .06em; }
+        @media (max-width: 480px) {
+            .dm-panel { width: calc(100vw - 20px); right: calc(-100vw + 10px); }
+            .dm-panel.open { right: 0; }
+        }
     </style>
 </head>
 <body>
@@ -319,6 +444,14 @@
             </div>
         </div>
 
+        <!-- Direct messages -->
+        <div class="chat-wrap">
+            <button class="chat-btn" id="chatBtn" title="Direct Messages" onclick="toggleDMPanel(event)">
+                💬
+                <span class="chat-badge" id="chatBadge"></span>
+            </button>
+        </div>
+
         <div class="user-pill">
             <div class="user-avatar" id="userAvatar">?</div>
             <span class="user-name-text" id="userName">Loading…</span>
@@ -330,6 +463,30 @@
 </div>
 
 <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+<!-- DM panel -->
+<div class="dm-backdrop" id="dmBackdrop" onclick="closeDMPanel()"></div>
+<div class="dm-panel" id="dmPanel">
+    <div class="dm-panel-header">
+        <span class="dm-panel-title">Direct Messages</span>
+        <button class="dm-close-btn" onclick="closeDMPanel()">✕</button>
+    </div>
+    <div class="dm-contacts" id="dmContacts">
+        <div class="dm-empty">Loading…</div>
+    </div>
+    <div class="dm-convo" id="dmConvo">
+        <div class="dm-convo-header">
+            <button class="dm-back-btn" onclick="showDMContacts()">←</button>
+            <span class="dm-convo-name" id="dmConvoName">—</span>
+        </div>
+        <div class="dm-messages" id="dmMessages"></div>
+        <div class="dm-input-row">
+            <textarea class="dm-input" id="dmInput" placeholder="Type a message…" rows="1" onkeydown="dmInputKeydown(event)"></textarea>
+            <button class="dm-send-btn" id="dmSendBtn" onclick="sendDM()">Send</button>
+        </div>
+    </div>
+</div>
+
 <div class="layout">
     <nav class="sidebar">
         <div class="nav-section">
@@ -696,16 +853,176 @@
             );
             tick(); setInterval(tick, 1000);
 
+            dmMe = user;
+
             document.getElementById("authGate").classList.add("hidden");
             document.body.classList.add("visible");
 
             loadActivity();
+            pollDMUnread();
+            dmUnreadPollTimer = setInterval(pollDMUnread, 15000);
         } catch { location.href = "login.html"; }
     })();
 
     async function handleLogout() {
         await fetch(`${API_BASE}/api/logout`, { method: "POST", credentials: "include" });
         location.href = "login.html";
+    }
+
+    // ── Direct Messages ───────────────────────────────────────────────────────
+    let dmMe = null;
+    let dmTeam = [];
+    let dmCurrentSub = null;
+    let dmConvoPollTimer = null;
+    let dmUnreadPollTimer = null;
+
+    function toggleDMPanel(e) {
+        e.stopPropagation();
+        const panel = document.getElementById("dmPanel");
+        if (panel.classList.contains("open")) {
+            closeDMPanel();
+        } else {
+            panel.classList.add("open");
+            document.getElementById("dmBackdrop").classList.add("open");
+            if (dmTeam.length === 0) loadDMTeam();
+        }
+    }
+
+    function closeDMPanel() {
+        document.getElementById("dmPanel").classList.remove("open");
+        document.getElementById("dmBackdrop").classList.remove("open");
+        clearInterval(dmConvoPollTimer);
+        dmConvoPollTimer = null;
+    }
+
+    function showDMContacts() {
+        document.getElementById("dmContacts").style.display = "";
+        document.getElementById("dmConvo").classList.remove("active");
+        dmCurrentSub = null;
+        clearInterval(dmConvoPollTimer);
+        dmConvoPollTimer = null;
+    }
+
+    async function loadDMTeam() {
+        try {
+            const res = await fetch(`${API_BASE}/api/team`, { credentials: "include" });
+            if (!res.ok) return;
+            const { team } = await res.json();
+            dmTeam = team || [];
+            renderDMContacts();
+        } catch {}
+    }
+
+    function renderDMContacts(unreadMap = {}) {
+        const el = document.getElementById("dmContacts");
+        if (dmTeam.length === 0) {
+            el.innerHTML = `<div class="dm-empty">No team members found.</div>`;
+            return;
+        }
+        el.innerHTML = dmTeam.map(m => {
+            const unread = unreadMap[m.sub] || 0;
+            return `
+                <div class="dm-contact" onclick="openDMConvo('${esc(m.sub)}','${esc(m.name)}')">
+                    <div class="dm-contact-avatar">${esc(m.name.charAt(0).toUpperCase())}</div>
+                    <div class="dm-contact-info">
+                        <div class="dm-contact-name">${esc(m.name)}</div>
+                        <div class="dm-contact-role">${esc(m.role)}</div>
+                    </div>
+                    <div class="dm-unread-badge ${unread > 0 ? 'show' : ''}" id="dmUnread-${esc(m.sub)}">${unread > 9 ? '9+' : (unread || '')}</div>
+                </div>
+            `;
+        }).join("");
+    }
+
+    async function openDMConvo(sub, name) {
+        dmCurrentSub = sub;
+        document.getElementById("dmConvoName").textContent = name;
+        document.getElementById("dmContacts").style.display = "none";
+        document.getElementById("dmConvo").classList.add("active");
+        document.getElementById("dmMessages").innerHTML = `<div class="dm-empty">Loading…</div>`;
+        document.getElementById("dmInput").value = "";
+        await loadDMMessages();
+        const dot = document.getElementById(`dmUnread-${sub}`);
+        if (dot) { dot.classList.remove("show"); dot.textContent = ""; }
+        clearInterval(dmConvoPollTimer);
+        dmConvoPollTimer = setInterval(loadDMMessages, 15000);
+        document.getElementById("dmInput").focus();
+    }
+
+    async function loadDMMessages() {
+        if (!dmCurrentSub) return;
+        try {
+            const res = await fetch(`${API_BASE}/api/messages?with=${encodeURIComponent(dmCurrentSub)}`, { credentials: "include" });
+            if (!res.ok) return;
+            const { messages } = await res.json();
+            renderDMMessages(messages || []);
+        } catch {}
+    }
+
+    function renderDMMessages(messages) {
+        const el = document.getElementById("dmMessages");
+        const mySub = dmMe?.sub;
+        if (messages.length === 0) {
+            el.innerHTML = `<div class="dm-empty">No messages yet. Say hello!</div>`;
+            return;
+        }
+        const atBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+        el.innerHTML = messages.map(m => {
+            const sent = m.from_sub === mySub;
+            const time = new Date(m.created_at).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false });
+            return `
+                <div class="dm-msg ${sent ? 'sent' : 'received'}">
+                    ${esc(m.body)}
+                    <div class="dm-msg-time">${time}</div>
+                </div>
+            `;
+        }).join("");
+        if (atBottom || messages[messages.length - 1]?.from_sub === mySub) {
+            el.scrollTop = el.scrollHeight;
+        }
+    }
+
+    function dmInputKeydown(e) {
+        if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendDM(); }
+    }
+
+    async function sendDM() {
+        const input = document.getElementById("dmInput");
+        const body = input.value.trim();
+        if (!body || !dmCurrentSub) return;
+        const btn = document.getElementById("dmSendBtn");
+        btn.disabled = true;
+        try {
+            const res = await fetch(`${API_BASE}/api/messages`, {
+                method: "POST", credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ to: dmCurrentSub, body }),
+            });
+            if (res.ok) { input.value = ""; await loadDMMessages(); }
+        } catch {}
+        btn.disabled = false;
+        input.focus();
+    }
+
+    async function pollDMUnread() {
+        try {
+            const res = await fetch(`${API_BASE}/api/messages/unread`, { credentials: "include" });
+            if (!res.ok) return;
+            const { count, by_sender } = await res.json();
+            const badge = document.getElementById("chatBadge");
+            if (count > 0) {
+                badge.textContent = count > 9 ? "9+" : count;
+                badge.classList.add("show");
+            } else {
+                badge.classList.remove("show");
+                badge.textContent = "";
+            }
+            if (dmTeam.length > 0) {
+                const map = {};
+                for (const r of (by_sender || [])) map[r.from_sub] = r.count;
+                renderDMContacts(map);
+            }
+        } catch {}
     }
 </script>
 </body>

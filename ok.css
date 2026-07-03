@@ -1,3 +1,4 @@
+
 @media only screen and (max-width: 900px) {
     .people {
         flex-direction: column;
@@ -21,7 +22,7 @@ button, input, select, textarea {
 }
 
 body {
-    font-family: "Rubik", sans-serif;
+    font-family: "Michroma", sans-serif;
     margin: 0;
     overflow-x: hidden;
     background-color: #f6f4ef;
@@ -620,6 +621,11 @@ tr:nth-child(even) {
     width: 100%;
     height: 100%;
     align-items: center;
+    pointer-events: none; /* don't block clicks on hero-btn inside carosel-item-wrapper */
+}
+
+.carosel-btn {
+    pointer-events: auto;
 }
 
 .carosel-btn {
@@ -1256,7 +1262,7 @@ tr:nth-child(even) {
     top: 14px;
     left: 14px;
     padding: 5px 12px;
-    border-radius: 100px;
+    border-radius: 5px;
     font-size: 10px;
     font-weight: 700;
     letter-spacing: 0.1em;
@@ -1540,7 +1546,7 @@ main {
 .acc-btn-meta { font-size: 11px; color: var(--color-text-tertiary); font-weight: 400; }
 .acc-badge {
     font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-    padding: 4px 10px; border-radius: 100px; flex-shrink: 0;
+    padding: 4px 10px; border-radius: 5px; flex-shrink: 0;
 }
 .acc-badge.wip { background: #fef3c7; color: #92400e; }
 .acc-badge.done { background: #dcfce7; color: #166534; }
