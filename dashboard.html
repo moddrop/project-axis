@@ -384,7 +384,7 @@
         .dm-msg-time { font-size: 9px; opacity: .65; margin-top: 4px; letter-spacing: .03em; }
         .dm-input-row {
             padding: 12px; border-top: 1px solid var(--border-lit);
-            display: flex; gap: 8px; flex-shrink: 0;
+            display: flex; gap: 8px; flex-shrink: 0; align-items: flex-end;
         }
         .dm-input {
             flex: 1; background: var(--surface2); border: 1px solid var(--border-lit);
@@ -396,10 +396,10 @@
         .dm-input:focus { border-color: var(--accent); }
         .dm-send-btn {
             background: var(--accent); border: none; color: #fff;
-            padding: 0 14px; border-radius: 2px; cursor: pointer;
+            padding: 8px 16px; min-height: 36px; border-radius: 2px; cursor: pointer;
             font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: .06em;
-            transition: opacity .15s; box-shadow: 2px 2px 0 rgba(229,92,10,0.28);
-            flex-shrink: 0; align-self: flex-end;
+            line-height: 1; transition: opacity .15s;
+            box-shadow: 2px 2px 0 rgba(229,92,10,0.28); flex-shrink: 0;
         }
         .dm-send-btn:hover { opacity: .85; }
         .dm-send-btn:disabled { opacity: .4; cursor: default; }
@@ -945,7 +945,7 @@
         const dot = document.getElementById(`dmUnread-${sub}`);
         if (dot) { dot.classList.remove("show"); dot.textContent = ""; }
         clearInterval(dmConvoPollTimer);
-        dmConvoPollTimer = setInterval(loadDMMessages, 15000);
+        dmConvoPollTimer = setInterval(loadDMMessages, 2000);
         document.getElementById("dmInput").focus();
     }
 
@@ -1003,6 +1003,16 @@
         btn.disabled = false;
         input.focus();
     }
+
+    document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+            clearInterval(dmConvoPollTimer);
+            dmConvoPollTimer = null;
+        } else if (dmCurrentSub) {
+            loadDMMessages();
+            dmConvoPollTimer = setInterval(loadDMMessages, 2000);
+        }
+    });
 
     async function pollDMUnread() {
         try {
