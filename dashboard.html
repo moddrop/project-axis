@@ -671,13 +671,12 @@
         return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
     }
 
-    // ── localStorage last-seen ────────────────────────────────────────────────
-    function getLastSeen() {
-        return parseInt(localStorage.getItem("axis_last_seen") || "0", 10);
-    }
+    // ── localStorage last-seen (keyed by user so accounts don't share state) ──
+    function lsKey() { return `axis_last_seen_${dmMe?.sub || "anon"}`; }
+    function getLastSeen() { return parseInt(localStorage.getItem(lsKey()) || "0", 10); }
 
     function markAllRead() {
-        localStorage.setItem("axis_last_seen", Date.now().toString());
+        localStorage.setItem(lsKey(), Date.now().toString());
         document.getElementById("bellBadge").classList.remove("show");
         document.getElementById("bellDropdown").classList.remove("open");
         renderBell(allEntries, []);
@@ -1073,7 +1072,7 @@
 
             // Cross-device sync: if server has a newer last_seen, apply it
             if (last_seen && last_seen > getLastSeen()) {
-                localStorage.setItem("axis_last_seen", String(last_seen));
+                localStorage.setItem(lsKey(), String(last_seen));
                 if (allEntries.length > 0) {
                     const newEntries = allEntries.filter(e => e.created_at > last_seen);
                     renderBell(allEntries, newEntries);

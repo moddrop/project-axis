@@ -185,6 +185,99 @@
         .card-delete-btn:hover { color: var(--danger) !important; border-color: var(--danger) !important; }
         .card-edit-btn:hover   { color: var(--accent) !important; border-color: var(--accent) !important; }
 
+        /* ── Goals panel ── */
+        .goals-panel {
+            background: var(--surface); border: 1px solid var(--border-lit);
+            border-radius: 3px; margin-bottom: 20px;
+            box-shadow: 3px 3px 0 rgba(28,27,25,0.09);
+            animation: fadeUp .4s .08s both;
+        }
+        .goals-panel-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 12px 20px; border-bottom: 1px solid var(--border-lit);
+        }
+        .goals-panel-left { display: flex; align-items: center; gap: 10px; }
+        .goals-panel-title { font-family: 'Rubik', sans-serif; font-weight: 700; font-size: 13px; color: var(--text); }
+        .goals-progress-pill {
+            font-size: 10px; color: var(--muted); background: var(--surface2);
+            border: 1px solid var(--border-lit); padding: 2px 8px; border-radius: 20px;
+            font-family: 'Geist Mono', monospace; letter-spacing: .04em;
+        }
+        .btn-add-goal {
+            background: transparent; border: 1px solid var(--border-lit);
+            color: var(--muted); font-family: 'Geist Mono', monospace;
+            font-size: 10px; letter-spacing: .06em; padding: 5px 12px;
+            border-radius: 2px; cursor: pointer; transition: all .15s;
+        }
+        .btn-add-goal:hover { border-color: var(--accent); color: var(--accent); }
+
+        .goals-list { padding: 8px 20px 8px 20px; position: relative; min-height: 20px; }
+        .goals-list.has-goals::before {
+            content: ''; position: absolute;
+            left: 33px; top: 22px; bottom: 22px;
+            width: 1px; background: var(--border-lit);
+        }
+        .goal-item {
+            display: flex; align-items: flex-start; gap: 10px;
+            padding: 8px 0; position: relative;
+        }
+        .goal-dot {
+            width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+            border: 2px solid var(--border-lit); background: var(--surface);
+            margin-top: 4px; z-index: 1; transition: all .15s;
+        }
+        .goal-dot.done    { background: var(--green);  border-color: var(--green); }
+        .goal-dot.overdue { background: var(--danger); border-color: var(--danger); }
+        .goal-check {
+            background: transparent; border: none; cursor: pointer;
+            font-size: 13px; padding: 0; line-height: 1; flex-shrink: 0;
+            color: var(--muted); transition: color .15s; margin-top: 1px; width: 16px;
+        }
+        .goal-check:hover { color: var(--green); }
+        .goal-check.done  { color: var(--green); }
+        .goal-body { flex: 1; min-width: 0; }
+        .goal-title-text { font-size: 12px; color: var(--text); }
+        .goal-title-text.done { text-decoration: line-through; color: var(--muted); }
+        .goal-date { font-size: 10px; color: var(--muted); letter-spacing: .03em; margin-top: 1px; }
+        .goal-date.overdue { color: var(--danger); }
+        .goal-date.soon    { color: var(--yellow); }
+        .goal-del {
+            background: transparent; border: none; color: transparent;
+            font-size: 11px; cursor: pointer; padding: 2px 4px; flex-shrink: 0;
+            transition: color .15s;
+        }
+        .goal-item:hover .goal-del { color: var(--muted); }
+        .goal-del:hover { color: var(--danger) !important; }
+        .goals-empty { padding: 14px 0; font-size: 11px; color: var(--muted); letter-spacing: .04em; }
+
+        .add-goal-row {
+            display: none; align-items: center; gap: 8px;
+            padding: 10px 20px; border-top: 1px solid var(--border);
+        }
+        .add-goal-row.open { display: flex; }
+        .add-goal-input {
+            flex: 1; background: var(--surface2); border: 1px solid var(--border-lit);
+            padding: 7px 10px; border-radius: 2px;
+            font-family: 'Geist Mono', monospace; font-size: 11px; color: var(--text);
+            outline: none;
+        }
+        .add-goal-input:focus { border-color: var(--accent); }
+        .add-goal-date {
+            background: var(--surface2); border: 1px solid var(--border-lit);
+            padding: 7px 10px; border-radius: 2px;
+            font-family: 'Geist Mono', monospace; font-size: 11px; color: var(--text);
+            outline: none; flex-shrink: 0; width: 140px;
+        }
+        .add-goal-date:focus { border-color: var(--accent); }
+        .btn-add-goal-submit {
+            background: var(--accent); color: #fff; border: none;
+            padding: 7px 14px; border-radius: 2px;
+            font-family: 'Geist Mono', monospace; font-size: 11px;
+            cursor: pointer; white-space: nowrap; transition: opacity .15s;
+            flex-shrink: 0;
+        }
+        .btn-add-goal-submit:hover { opacity: .85; }
+
         /* ── Log view ── */
         #logView { display: none; }
 
@@ -575,6 +668,27 @@
 
             <div class="log-project-bar" id="logProjectBar"></div>
 
+            <!-- Goals & Timeline -->
+            <div class="goals-panel">
+                <div class="goals-panel-header">
+                    <div class="goals-panel-left">
+                        <span class="goals-panel-title">Goals & Timeline</span>
+                        <span class="goals-progress-pill" id="goalsPill">—</span>
+                    </div>
+                    <button class="btn-add-goal" onclick="openAddGoal()">+ Add Goal</button>
+                </div>
+                <div class="goals-list" id="goalsList">
+                    <div class="goals-empty">Loading…</div>
+                </div>
+                <div class="add-goal-row" id="addGoalRow">
+                    <input class="add-goal-input" id="goalTitleInput" type="text" placeholder="Goal title…"
+                           onkeydown="if(event.key==='Enter')submitAddGoal()">
+                    <input class="add-goal-date" id="goalDateInput" type="date">
+                    <button class="btn-add-goal-submit" onclick="submitAddGoal()">Add</button>
+                    <button class="btn-secondary" style="padding:7px 12px;font-size:11px;flex-shrink:0" onclick="closeAddGoal()">Cancel</button>
+                </div>
+            </div>
+
             <div class="log-toolbar">
                 <div class="log-toolbar-left" id="logFilterBtns">
                     <button class="filter-btn active" onclick="setLogFilter(this,'all')">All</button>
@@ -799,23 +913,22 @@ const TYPE_CONFIG = {
 
 // ── Progress label ────────────────────────────────────────────────────────────
 function progressLabel(p) {
+    if (p._goals && p._goals.total > 0)
+        return `${p._goals.completed}/${p._goals.total} goals`;
     if (p.start_date && p.end_date) {
         const now = Date.now();
-        if (now < p.start_date) {
-            const d = Math.ceil((p.start_date - now) / 86400000);
-            return `Starts in ${d}d`;
-        }
+        if (now < p.start_date) return `Starts in ${Math.ceil((p.start_date - now) / 86400000)}d`;
         const d = p.days_remaining ?? Math.ceil((p.end_date - now) / 86400000);
-        if (d < 0)  return `${Math.abs(d)}d overdue`;
+        if (d < 0)   return `${Math.abs(d)}d overdue`;
         if (d === 0) return "Due today";
         return `${d}d remaining`;
     }
-    const s = p._stats;
-    if (!s || (s.milestones === 0 && s.total_issues === 0)) return "Progress";
-    const parts = [];
-    if (s.milestones > 0)   parts.push(`${s.milestones} milestone${s.milestones !== 1 ? "s" : ""}`);
-    if (s.total_issues > 0) parts.push(`${s.resolved_issues}/${s.total_issues} issues fixed`);
-    return parts.join(" · ");
+    return "Progress";
+}
+
+// ── Date short format ─────────────────────────────────────────────────────────
+function fmtDateShort(ts) {
+    return new Date(ts).toLocaleDateString("en-GB", { day: "numeric", month: "short" });
 }
 
 // ── XSS guard ────────────────────────────────────────────────────────────────
@@ -916,7 +1029,8 @@ function renderGrid() {
     }
 
     document.getElementById("projectsGrid").innerHTML = filtered.map(p => {
-        const overdue   = p.days_remaining !== null && p.days_remaining !== undefined && p.days_remaining < 0;
+        const hasGoals  = p._goals && p._goals.total > 0;
+        const overdue   = !hasGoals && p.days_remaining !== null && p.days_remaining !== undefined && p.days_remaining < 0;
         const barColor  = overdue ? "danger" : esc(p.color);
         return `
         <div class="project-card ${esc(p.color)}" onclick="showLog('${esc(p.id)}')">
@@ -979,11 +1093,15 @@ async function showLog(projectId) {
         <div class="project-status ${esc(currentProject.status)}" style="flex-shrink:0">${currentProject.status.toUpperCase()}</div>
     `;
 
-    await refreshEntries();
+    closeAddGoal();
+    document.getElementById("goalsList").innerHTML = `<div class="goals-empty">Loading…</div>`;
+    document.getElementById("goalsPill").textContent = "—";
+    await Promise.all([refreshEntries(), loadGoals()]);
 }
 
 function showGrid() {
     currentProject = null;
+    closeAddGoal();
     document.getElementById("logView").style.display  = "none";
     document.getElementById("gridView").style.display = "block";
 }
@@ -1356,6 +1474,126 @@ async function confirmDeleteProject() {
         closeDeleteProjectModal();
         await fetchProjects();
     } catch { closeDeleteProjectModal(); }
+}
+
+// ── Goals & Timeline ──────────────────────────────────────────────────────────
+let currentGoals = [];
+
+async function loadGoals() {
+    try {
+        const res = await fetch(`${API_BASE}/api/projects/${currentProject.id}/goals`, { credentials: "include" });
+        if (!res.ok) return;
+        const { goals } = await res.json();
+        currentGoals = goals || [];
+        renderGoals(currentGoals);
+    } catch {}
+}
+
+function renderGoals(goals) {
+    const list  = document.getElementById("goalsList");
+    const pill  = document.getElementById("goalsPill");
+    const now   = Date.now();
+    const total = goals.length;
+    const done  = goals.filter(g => g.completed_at).length;
+
+    pill.textContent = total > 0 ? `${done}/${total} complete` : "0 goals";
+
+    if (total === 0) {
+        list.classList.remove("has-goals");
+        list.innerHTML = `<div class="goals-empty">No goals yet — add one above to start tracking progress.</div>`;
+        return;
+    }
+
+    list.classList.add("has-goals");
+    list.innerHTML = goals.map(g => {
+        const completed = Boolean(g.completed_at);
+        let dateLabel = "", dateClass = "", dotClass = "";
+
+        if (g.due_date) {
+            const daysLeft = Math.ceil((g.due_date - now) / 86400000);
+            if (completed) {
+                dateLabel = `Completed · was due ${fmtDateShort(g.due_date)}`;
+                dotClass  = "done";
+            } else if (daysLeft < 0) {
+                dateLabel = `${Math.abs(daysLeft)}d overdue`;
+                dateClass = "overdue"; dotClass = "overdue";
+            } else if (daysLeft === 0) {
+                dateLabel = "Due today";
+                dateClass = "overdue"; dotClass = "overdue";
+            } else if (daysLeft <= 7) {
+                dateLabel = `${daysLeft}d left`;
+                dateClass = "soon";
+            } else {
+                dateLabel = `Due ${fmtDateShort(g.due_date)}`;
+            }
+        } else if (completed) {
+            dotClass = "done";
+        }
+
+        return `
+            <div class="goal-item" id="goal-${esc(g.id)}">
+                <div class="goal-dot ${dotClass}"></div>
+                <button class="goal-check ${completed ? 'done' : ''}"
+                        onclick="toggleGoal('${esc(g.id)}',${!completed})"
+                        title="${completed ? 'Mark incomplete' : 'Mark complete'}">
+                    ${completed ? "✓" : "○"}
+                </button>
+                <div class="goal-body">
+                    <div class="goal-title-text ${completed ? 'done' : ''}">${esc(g.title)}</div>
+                    ${dateLabel ? `<div class="goal-date ${dateClass}">${dateLabel}</div>` : ""}
+                </div>
+                <button class="goal-del" onclick="deleteGoal('${esc(g.id)}')" title="Delete">✕</button>
+            </div>
+        `;
+    }).join("");
+}
+
+function openAddGoal() {
+    document.getElementById("addGoalRow").classList.add("open");
+    setTimeout(() => document.getElementById("goalTitleInput").focus(), 50);
+}
+
+function closeAddGoal() {
+    document.getElementById("addGoalRow")?.classList.remove("open");
+    const t = document.getElementById("goalTitleInput");
+    const d = document.getElementById("goalDateInput");
+    if (t) t.value = "";
+    if (d) d.value = "";
+}
+
+async function submitAddGoal() {
+    const title   = document.getElementById("goalTitleInput").value.trim();
+    const dateStr = document.getElementById("goalDateInput").value;
+    if (!title) { document.getElementById("goalTitleInput").focus(); return; }
+
+    const due_date = dateStr ? new Date(dateStr).getTime() : null;
+    try {
+        await fetch(`${API_BASE}/api/projects/${currentProject.id}/goals`, {
+            method: "POST", credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ title, due_date }),
+        });
+        closeAddGoal();
+        await Promise.all([loadGoals(), fetchProjects()]);
+    } catch {}
+}
+
+async function toggleGoal(goalId, complete) {
+    try {
+        await fetch(`${API_BASE}/api/goals/${goalId}`, {
+            method: "PATCH", credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ complete }),
+        });
+        await Promise.all([loadGoals(), fetchProjects()]);
+    } catch {}
+}
+
+async function deleteGoal(goalId) {
+    try {
+        await fetch(`${API_BASE}/api/goals/${goalId}`, { method: "DELETE", credentials: "include" });
+        await Promise.all([loadGoals(), fetchProjects()]);
+    } catch {}
 }
 
 // ── Edit project modal ────────────────────────────────────────────────────────
