@@ -225,7 +225,7 @@
 
         @media (max-width: 1024px) {
             .sidebar-toggle { display: flex; }
-            .layout { grid-template-columns: 1fr; }
+            .layout { display: block; }
             .sidebar {
                 position: fixed; top: 56px; left: -260px;
                 width: 240px; height: calc(100vh - 56px);
@@ -244,7 +244,10 @@
 
         @media (max-width: 640px) {
             .topbar { padding: 0 14px; }
+            .topbar-left { gap: 8px; }
+            .topbar-right { gap: 8px; }
             .badge { display: none; }
+            .user-pill span { display: none; }
             main { padding: 18px 14px; }
             .page-header h2 { font-size: 20px; }
             .sec-panel table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
@@ -253,7 +256,9 @@
 
         @media (max-width: 480px) {
             .topbar { padding: 0 10px; }
-            .user-pill span:not(.user-avatar) { display: none; }
+            .topbar-left { gap: 6px; }
+            .topbar-right { gap: 6px; }
+            .logo-text { display: none; }
             .logout-btn { padding: 5px 8px; font-size: 10px; }
             main { padding: 14px 10px; }
             .page-header h2 { font-size: 18px; }
