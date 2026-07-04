@@ -70,7 +70,7 @@
             backdrop-filter: blur(8px);
         }
         .topbar-left { display: flex; align-items: center; gap: 16px; }
-        .logo-icon { width: 28px; height: 28px; border-radius: 2px; display: grid; place-items: center; }
+        .logo-icon { width: 28px; height: 28px; border-radius: 2px; display: grid; place-items: center; font-size: 13px; box-shadow: 2px 2px 0 rgba(28,27,25,0.2); }
         .logo-text { font-family: 'Rubik', sans-serif; font-weight: 800; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--text); }
         .badge { font-size: 9px; letter-spacing: .14em; text-transform: uppercase; padding: 3px 8px; border-radius: 2px; background: rgba(229,92,10,0.08); color: var(--accent); border: 1px solid rgba(229,92,10,0.22); font-family: 'Geist Mono', monospace; }
         .topbar-right { display: flex; align-items: center; gap: 20px; }
@@ -192,6 +192,11 @@
         .project-card:hover .card-edit-btn { color: var(--muted); border-color: var(--border-lit); }
         .card-delete-btn:hover { color: var(--danger) !important; border-color: var(--danger) !important; }
         .card-edit-btn:hover   { color: var(--accent) !important; border-color: var(--accent) !important; }
+        @media (hover: none) {
+            .project-card .card-delete-btn,
+            .project-card .card-edit-btn { color: var(--muted); border-color: var(--border-lit); }
+            .entry-actions { opacity: 1; }
+        }
 
         /* ── Goals panel ── */
         .goals-panel {
@@ -599,7 +604,7 @@
         <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle menu">
             <span></span><span></span><span></span>
         </button>
-        <div class="logo-icon"><img height="22px" src="logo.png"></div>
+        <div class="logo-icon"><img height="25px" src="logo.png"></div>
         <div class="logo-text">Project Axis</div>
         <div class="badge">Internal</div>
     </div>
@@ -625,6 +630,7 @@
         </div>
         <div class="nav-section">
             <div class="nav-label">Team</div>
+            <a href="dashboard.html#messages" class="nav-item"><span class="icon">✉</span> Messages</a>
             <a href="#" class="nav-item"><span class="icon">◎</span> Directory</a>
             <a href="#" class="nav-item"><span class="icon">⊕</span> Requests</a>
         </div>
@@ -664,8 +670,8 @@
 
             <div class="toolbar">
                 <div class="toolbar-left">
-                    <button class="filter-btn active" onclick="setFilter(this,'all')">All</button>
-                    <button class="filter-btn" onclick="setFilter(this,'active')">Active</button>
+                    <button class="filter-btn" onclick="setFilter(this,'all')">All</button>
+                    <button class="filter-btn active" onclick="setFilter(this,'active')">Active</button>
                     <button class="filter-btn" onclick="setFilter(this,'review')">Review</button>
                     <button class="filter-btn" onclick="setFilter(this,'complete')">Complete</button>
                 </div>
@@ -1025,7 +1031,7 @@ function updateProjectStats() {
 })();
 
 // ── Grid ─────────────────────────────────────────────────────────────────────
-let currentFilter = "all";
+let currentFilter = "active";
 
 function setFilter(el, filter) {
     document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
@@ -1280,6 +1286,7 @@ async function addComment(entryId) {
         });
         if (!res.ok) throw new Error();
         input.value = "";
+        showToast("Comment posted");
         // Reload comments section
         const list = document.getElementById(`comments-list-${entryId}`);
         const existing = list.querySelectorAll(".comment-item");
@@ -1299,6 +1306,7 @@ async function deleteComment(commentId, entryId) {
         });
         const el = document.getElementById(`comment-${commentId}`);
         if (el) el.remove();
+        showToast("Comment deleted");
     } catch {}
 }
 
@@ -1374,8 +1382,10 @@ async function submitEntry() {
             entryId = data.entry.id;
         }
 
+        const wasEditing = Boolean(editingEntry);
         closeEntryModal();
         await refreshEntries();
+        showToast(wasEditing ? "Entry updated" : "Entry created");
     } catch (e) {
         console.error("submitEntry:", e);
         errorEl.textContent = e.message || "Something went wrong. Check the console.";
@@ -1391,6 +1401,7 @@ async function resolveEntry(entryId, resolve) {
     if (idx !== -1) {
         allEntries[idx] = { ...allEntries[idx], resolved_at: resolve ? Date.now() : null };
         renderEntries();
+        showToast(resolve ? "Issue resolved" : "Issue reopened");
     }
     try {
         await fetch(`${API_BASE}/api/logs/${entryId}`, {
@@ -1419,6 +1430,7 @@ async function confirmDelete() {
     const removed = idx !== -1 ? allEntries.splice(idx, 1)[0] : null;
     closeDeleteModal();
     renderEntries();
+    showToast("Entry deleted");
     try {
         await fetch(`${API_BASE}/api/logs/${id}`, { method: "DELETE", credentials: "include" });
     } catch {
@@ -1475,6 +1487,7 @@ async function submitNewProject() {
         if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || "Failed");
         closeNewProjectModal();
         await fetchProjects();
+        showToast("Project created");
     } catch (e) {
         errorEl.textContent = e.message;
         errorEl.style.display = "block";
@@ -1503,6 +1516,7 @@ async function confirmDeleteProject() {
         });
         closeDeleteProjectModal();
         await fetchProjects();
+        showToast("Project deleted");
     } catch { closeDeleteProjectModal(); }
 }
 
@@ -1621,6 +1635,7 @@ async function submitAddGoal() {
         });
         closeAddGoal();
         await Promise.all([loadGoals(), fetchProjects()]);
+        showToast("Goal added");
     } catch {}
 }
 
@@ -1631,6 +1646,7 @@ async function toggleGoal(goalId, complete) {
         currentGoals[idx] = { ...currentGoals[idx], completed_at: complete ? Date.now() : null };
         renderGoals(currentGoals);
         updateLogProgressBar();
+        showToast(complete ? "Goal completed" : "Goal reopened");
     }
     try {
         await fetch(`${API_BASE}/api/goals/${goalId}`, {
@@ -1649,6 +1665,7 @@ async function deleteGoal(goalId) {
     const removed = idx !== -1 ? currentGoals.splice(idx, 1)[0] : null;
     renderGoals(currentGoals);
     updateLogProgressBar();
+    showToast("Goal removed");
     try {
         await fetch(`${API_BASE}/api/goals/${goalId}`, { method: "DELETE", credentials: "include" });
         await fetchProjects();
@@ -1705,11 +1722,21 @@ async function submitEditProject() {
         if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || "Failed");
         closeEditProjectModal();
         await fetchProjects();
+        showToast("Project updated");
     } catch (e) {
         errorEl.textContent = e.message;
         errorEl.style.display = "block";
         submitBtn.disabled = false;
     }
+}
+
+// ── Toast ─────────────────────────────────────────────────────────────────────
+function showToast(msg) {
+    const t = document.getElementById("toast");
+    document.getElementById("toastMsg").textContent = msg;
+    t.style.opacity = "1"; t.style.transform = "translateY(0)";
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => { t.style.opacity = "0"; t.style.transform = "translateY(8px)"; }, 2500);
 }
 
 // ── Keyboard shortcuts ────────────────────────────────────────────────────────
@@ -1729,5 +1756,7 @@ async function handleLogout() {
     location.href = "login.html";
 }
 </script>
+
+<div id="toast" style="position:fixed; bottom:28px; right:28px; background:var(--surface); border:1px solid var(--border-lit); color:var(--text); font-size:12px; letter-spacing:.04em; padding:12px 20px; border-radius:3px; opacity:0; transform:translateY(8px); transition:opacity .25s, transform .25s; z-index:999; pointer-events:none;">◈ &nbsp;<span id="toastMsg"></span></div>
 </body>
 </html>

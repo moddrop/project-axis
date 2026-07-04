@@ -67,7 +67,7 @@
             backdrop-filter: blur(8px);
         }
         .topbar-left { display: flex; align-items: center; gap: 16px; }
-        .logo-icon { width: 28px; height: 28px; background: var(--accent); border-radius: 2px; display: grid; place-items: center; font-size: 13px; box-shadow: 2px 2px 0 rgba(28,27,25,0.2); }
+        .logo-icon { width: 28px; height: 28px; border-radius: 2px; display: grid; place-items: center; font-size: 13px; box-shadow: 2px 2px 0 rgba(28,27,25,0.2); }
         .logo-text { font-family: 'Rubik', sans-serif; font-weight: 800; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--text); }
         .badge { font-size: 9px; letter-spacing: .14em; text-transform: uppercase; padding: 3px 8px; border-radius: 2px; background: rgba(229,92,10,0.08); color: var(--accent); border: 1px solid rgba(229,92,10,0.22); font-family: 'Geist Mono', monospace; }
         .topbar-right { display: flex; align-items: center; gap: 14px; }
@@ -136,6 +136,8 @@
         .nav-item:hover { background: var(--surface2); color: var(--text); }
         .nav-item.active { background: rgba(229,92,10,0.09); color: var(--accent); }
         .nav-item .icon { width: 16px; text-align: center; font-size: 14px; }
+        .nav-msg-badge { margin-left: auto; background: var(--accent); color: #fff; font-size: 9px; font-family: 'Geist Mono', monospace; padding: 1px 5px; border-radius: 2px; display: none; }
+        .nav-msg-badge.show { display: inline-block; }
 
         /* ── Main ── */
         main { padding: 40px; background: transparent; }
@@ -560,6 +562,7 @@
         </div>
         <div class="nav-section">
             <div class="nav-label">Team</div>
+            <a href="#" class="nav-item" onclick="event.preventDefault();openMessagesFromNav()"><span class="icon">✉</span> Messages<span class="nav-msg-badge" id="navMsgBadge"></span></a>
             <a href="#" class="nav-item"><span class="icon">◎</span> Directory</a>
             <a href="#" class="nav-item"><span class="icon">⊕</span> Requests</a>
         </div>
@@ -961,7 +964,7 @@
             loadActivity();
             loadUpcomingGoals();
             initPush(); // silent re-subscribe if permission already granted
-            activityPollTimer = setInterval(loadActivity, 1000);
+            activityPollTimer = setInterval(loadActivity, 1500);
             setInterval(loadUpcomingGoals, 30000);
             pollDMUnread();
             dmUnreadPollTimer = setInterval(pollDMUnread, 15000);
@@ -980,6 +983,20 @@
     let dmLastMsgId = null;
     let dmConvoPollTimer = null;
     let dmUnreadPollTimer = null;
+
+    function openMessagesFromNav() {
+        const panel = document.getElementById("dmPanel");
+        if (!panel.classList.contains("open")) {
+            panel.classList.add("open");
+            document.getElementById("dmBackdrop").classList.add("open");
+            if (dmTeam.length === 0) loadDMTeam();
+        }
+    }
+
+    if (location.hash === "#messages") {
+        history.replaceState(null, "", location.pathname);
+        addEventListener("load", openMessagesFromNav);
+    }
 
     function toggleDMPanel(e) {
         e.stopPropagation();
@@ -1176,6 +1193,7 @@
         const prevCount = parseInt(badge.textContent, 10);
         if (row) row.classList.add("ticking");
         if (!isNaN(prevCount) && prevCount > 0) badge.textContent = prevCount - 1;
+        showToast("Goal marked complete");
         try {
             await fetch(`${API_BASE}/api/goals/${goalId}`, {
                 method: "PATCH", credentials: "include",
@@ -1196,7 +1214,7 @@
         } else {
             loadActivity();
             loadUpcomingGoals();
-            activityPollTimer = setInterval(loadActivity, 1000);
+            activityPollTimer = setInterval(loadActivity, 1500);
             if (dmCurrentSub) {
                 loadDMMessages();
                 dmConvoPollTimer = setInterval(loadDMMessages, 2000);
@@ -1277,12 +1295,17 @@
             }
 
             const badge = document.getElementById("chatBadge");
+            const navBadge = document.getElementById("navMsgBadge");
             if (count > 0) {
                 badge.textContent = count > 9 ? "9+" : count;
                 badge.classList.add("show");
+                navBadge.textContent = count > 9 ? "9+" : count;
+                navBadge.classList.add("show");
             } else {
                 badge.classList.remove("show");
                 badge.textContent = "";
+                navBadge.classList.remove("show");
+                navBadge.textContent = "";
             }
             if (dmTeam.length > 0) {
                 const map = {};
@@ -1291,6 +1314,16 @@
             }
         } catch {}
     }
+
+    function showToast(msg) {
+        const t = document.getElementById("toast");
+        document.getElementById("toastMsg").textContent = msg;
+        t.style.opacity = "1"; t.style.transform = "translateY(0)";
+        clearTimeout(t._timer);
+        t._timer = setTimeout(() => { t.style.opacity = "0"; t.style.transform = "translateY(8px)"; }, 2500);
+    }
 </script>
+
+<div id="toast" style="position:fixed; bottom:28px; right:28px; background:var(--surface); border:1px solid var(--border-lit); color:var(--text); font-size:12px; letter-spacing:.04em; padding:12px 20px; border-radius:3px; opacity:0; transform:translateY(8px); transition:opacity .25s, transform .25s; z-index:999; pointer-events:none;">⊞ &nbsp;<span id="toastMsg"></span></div>
 </body>
 </html>
