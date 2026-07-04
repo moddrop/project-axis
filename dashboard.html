@@ -166,6 +166,7 @@
         .panel-badge { font-size: 10px; padding: 2px 8px; background: var(--surface2); border-radius: 20px; color: var(--muted); border: 1px solid var(--border-lit); font-family: 'Geist Mono', monospace; }
 
         /* service table */
+        .panel-body { overflow-x: auto; -webkit-overflow-scrolling: touch; }
         table { width: 100%; border-collapse: collapse; }
         th { font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); padding: 10px 20px; text-align: left; border-bottom: 1px solid var(--border-lit); background: var(--surface2); font-family: 'Geist Mono', monospace; }
         td { padding: 12px 20px; font-size: 12px; border-bottom: 1px solid var(--border); vertical-align: middle; color: var(--text); }
@@ -310,6 +311,8 @@
         /* ── Phone (≤640px) ── */
         @media (max-width: 640px) {
             .topbar { padding: 0 14px; gap: 8px; }
+            .topbar-left { gap: 8px; }
+            .topbar-right { gap: 8px; }
             .badge { display: none; }
             .user-pill .user-name-text { display: none; }
             .user-pill .role-text { display: none; }
@@ -324,6 +327,9 @@
         /* ── Small phone (≤480px) ── */
         @media (max-width: 480px) {
             .topbar { padding: 0 10px; gap: 6px; }
+            .topbar-left { gap: 6px; }
+            .topbar-right { gap: 6px; }
+            .logo-text { display: none; }
             .user-avatar { width: 26px; height: 26px; font-size: 10px; }
             .logout-btn { padding: 5px 8px; font-size: 10px; letter-spacing: 0; }
             .bell-btn, .chat-btn { width: 30px; height: 30px; font-size: 13px; }
