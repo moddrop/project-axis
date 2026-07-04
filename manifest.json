@@ -1,0 +1,15 @@
+{
+  "name": "Project Axis",
+  "short_name": "Axis",
+  "description": "Project Axis Internal Dashboard",
+  "start_url": "/login.html",
+  "display": "standalone",
+  "background_color": "#f6f4ef",
+  "theme_color": "#e55c0a",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "/logo.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/logo.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/logo.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
