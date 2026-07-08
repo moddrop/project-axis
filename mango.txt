@@ -1,0 +1,45 @@
+        <!-- ── Build Status Ticker ── -->
+        <section class="build-status" aria-label="SoundView v3 build progress">
+            <div class="build-status-inner">
+                <div class="build-status-hd">
+                    <p class="build-status-eyebrow">// SOUNDVIEW v1 — Build Status</p>
+                    <span class="build-live-badge">Live</span>
+                </div>
+
+                <div class="build-track" role="progressbar" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100" aria-label="SoundView build progress: 55% complete — currently in testing stage">
+                    <div class="build-track-bg"></div>
+                    <div class="build-track-fill"></div>
+                    <div class="build-nodes">
+                        <div class="build-node build-node--done">
+                            <div class="build-node-pad"></div>
+                            <span class="build-node-label">Design</span>
+                        </div>
+                        <div class="build-node build-node--done">
+                            <div class="build-node-pad"></div>
+                            <span class="build-node-label">Proto v1</span>
+                        </div>
+                        <div class="build-node build-node--active">
+                            <div class="build-node-pad"></div>
+                            <span class="build-node-label">Testing</span>
+                        </div>
+                        <div class="build-node">
+                            <div class="build-node-pad"></div>
+                            <span class="build-node-label">v3 Final</span>
+                        </div>
+                        <div class="build-node">
+                            <div class="build-node-pad"></div>
+                            <span class="build-node-label">Deploy</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="build-checklist">
+                    <div class="build-item build-item--done">Glasses frame assembled — all components mounted</div>
+                    <div class="build-item build-item--done">ESP32-S3 Sense camera and microphone configured</div>
+                    <div class="build-item build-item--done">OpenAI Vision API integration confirmed</div>
+                    <div class="build-item build-item--done">Max98357A speaker driver and 13MM speaker working</div>
+                    <div class="build-item build-item--done">Wi-Fi connectivity verified via Serial Monitor</div>
+                    <div class="build-item">Formal testing with teammate — upcoming</div>
+                </div>
+            </div>
+        </section>

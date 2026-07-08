@@ -1,9 +1,7 @@
 
 @media only screen and (max-width: 900px) {
     .people {
-        flex-direction: column;
-        align-items: center;
-        margin: 30px;
+        gap: 24px;
     }
 }
 
@@ -22,7 +20,7 @@ button, input, select, textarea {
 }
 
 body {
-    font-family: "Michroma", sans-serif;
+    font-family: "Rubik", sans-serif;
     margin: 0;
     overflow-x: hidden;
     background-color: #f6f4ef;
@@ -421,7 +419,7 @@ tr:nth-child(even) {
     justify-content: center;
     flex-wrap: wrap;
     gap: 20px;
-    padding: 15px;
+    padding: 0px 15px 15px 15px;
 }
 
 .project-card {
@@ -479,7 +477,7 @@ tr:nth-child(even) {
 
 .project-title {
     margin: 0;
-    font-size: 18px;
+    font-size: 25px;
     font-weight: 600;
     color: var(--color-text-primary);
     text-align: left;
@@ -766,6 +764,10 @@ tr:nth-child(even) {
     --accent-teal: #1f7a72;
     --accent-orange: #f0a800;
     --accent-pink: #8a3a3a;
+    /* Hierarchy: quiet amber for supporting eyebrow/kicker labels (recedes vs hot-orange),
+       and a lighter amber for the decorative // and "| PROJECT AXIS |" marks. */
+    --eyebrow-quiet: #c98f2b;
+    --accent-amber-soft: #e6c078;
     --color-bg: #ffffff;
     --color-bg-dark: #1c1b19;
     --color-bg-secondary: #f2efe9;
@@ -782,7 +784,7 @@ tr:nth-child(even) {
     --shadow-md: 4px 4px 0 rgba(28, 27, 25, 0.18);
     --shadow-lg: 6px 6px 0 rgba(28, 27, 25, 0.2);
     --navbar-height: 80px;
-    --font-mono: 'Geist Mono', ui-monospace, monospace;
+    --font-mono: 'Rubik', sans-serif;
 }
 
 .blog-page {
@@ -1314,29 +1316,32 @@ tr:nth-child(even) {
 
 .page-hero-eyebrow {
     font-size: 12px;
-    font-weight: 600;
+    font-weight: 500;
+    font-style: italic;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--primary);
+    color: var(--eyebrow-quiet);
     margin: 0 0 14px;
 }
 
 .page-hero h1 {
-    font-size: clamp(2rem, 5vw, 3.8rem);
+    font-size: clamp(2.4rem, 6vw, 4.4rem);
     font-weight: 900;
     color: var(--color-text-primary);
-    letter-spacing: -0.04em;
-    margin: 0 0 18px;
-    line-height: 1.0;
+    letter-spacing: -0.045em;
+    margin: 0 0 22px;
+    line-height: 0.98;
     text-align: center;
 }
 
 .page-hero > p {
-    font-size: 17px;
-    color: var(--color-text-secondary);
-    max-width: 540px;
+    font-size: 16px;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--color-text-tertiary);
+    max-width: 500px;
     margin: 0 auto;
-    line-height: 1.65;
+    line-height: 1.6;
     text-shadow: none;
 }
 
@@ -1396,12 +1401,13 @@ tr:nth-child(even) {
 .projects-eyebrow {
     text-align: center;
     font-family: var(--font-mono);
-    font-size: 12px;
+    font-size: 15px;
     font-weight: 500;
+    font-style: italic;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--primary);
-    padding-top: 48px;
+    color: var(--eyebrow-quiet);
+    padding-top: 30px;
     margin-bottom: -4px;
 }
 
@@ -1581,7 +1587,7 @@ main {
 .blog-panel table { margin: 12px 0 20px; }
 
 .circuit-path {
-    display: block; font-family: 'Geist Mono', monospace; font-size: 12px;
+    display: block; font-family: 'Rubik', sans-serif; font-size: 12px;
     color: var(--primary); background: var(--color-bg-secondary);
     border: 1px solid var(--color-border); border-radius: var(--radius-sm);
     padding: 8px 14px; margin: 4px 0; letter-spacing: 0.02em;
@@ -2003,6 +2009,8 @@ button:focus-visible {
 
 .donate-cta p:not(.projects-eyebrow) {
     max-width: 580px;
+    font-style: italic;
+    color: var(--color-text-tertiary);
 }
 
 /* ── About values card bold ── */
@@ -2227,7 +2235,7 @@ button:focus-visible {
 
 /* ── How SoundView Works section ── */
 .how-section {
-    padding: 72px 24px 56px;
+    padding: 1px 24px 56px;
     max-width: 1100px;
     margin: 0 auto;
 }
@@ -2309,6 +2317,7 @@ button:focus-visible {
 
 /* ── Team section: dark ink ── */
 .team-section {
+    margin-top: px;
     background: #1c1b19;
     padding: 64px 24px 72px;
     border-top: 3px solid var(--primary);
@@ -2483,7 +2492,7 @@ button:focus-visible {
 
 /* ── FAQ section ── */
 .faq-section {
-    padding: 72px 24px 56px;
+    padding: 0px 24px 56px;
     max-width: 720px;
     margin: 0 auto;
 }
@@ -2633,9 +2642,6 @@ button:focus-visible {
 }
 
 /* ── Invest section heading balance ── */
-.invest-section {
-    border-top: 3px solid var(--primary);
-}
 
 .invest-section h3 {
     text-align: center;
@@ -2673,7 +2679,7 @@ button:focus-visible {
 main > .newsletter {
     max-width: 1100px;
     margin: 0 auto;
-    padding: 0 24px 80px;
+    padding: 4px 24px 20px;
 }
 
 @media (max-width: 700px) {
@@ -2752,8 +2758,8 @@ main > .newsletter {
 .projects-eyebrow::before,
 .page-hero-eyebrow::before,
 .proj-section-eyebrow::before {
-    color: var(--accent-orange);
-    opacity: 0.85;
+    color: var(--accent-amber-soft);
+    opacity: 0.9;
 }
 
 /* ── Newsletter subscribe button: orange on hover ── */
@@ -3337,6 +3343,8 @@ main > .newsletter {
     border-top: 2px solid rgba(240,168,0,0.22);
     border-bottom: 2px solid rgba(240,168,0,0.22);
     padding: 56px 24px 60px;
+    border-top: 3px solid var(--primary);
+    border-bottom: 3px solid var(--primary);
 }
 
 .build-status-inner {
@@ -3755,4 +3763,50 @@ main > .newsletter {
 .section-label::before {
     content: "| PROJECT AXIS | ";
     color: var(--primary);
+}
+
+/* ════════════════════════════════════════════════════
+   MOBILE RESPONSIVENESS FIX  (info + donor pages)
+   Person/donor images were rendering at their intrinsic
+   width (no max-width, object-fit: fill), forcing the
+   document ~600px wide on a 390px screen so no text wrapped.
+   These rules cap every image to its container.
+   ════════════════════════════════════════════════════ */
+
+/* Global safety net: media never exceeds its container width. */
+img,
+iframe,
+video {
+    max-width: 100%;
+}
+
+/* Person / donor cards: fluid width, capped, content-box safe. */
+.person-card,
+.person-card-1 {
+    width: 100%;
+    max-width: 320px;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.person-card > img,
+.person-card-1 > img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+}
+
+/* Card row wraps and centers instead of overflowing. */
+.people {
+    flex-wrap: wrap;
+    max-width: 100%;
+}
+
+@media (max-width: 900px) {
+    .people {
+        margin: 30px 16px;
+        gap: 24px;
+    }
 }

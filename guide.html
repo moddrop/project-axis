@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -26,7 +26,7 @@
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: 'Geist Mono', monospace;
+            font-family: 'Rubik', sans-serif;
             background: var(--bg);
             background-image:
                 linear-gradient(var(--ink-grid) 1px, transparent 1px),
@@ -61,11 +61,11 @@
         .topbar-left { display: flex; align-items: center; gap: 16px; }
         .logo-icon { width: 28px; height: 28px; border-radius: 2px; display: grid; place-items: center; }
         .logo-text { font-family: 'Rubik', sans-serif; font-weight: 800; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--text); }
-        .badge { font-size: 9px; letter-spacing: .14em; text-transform: uppercase; padding: 3px 8px; border-radius: 2px; background: rgba(229,92,10,0.08); color: var(--accent); border: 1px solid rgba(229,92,10,0.22); font-family: 'Geist Mono', monospace; }
+        .badge { font-size: 9px; letter-spacing: .14em; text-transform: uppercase; padding: 3px 8px; border-radius: 2px; background: rgba(229,92,10,0.08); color: var(--accent); border: 1px solid rgba(229,92,10,0.22); font-family: 'Rubik', sans-serif; }
         .topbar-right { display: flex; align-items: center; gap: 20px; }
         .user-pill { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
         .user-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--accent); display: grid; place-items: center; font-size: 11px; font-weight: 700; color: #fff; font-family: 'Rubik', sans-serif; box-shadow: 2px 2px 0 rgba(28,27,25,0.15); }
-        .logout-btn { background: transparent; border: 1px solid var(--border-lit); color: var(--muted); font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: .08em; padding: 6px 14px; border-radius: 2px; cursor: pointer; transition: border-color .2s, color .2s; }
+        .logout-btn { background: transparent; border: 1px solid var(--border-lit); color: var(--muted); font-family: 'Rubik', sans-serif; font-size: 11px; letter-spacing: .08em; padding: 6px 14px; border-radius: 2px; cursor: pointer; transition: border-color .2s, color .2s; }
         .logout-btn:hover { border-color: var(--danger); color: var(--danger); }
 
         /* ── Layout ── */
@@ -126,7 +126,7 @@
         .guide-item-label {
             font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
             color: var(--accent); flex-shrink: 0; padding-top: 2px;
-            font-family: 'Geist Mono', monospace; min-width: 90px;
+            font-family: 'Rubik', sans-serif; min-width: 90px;
         }
         .guide-item-body { font-size: 12px; color: var(--text); line-height: 1.8; }
         .guide-item-body strong { color: var(--text); font-weight: 700; }
@@ -144,12 +144,12 @@
         kbd {
             background: var(--surface2); border: 1px solid var(--border-lit);
             border-radius: 2px; padding: 1px 6px; font-size: 10px;
-            font-family: 'Geist Mono', monospace; box-shadow: 1px 1px 0 rgba(28,27,25,.08);
+            font-family: 'Rubik', sans-serif; box-shadow: 1px 1px 0 rgba(28,27,25,.08);
         }
 
         a { text-decoration: none; }
         .footer { background: var(--surface); border-top: 1px solid var(--border-lit); padding: 20px 32px; text-align: center; }
-        .footer-text { font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: .12em; color: var(--muted); font-weight: 400; text-transform: uppercase; }
+        .footer-text { font-family: 'Rubik', sans-serif; font-size: 11px; letter-spacing: .12em; color: var(--muted); font-weight: 400; text-transform: uppercase; }
 
         /* ── Sidebar toggle ── */
         .sidebar-toggle {

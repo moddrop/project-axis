@@ -139,8 +139,6 @@
             </div>
         </div>
 
-        <div id="timer">Loading...</div>
-
         <section class="stats-strip" aria-label="Project impact at a glance">
             <div class="stat-card">
                 <div class="stat-value">2.2B</div>
@@ -159,13 +157,12 @@
                 <div class="stat-label">Total project budget, funded by Caleb's dad</div>
             </div>
         </section>
-
-        <p class="projects-eyebrow">What We Build</p>
+        <h1 class ="gradient-text"style="text-align: center;">[ Projects ]</h1>
         <div class="projects-container">
             <div class="project-card">
                 <div class="project-image-wrap">
                     <img src="raver-project.webp" alt="Wind turbine vs solar panel energy comparison experiment" class="project-image" loading="lazy">
-                    <span class="project-tag tag-green">Energy</span>
+                    
                 </div>
                 <div class="project-content">
                     <h3 class="project-title">Wind Energy VS Sun Energy</h3>
@@ -176,7 +173,7 @@
             <div class="project-card">
                 <div class="project-image-wrap">
                     <img src="binbin-project-1.webp" alt="CO2 and air quality sensor monitor using microcontroller" class="project-image" loading="lazy">
-                    <span class="project-tag tag-teal">Environment</span>
+                    
                 </div>
                 <div class="project-content">
                     <h3 class="project-title">CO₂ Levels</h3>
@@ -187,10 +184,10 @@
             <div class="project-card">
                 <div class="project-image-wrap">
                     <img src="caleb-project-1.webp" alt="SoundView smart glasses prototype for blind users" class="project-image" loading="lazy">
-                    <span class="project-tag tag-purple">AI / Vision</span>
+                    
                 </div>
                 <div class="project-content">
-                    <h3 class="project-title">Smart Glasses</h3>
+                    <h3 class="project-title">Smart Glasses <i>[Flagship]</i></h3>
                     <p class="project-description">AI-powered glasses for the 2.2 billion people with vision impairment — minimal materials, affordable microcontroller hardware.</p>
                     <a href="project.html" class="project-button">Read More</a>
                 </div>
@@ -198,7 +195,7 @@
             <div class="project-card">
                 <div class="project-image-wrap">
                     <img src="blog-project.webp" alt="Project Axis blog posts with behind-the-scenes project updates" class="project-image" loading="lazy">
-                    <span class="project-tag tag-blue">Blog</span>
+                    
                 </div>
                 <div class="project-content">
                     <h3 class="project-title">Blog Posts</h3>
@@ -209,7 +206,7 @@
             <div class="project-card">
                 <div class="project-image-wrap">
                     <img src="projectsgif.gif" alt="Animated preview of Project Axis hardware gallery" class="project-image" loading="lazy">
-                    <span class="project-tag tag-orange">Gallery</span>
+                    
                 </div>
                 <div class="project-content">
                     <h3 class="project-title">Gallery</h3>
@@ -220,7 +217,7 @@
             <div class="project-card">
                 <div class="project-image-wrap">
                     <img src="aboutus-project.PNG" alt="Project Axis team members Caleb, Binbin, and Raver" class="project-image" loading="lazy">
-                    <span class="project-tag tag-pink">Team</span>
+                    
                 </div>
                 <div class="project-content">
                     <h3 class="project-title">Information</h3>
@@ -232,7 +229,7 @@
 
         <section class="how-section" aria-label="How SoundView works">
             <p class="projects-eyebrow">How SoundView Works</p>
-            <h3 class="how-title">One glance in, one clear sentence out.</h3>
+            <h3 class="how-title">A sound, a picture, a description.</h3>
             <div class="how-steps">
                 <div class="how-step">
                     <div class="how-step-num">01</div>
@@ -253,52 +250,6 @@
                     <div class="how-step-num">04</div>
                     <h4 class="how-step-title">Feedback</h4>
                     <p class="how-step-desc">The AI's text response is converted to audio and played back through a 13MM speaker mounted near the user's ear.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- ── Build Status Ticker ── -->
-        <section class="build-status" aria-label="SoundView v3 build progress">
-            <div class="build-status-inner">
-                <div class="build-status-hd">
-                    <p class="build-status-eyebrow">// SOUNDVIEW v1 — Build Status</p>
-                    <span class="build-live-badge">Live</span>
-                </div>
-
-                <div class="build-track" role="progressbar" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100" aria-label="SoundView build progress: 55% complete — currently in testing stage">
-                    <div class="build-track-bg"></div>
-                    <div class="build-track-fill"></div>
-                    <div class="build-nodes">
-                        <div class="build-node build-node--done">
-                            <div class="build-node-pad"></div>
-                            <span class="build-node-label">Design</span>
-                        </div>
-                        <div class="build-node build-node--done">
-                            <div class="build-node-pad"></div>
-                            <span class="build-node-label">Proto v1</span>
-                        </div>
-                        <div class="build-node build-node--active">
-                            <div class="build-node-pad"></div>
-                            <span class="build-node-label">Testing</span>
-                        </div>
-                        <div class="build-node">
-                            <div class="build-node-pad"></div>
-                            <span class="build-node-label">v3 Final</span>
-                        </div>
-                        <div class="build-node">
-                            <div class="build-node-pad"></div>
-                            <span class="build-node-label">Deploy</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="build-checklist">
-                    <div class="build-item build-item--done">Glasses frame assembled — all components mounted</div>
-                    <div class="build-item build-item--done">ESP32-S3 Sense camera and microphone configured</div>
-                    <div class="build-item build-item--done">OpenAI Vision API integration confirmed</div>
-                    <div class="build-item build-item--done">Max98357A speaker driver and 13MM speaker working</div>
-                    <div class="build-item build-item--done">Wi-Fi connectivity verified via Serial Monitor</div>
-                    <div class="build-item">Formal testing with teammate — upcoming</div>
                 </div>
             </div>
         </section>
@@ -372,7 +323,7 @@
             <div class="faq-list">
                 <details class="faq-item">
                     <summary>What is Project Axis?</summary>
-                    <p>Project Axis is a student-led initiative building affordable, AI-powered smart glasses for people with vision impairment. We design, prototype, and document everything in the open as we go.</p>
+                    <p>Project Axis is a student-led initiative building affordable, AI-powered smart glasses for people with vision impairment. We design, prototype, and document everything in the open as we go. It also includes many other projects, things that have to do with arduino, and IOT, so that we can learn from them and build the smartglasses.</p>
                 </details>
 
                 <details class="faq-item">
